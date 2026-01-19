@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Agentic AI Weather System</title>
+    <style>
+        body {
+            background: #e1f5fe;
+            font-family: Arial;
+            text-align: center;
+            padding-top: 50px;
+        }
+        .card {
+            background: white;
+            width: 400px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        input, button {
+            padding: 10px;
+            width: 80%;
+            margin: 5px;
+        }
+        button {
+            background: #2196f3;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>🌦 Agentic AI Weather Monitoring</h2>
+
+    <form method="POST">
+        <input type="text" name="city" placeholder="Enter City Name" required>
+        <button type="submit">Check Weather</button>
+    </form>
+
+    {% if result %}
+        <hr>
+        <p>🌡 Temperature: {{ result.weather.temp }} °C</p>
+        <p>💧 Humidity: {{ result.weather.humidity }}%</p>
+        <p>🌥 Condition: {{ result.weather.condition }}</p>
+        <p>🌬 Wind Speed: {{ result.weather.wind }} m/s</p>
+
+        <h3>⚠ Decision: {{ result.decision }}</h3>
+        <p>✅ Action: {{ result.action }}</p>
+    {% endif %}
+</div>
+
+</body>
+</html>
