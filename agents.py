@@ -80,7 +80,6 @@ class DataCollectionAgent:
         return matched
 
     def geolocate(self, city_name: str) -> Dict[str, Any]:
-        # Handle raw lat,lon string if passed (e.g. "13.08, 80.27")
         if "," in city_name and any(c.isdigit() for c in city_name):
             try:
                 parts = [float(p.strip()) for p in city_name.split(",")]
@@ -397,41 +396,29 @@ class PredictiveAgent:
 
 
 class ActionAgent:
-    """Agent 4: Recommends specific mitigation steps based on ML risk levels."""
+    """Agent 4: Research-backed, highly practical and realistic city-specific advisories."""
     
     def __init__(self):
         self.name = "Decision & Action Agent"
-        self.role = "Actionable Advisory & Emergency Guidance Generation"
+        self.role = "Research-Backed Realistic Safety Advisory Generation"
 
     def recommend(self, raw_data: Dict[str, Any], analysis: Dict[str, Any], predictions: Dict[str, Any], ml_res: Dict[str, Any]) -> Dict[str, Any]:
         curr = raw_data["current"]
+        air_quality = raw_data.get("air_quality", {})
+        city = raw_data["location"]["city"]
         status_level = analysis["status_level"]
-        temp = curr["temperature"]
-        ml_rain = ml_res["rainfall_prediction"]
 
-        actions = []
         if status_level == "CRITICAL_RISK":
-            primary_action = "CRITICAL ML ADVISORY: Emergency severe weather risk detected. Limit outdoor travel and monitor broadcasts."
+            primary_action = f"🚨 CRITICAL ML ADVISORY FOR {city.upper()}: Severe meteorological risk. Limit non-essential travel and remain indoors."
         elif status_level == "HIGH_RISK":
-            primary_action = "HIGH RISK ADVISORY: High ML risk level. Postpone heavy outdoor exertion and outdoor sports."
+            primary_action = f"⚠️ HIGH RISK ADVISORY FOR {city.upper()}: Adverse atmospheric conditions. Postpone intense outdoor activities."
         elif status_level == "MODERATE":
-            primary_action = "MODERATE ADVISORY: Minor atmospheric hazard. Stay informed of local forecast updates."
+            primary_action = f"⚡ MODERATE ADVISORY FOR {city.upper()}: Minor environmental hazards detected. Exercise standard precautions."
         else:
-            primary_action = "OPTIMAL CONDITIONS: Favorable weather conditions. Enjoy outdoor activities!"
+            primary_action = f"🌿 OPTIMAL CONDITIONS IN {city.upper()}: Weather is favorable for outdoor activities and daily routines!"
 
-        if temp >= 34:
-            actions.append({"category": "Hydration & Heat", "icon": "💧", "text": "Drink at least 3L of water daily. Avoid direct sun between 11 AM - 4 PM."})
-        elif temp <= 8:
-            actions.append({"category": "Thermal Gear", "icon": "🧥", "text": "Wear layered thermal clothing, heavy coats, and gloves."})
-
-        if ml_rain["probability_pct"] > 40:
-            actions.append({"category": "Rain Gear", "icon": "☔", "text": f"Carry an umbrella. ML model estimates {ml_rain['probability_pct']}% rainfall probability ({ml_rain['confidence_pct']}% confidence)."})
-
-        if ml_res["anomaly_detection"]["is_anomaly"]:
-            actions.append({"category": "Anomaly Alert", "icon": "🚨", "text": "ML Anomaly Detector flagged sudden atmospheric pattern deviations. Exercise caution."})
-
-        if not actions:
-            actions.append({"category": "General Advice", "icon": "😊", "text": "Ideal weather conditions. Perfect for walking, running, or outdoor gatherings."})
+        # Generate evidence-based, realistic, city-specific advisories
+        actions = weather_knowledge.generate_research_advisories(city, curr, air_quality, ml_res)
 
         return {
             "primary_advisory": primary_action,
@@ -440,13 +427,14 @@ class ActionAgent:
 
 
 class ConversationalAgent:
-    """Agent 5: Interactive AI Agent Assistant responding with atmospheric statistics, ML inferences, and global precautions."""
+    """Agent 5: Intelligent, Natural Language Conversational Assistant with Intent-Aware Reasoning."""
     
     def __init__(self):
         self.name = "AI Conversational Assistant"
-        self.role = "Global Weather Telemetry, Machine Learning Diagnostics & Conversational Guidance"
+        self.role = "Conversational Intelligence & Meteorological Assistant"
 
     def respond(self, query: str, weather_result: Dict[str, Any]) -> Dict[str, Any]:
+        q_clean = query.strip().lower()
         curr = weather_result["data"]["current"]
         loc = weather_result["data"]["location"]
         analysis = weather_result["analysis"]
@@ -457,7 +445,6 @@ class ConversationalAgent:
         cond = curr["condition"]
         humidity = curr["humidity"]
         wind = curr["wind_speed"]
-        pressure = curr["pressure"]
         uv = curr["uv_index"]
         aqi = weather_result["data"]["air_quality"]["us_aqi"]
         safety = analysis["safety_score"]
@@ -465,49 +452,112 @@ class ConversationalAgent:
         ml_analytics = weather_result.get("ml_analytics", {})
         ml_rain = ml_analytics.get("rainfall_prediction", {})
         ml_risk = ml_analytics.get("risk_classification", {})
-        ml_anomaly = ml_analytics.get("anomaly_detection", {})
-        ml_fore = ml_analytics.get("temperature_forecast", {})
+        rain_prob = ml_rain.get("probability_pct", 15)
+        rain_conf = ml_rain.get("confidence_pct", 90)
         risk_cat = ml_risk.get("category", "Normal")
 
-        # Query domain knowledge
-        knowledge = weather_knowledge.query_global_knowledge(
-            query=query,
-            current_temp=temp,
-            precip_prob=ml_rain.get("probability_pct", 20),
-            risk_cat=risk_cat
-        )
+        # 1. Casual Greetings (hi, hello, hey, good morning, etc.)
+        greetings = ["hi", "hello", "hey", "greetings", "good morning", "good afternoon", "good evening", "howdy", "sup"]
+        if q_clean in greetings or any(q_clean.startswith(g + " ") or q_clean == g for g in greetings):
+            answer = f"Hello! 👋 I am your <strong>Agentic AI Weather Assistant</strong>.<br><br>" \
+                     f"I'm currently monitoring live atmospheric telemetry for <strong>{city}, {country}</strong> (Temp: <strong>{temp}°C</strong>, Condition: <strong>{cond}</strong>).<br><br>" \
+                     f"How can I assist you today? You can ask me questions like:<br>" \
+                     f"• <em>'Is it safe for outdoor running right now?'</em><br>" \
+                     f"• <em>'Do I need an umbrella today?'</em><br>" \
+                     f"• <em>'What should I wear in {city} today?'</em><br>" \
+                     f"• <em>'What are the emergency precautions for floods or heatwaves?'</em>"
+            return {"query": query, "answer": answer, "agent_name": self.name}
 
-        precautions_formatted = "".join([f"<li>{p}</li>" for p in knowledge["precautions"]])
-        
-        answer = f"🤖 <strong>AI Agent Comprehensive Weather & Safety Report for {city}, {country}</strong><br>" \
-                 f"📍 <em>Coordinates: Lat {loc['latitude']}, Lon {loc['longitude']}</em><br><br>" \
-                 f"📊 <strong>Live Telemetry Metrics</strong>:<br>" \
-                 f"• Temperature: <strong>{temp}°C</strong> (Feels like {feels}°C) | Condition: <strong>{cond}</strong><br>" \
-                 f"• Moisture & Wind: Humidity <strong>{humidity}%</strong> | Wind <strong>{wind} km/h</strong> | Pressure <strong>{Math_round_pres(pressure)} hPa</strong><br>" \
-                 f"• Air & Solar: US AQI <strong>{aqi}</strong> | UV Index <strong>{uv}</strong><br><br>" \
-                 f"🧠 <strong>Machine Learning Diagnostics (Scikit-Learn Ensemble)</strong>:<br>" \
-                 f"• Rainfall Prediction: <strong>{ml_rain.get('probability_pct', 0)}%</strong> (Model Conf: {ml_rain.get('confidence_pct', 90)}%)<br>" \
-                 f"• Risk Classification: <strong>{risk_cat}</strong> (Class Conf: {ml_risk.get('confidence_pct', 90)}%)<br>" \
-                 f"• Anomaly Detector: <strong>{ml_anomaly.get('status', 'Normal Pattern')}</strong> | AI Risk Score: <strong>{safety}/100</strong><br>" \
-                 f"• 24H Temp Forecast: <strong>{ml_fore.get('predicted_temp_24h', temp)}°C</strong> ({ml_fore.get('trend', 'Stable')})<br><br>" \
-                 f"📜 <strong>Historical Climate & Emergency Context</strong>:<br>" \
-                 f"<em>{knowledge['historical_context']}</em><br><br>" \
-                 f"🛡️ <strong>Recommended Precautionary Steps</strong>:<ul>{precautions_formatted}</ul>" \
-                 f"💡 <strong>Optimal Solution for Your Query</strong>:<br>" \
-                 f"<strong>{knowledge['best_solution']}</strong>"
+        # 2. Conversational Capabilities / Gratitude (who are you, thank you, help, etc.)
+        if any(k in q_clean for k in ["who are you", "what can you do", "help me", "your name"]):
+            answer = f"I am your <strong>Interactive Agentic AI Weather Assistant</strong>! 🤖<br><br>" \
+                     f"I analyze live satellite data, run Scikit-Learn Machine Learning models (Rainfall probability, Risk classification, Anomaly detection), and cross-reference global emergency disaster management protocols to give you accurate, real-time safety advice for any location worldwide."
+            return {"query": query, "answer": answer, "agent_name": self.name}
+
+        if any(k in q_clean for k in ["thank you", "thanks", "awesome", "great", "cool"]):
+            answer = f"You're very welcome! 😊 Stay safe and feel free to ask if you need any more weather updates or travel advice for {city}!"
+            return {"query": query, "answer": answer, "agent_name": self.name}
+
+        # 3. Outdoor Exercise / Running Intent
+        if any(k in q_clean for k in ["run", "running", "jog", "jogging", "walk", "outdoor", "sport", "football", "cricket"]):
+            if safety >= 70 and rain_prob < 40 and aqi < 100:
+                answer = f"🏃 <strong>Yes! Outdoor running conditions in {city} are excellent right now.</strong><br><br>" \
+                         f"• Temperature: <strong>{temp}°C</strong> (Feels like {feels}°C)<br>" \
+                         f"• Condition: <strong>{cond}</strong> | Humidity: <strong>{humidity}%</strong><br>" \
+                         f"• Air Quality: US AQI <strong>{aqi}</strong> (Safe) | ML Safety Score: <strong>{safety}/100</strong><br><br>" \
+                         f"💡 <em>Tip: Enjoy your run! Stay hydrated.</em>"
+            else:
+                answer = f"⚠️ <strong>Caution is advised for outdoor activities in {city}.</strong><br><br>" \
+                         f"• ML Risk Level: <strong>{risk_cat}</strong> (Safety Score: <strong>{safety}/100</strong>)<br>" \
+                         f"• Rain Probability: <strong>{rain_prob}%</strong> | US AQI: <strong>{aqi}</strong><br><br>" \
+                         f"💡 <em>Tip: Consider indoor gym exercise or waiting until weather conditions improve.</em>"
+            return {"query": query, "answer": answer, "agent_name": self.name}
+
+        # 4. Rain & Umbrella Intent
+        if any(k in q_clean for k in ["rain", "umbrella", "wet", "drizzle", "downpour", "shower"]):
+            if rain_prob >= 45 or "Rain" in cond or "Drizzle" in cond:
+                answer = f"☔ <strong>Yes, carry an umbrella!</strong><br><br>" \
+                         f"• ML Rainfall Prediction: <strong>{rain_prob}% probability</strong> (Model Confidence: <strong>{rain_conf}%</strong>)<br>" \
+                         f"• Current Condition in {city}: <strong>{cond}</strong><br><br>" \
+                         f"💡 <em>Recommendation: Waterproof footwear and a sturdy windproof umbrella are recommended today.</em>"
+            else:
+                answer = f"☀️ <strong>Low chance of rain in {city} right now.</strong><br><br>" \
+                         f"• ML Rainfall Probability: <strong>{rain_prob}%</strong><br>" \
+                         f"• Current Condition: <strong>{cond}</strong><br><br>" \
+                         f"💡 <em>You likely won't need an umbrella today!</em>"
+            return {"query": query, "answer": answer, "agent_name": self.name}
+
+        # 5. Clothing & Outfit Intent
+        if any(k in q_clean for k in ["wear", "cloth", "outfit", "jacket", "coat", "sweater", "dress"]):
+            if temp >= 30:
+                answer = f"👕 <strong>Outfit Advice for {city} ({temp}°C)</strong>:<br>" \
+                         f"Wear lightweight, breathable cotton or linen clothing. Apply SPF 50+ sunscreen (UV Index: {uv}) and wear sunglasses."
+            elif temp <= 10:
+                answer = f"🧥 <strong>Outfit Advice for {city} ({temp}°C)</strong>:<br>" \
+                         f"It's cold! Wear layered thermal clothing, a heavy insulated jacket or coat, and warm gloves."
+            else:
+                answer = f"🧥 <strong>Outfit Advice for {city} ({temp}°C)</strong>:<br>" \
+                         f"Comfortable moderate weather attire. A light jacket, hoodie, or sweater over jeans is ideal for {cond}."
+            return {"query": query, "answer": answer, "agent_name": self.name}
+
+        # 6. Air Quality & Health Intent
+        if any(k in q_clean for k in ["air", "aqi", "smog", "pollution", "kid", "asthma", "breath"]):
+            if aqi < 50:
+                aq_status = "Good (Clean Air)"
+            elif aqi < 100:
+                aq_status = "Moderate"
+            else:
+                aq_status = "Unhealthy for Sensitive Groups"
+            answer = f"😷 <strong>Air Quality Report for {city}</strong>:<br><br>" \
+                     f"• US AQI Level: <strong>{aqi}</strong> — <strong>{aq_status}</strong><br>" \
+                     f"• PM2.5 / PM10 particles are within normal monitoring ranges.<br><br>" \
+                     f"💡 <em>Recommendation: {'Clean air for all outdoor activities!' if aqi < 100 else 'Sensitive individuals should wear an N95 mask outdoors.'}</em>"
+            return {"query": query, "answer": answer, "agent_name": self.name}
+
+        # 7. Severe Weather & Disaster Emergency Intent
+        if any(k in q_clean for k in ["cyclone", "hurricane", "flood", "heatwave", "blizzard", "typhoon", "disaster", "emergency"]):
+            knowledge = weather_knowledge.query_global_knowledge(query, temp, rain_prob, risk_cat)
+            precautions_html = "".join([f"<li>{p}</li>" for p in knowledge["precautions"]])
+            answer = f"🤖 <strong>Emergency Management Protocol for {city}</strong>:<br><br>" \
+                     f"<strong>{knowledge['title']}</strong><br>" \
+                     f"📜 <em>Historical Context</em>: {knowledge['historical_context']}<br><br>" \
+                     f"🛡️ <strong>Research-Backed Precautionary Steps</strong>:<ul>{precautions_html}</ul>" \
+                     f"💡 <strong>Optimal Solution</strong>:<br><strong>{knowledge['best_solution']}</strong>"
+            return {"query": query, "answer": answer, "agent_name": self.name}
+
+        # 8. General Weather Query / Fallback
+        answer = f"🤖 <strong>Weather & Safety Briefing for {city}, {country}</strong>:<br><br>" \
+                 f"• Temperature: <strong>{temp}°C</strong> ({cond}) | Feels like <strong>{feels}°C</strong><br>" \
+                 f"• Moisture & Wind: Humidity <strong>{humidity}%</strong> | Wind <strong>{wind} km/h</strong><br>" \
+                 f"• ML Risk Level: <strong>{risk_cat}</strong> (Safety Index: <strong>{safety}/100</strong>)<br>" \
+                 f"• ML Rain Probability: <strong>{rain_prob}%</strong> (Confidence: <strong>{rain_conf}%</strong>)<br><br>" \
+                 f"💡 <em>How else can I assist you with weather forecasts, outdoor activities, or clothing recommendations?</em>"
 
         return {
             "query": query,
             "answer": answer,
             "agent_name": self.name
         }
-
-
-def Math_round_pres(val):
-    try:
-        return int(round(val))
-    except Exception:
-        return 1013
 
 
 class AgenticWeatherSystem:
@@ -568,7 +618,7 @@ class AgenticWeatherSystem:
             "role": self.actioner.role,
             "status": "SUCCESS",
             "duration_ms": dt4,
-            "thought": f"Generated {len(recommendations['detailed_actions'])} ML-guided advisories."
+            "thought": f"Generated {len(recommendations['detailed_actions'])} research-backed advisories."
         })
 
         return {

@@ -5,7 +5,7 @@ GLOBAL_WEATHER_KNOWLEDGE = {
         "title": "🌀 Cyclone, Typhoon & Hurricane Emergency Management",
         "historical_context": "Tropical cyclones (e.g. Hurricane Katrina, Cyclone Nargis, Typhoon Tip) generate devastating wind velocities exceeding 120 km/h and massive storm surges.",
         "precautions": [
-            "Secure all windows and doors with storm shutters or heavy plywood.",
+            "Secure all windows and doors with storm shutters or heavy 5/8-inch exterior plywood.",
             "Stock an emergency supply kit with 3 days of non-perishable food, water (4L/person/day), first aid, flashlight, and power banks.",
             "Charge all mobile devices and monitor official emergency broadcasts (NOAA / IMD / JMA)."
         ],
@@ -53,17 +53,109 @@ GLOBAL_WEATHER_KNOWLEDGE = {
     }
 }
 
-REGIONAL_CLIMATE_PATTERNS = {
-    "asia": "Influenced by South-East Monsoons (June-Sept), Siberian Cold Highs (Dec-Feb), and West Pacific Typhoons.",
-    "europe": "Westerlies tempered by Gulf Stream currents, experiencing North Atlantic maritime lows and summer Mediterranean heat.",
-    "americas": "Vulnerable to Tornado Alley convective storms, Atlantic/Gulf Hurricanes, and Canadian Arctic Polar Outbreaks.",
-    "oceania": "Driven by El Niño-Southern Oscillation (ENSO) cycles, severe summer bushfire dynamics, and Southern Ocean squalls."
-}
+# Research-Backed Action Advisories Generator for ActionAgent
+def generate_research_advisories(city: str, current: Dict[str, Any], air_quality: Dict[str, Any], ml_analytics: Dict[str, Any]) -> List[Dict[str, Any]]:
+    temp = current.get("temperature", 22.0)
+    feels = current.get("feels_like", temp)
+    humidity = current.get("humidity", 60)
+    wind = current.get("wind_speed", 12.0)
+    pressure = current.get("pressure", 1013)
+    uv = current.get("uv_index", 5.0)
+    aqi = air_quality.get("us_aqi", 42)
+    
+    ml_rain = ml_analytics.get("rainfall_prediction", {})
+    ml_risk = ml_analytics.get("risk_classification", {})
+    ml_anomaly = ml_analytics.get("anomaly_detection", {})
+    rain_prob = ml_rain.get("probability_pct", 15)
+    risk_cat = ml_risk.get("category", "Normal")
+
+    advisories = []
+
+    # 1. Hydration & Heat Stress (Wet-Bulb Heat Index Thresholds)
+    if temp >= 35 or feels >= 38:
+        advisories.append({
+            "category": "Thermoregulatory Heat Safety",
+            "icon": "💧",
+            "text": f"High thermal load detected in {city} ({temp}°C, feels like {feels}°C). Drink 500ml of electrolyte water every hour. Avoid intense outdoor physical exertion between 11 AM - 4 PM."
+        })
+    elif temp >= 30:
+        advisories.append({
+            "category": "Moderate Thermal Exertion",
+            "icon": "🥤",
+            "text": f"Warm conditions in {city} ({temp}°C). Maintain adequate hydration (2.5L-3L daily) and rest in shaded or air-conditioned environments."
+        })
+    elif temp <= 5:
+        advisories.append({
+            "category": "Sub-Zero Thermal Insulation",
+            "icon": "🧥",
+            "text": f"Freezing temperatures in {city} ({temp}°C). Wear three-layer thermal insulation (base moisture-wicking layer, fleece mid-layer, windproof outer shell) to prevent hypothermia."
+        })
+
+    # 2. Air Quality & Respiratory Protection (WHO PM2.5 Guidelines)
+    if aqi >= 150:
+        advisories.append({
+            "category": "Severe Air Quality Alert",
+            "icon": "😷",
+            "text": f"US AQI level in {city} is Hazardous ({aqi}). Wear an N95/KN95 respirator outdoors. Run indoor HEPA air purifiers and keep windows closed."
+        })
+    elif aqi >= 100:
+        advisories.append({
+            "category": "Moderate Respiratory Advisory",
+            "icon": "🍃",
+            "text": f"Elevated AQI in {city} ({aqi}). Sensitive groups (children, seniors, asthma sufferers) should reduce prolonged outdoor exertion."
+        })
+
+    # 3. Wind Velocity & Structural Dynamics (Beaufort Scale Analysis)
+    if wind >= 45 or risk_cat == "Storm":
+        advisories.append({
+            "category": "Gale-Force Wind Hazards",
+            "icon": "💨",
+            "text": f"High wind speeds in {city} ({wind} km/h). Secure loose outdoor furniture, avoid standing near large trees or power lines, and drive with extra vehicle stability caution."
+        })
+
+    # 4. Precipitation & Rain Gear (Hydro-Meteorological Risk)
+    if rain_prob >= 60 or risk_cat == "Heavy Rain":
+        advisories.append({
+            "category": "Precipitation Preparedness",
+            "icon": "☔",
+            "text": f"ML Rainfall Model predicts {rain_prob}% rain probability for {city}. Carry a sturdy windproof umbrella and waterproof footwear."
+        })
+    elif rain_prob >= 35:
+        advisories.append({
+            "category": "Chance of Light Rain",
+            "icon": "🌧️",
+            "text": f"Moderate rain chance in {city} ({rain_prob}%). Keep a compact rain jacket or umbrella accessible."
+        })
+
+    # 5. Solar UV Dose (Erythemal Exposure Guidelines)
+    if uv >= 8.0:
+        advisories.append({
+            "category": "Very High UV Radiation",
+            "icon": "☀️",
+            "text": f"Extreme UV Index in {city} ({uv.toFixed(1) if hasattr(uv, 'toFixed') else round(uv,1)}). Apply broad-spectrum SPF 50+ sunscreen every 2 hours and wear broad-brimmed hats."
+        })
+
+    # 6. Environmental Anomaly Flag
+    if ml_anomaly.get("is_anomaly", False):
+        advisories.append({
+            "category": "Atmospheric Pattern Anomaly",
+            "icon": "🚨",
+            "text": f"ML Isolation Forest flagged unusual pressure/wind anomalies in {city}. Monitor local emergency bulletins for rapid weather shifts."
+        })
+
+    # Fallback optimal baseline if weather is ideal
+    if not advisories:
+        advisories.append({
+            "category": "Optimal Outdoor Conditions",
+            "icon": "🌿",
+            "text": f"Weather in {city} is favorable ({temp}°C, {current.get('condition', 'Clear')}). Excellent conditions for outdoor walks, sports, and daily activities."
+        })
+
+    return advisories
 
 def query_global_knowledge(query: str, current_temp: float, precip_prob: float, risk_cat: str) -> Dict[str, Any]:
     q_lower = query.lower()
     
-    # Intent Match
     if any(k in q_lower for k in ["cyclone", "hurricane", "typhoon", "storm", "gale"]):
         topic = "cyclone"
     elif any(k in q_lower for k in ["heat", "hot", "heatwave", "sunstroke", "summer"]):
@@ -75,7 +167,6 @@ def query_global_knowledge(query: str, current_temp: float, precip_prob: float, 
     elif any(k in q_lower for k in ["air", "aqi", "smog", "pollution", "smoke"]):
         topic = "pollution"
     else:
-        # Dynamic topic selection based on current live weather risk
         if risk_cat in ["Cyclone Risk", "Storm"]:
             topic = "cyclone"
         elif risk_cat == "Heatwave" or current_temp >= 36:
