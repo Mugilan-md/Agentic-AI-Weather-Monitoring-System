@@ -2,12 +2,15 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentUnit = "C";
     let weatherData = null;
     let hourlyChart = null;
+    let lightningHue = 210; // Vivid Deep Electric Blue
 
     const searchInput = document.getElementById("search-input");
     const searchBtn = document.getElementById("search-btn");
     const autocompleteDropdown = document.getElementById("autocomplete-dropdown");
     const loadingOverlay = document.getElementById("loading-overlay");
     const favStarBtn = document.getElementById("fav-star-btn");
+    const hueSlider = document.getElementById("hue-slider");
+    const hueValDisplay = document.getElementById("hue-val-display");
     const retrainBtn = document.getElementById("retrain-btn");
 
     const unitBtnC = document.getElementById("unit-c");
@@ -17,11 +20,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatSendBtn = document.getElementById("chat-send-btn");
     const chatHistory = document.getElementById("chat-history");
 
-    // Initialize Scroll-Driven Video Background Controller
-    initScrollVideoController();
+    // Initialize 60+ FPS 3-Way Branching WebGL Lightning Background Shader
+    initLightningShader();
 
-    // Initialize 3D Parallax Tilt Effects on Cards
+    // Initialize 3D Parallax Tilt Effects ONLY on Dashboard Content Cards (Excluding Navbar)
     init3DTiltEffects();
+
+    // Hue Slider Listener
+    if (hueSlider) {
+        hueSlider.value = lightningHue;
+        hueSlider.addEventListener("input", (e) => {
+            lightningHue = parseFloat(e.target.value);
+            if (hueValDisplay) hueValDisplay.textContent = `${Math.round(lightningHue)}°`;
+        });
+    }
 
     // Retrain Model Button Listener
     if (retrainBtn) {
@@ -532,11 +544,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // -------------------------------------------------------------
-    // Interactive 3D Parallax Tilt Effect
+    // Interactive 3D Parallax Tilt Effect (EXCLUDING Navbar)
     // -------------------------------------------------------------
     function init3DTiltEffects() {
         const cards = document.querySelectorAll(".glass-card, .metric-card");
         cards.forEach(card => {
+            // Exclude navbar completely from 3D tilting
+            if (card.classList.contains("navbar") || card.classList.contains("navbar-sleek")) return;
+
             card.addEventListener("mousemove", (e) => {
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
@@ -555,64 +570,162 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // =========================================================================
-    // SCROLL-DRIVEN VIDEO BACKGROUND CONTROLLER (GPU-ACCELERATED SCRUBBING)
-    // =========================================================================
-    function initScrollVideoController() {
-        const video = document.getElementById("scroll-weather-video");
-        if (!video) return;
+    // -------------------------------------------------------------
+    // High-FPS 3-Way Branching WebGL Lightning Shader
+    // -------------------------------------------------------------
+    function initLightningShader() {
+        const canvas = document.getElementById("lightning-canvas");
+        if (!canvas) return;
 
-        // Freeze at first frame initially
-        video.pause();
-        video.currentTime = 0;
+        const gl = canvas.getContext("webgl", { alpha: true, antialias: true, preserveDrawingBuffer: false });
+        if (!gl) return;
 
-        let targetTime = 0;
-        let currentTime = 0;
-        let effectiveDuration = 0;
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            gl.viewport(0, 0, canvas.width, canvas.height);
+        }
+        resize();
+        window.addEventListener("resize", resize);
 
-        function updateVideoMetadata() {
-            // Trim the last 4 seconds as requested
-            if (video.duration && video.duration > 4) {
-                effectiveDuration = video.duration - 4.0;
-            } else if (video.duration) {
-                effectiveDuration = video.duration;
-            } else {
-                effectiveDuration = 10.0; // fallback duration until loaded
+        const vsSource = `
+            attribute vec2 aPosition;
+            void main() {
+                gl_Position = vec4(aPosition, 0.0, 1.0);
             }
-        }
+        `;
 
-        video.addEventListener("loadedmetadata", updateVideoMetadata);
-        if (video.readyState >= 1) updateVideoMetadata();
+        const fsSource = `
+            precision mediump float;
+            uniform vec2 iResolution;
+            uniform float iTime;
+            uniform float uHue;
+            
+            #define OCTAVE_COUNT 8
 
-        function getScrollFraction() {
-            const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-            return Math.min(1, Math.max(0, window.scrollY / maxScroll));
-        }
-
-        function onScroll() {
-            const scrollFraction = getScrollFraction();
-            if (effectiveDuration > 0) {
-                targetTime = scrollFraction * effectiveDuration;
+            vec3 hsv2rgb(vec3 c) {
+                vec3 rgb = clamp(abs(mod(c.x * 6.0 + vec3(0.0,4.0,2.0), 6.0) - 3.0) - 1.0, 0.0, 1.0);
+                return c.z * mix(vec3(1.0), rgb, c.y);
             }
-        }
 
-        window.addEventListener("scroll", onScroll, { passive: true });
+            float hash12(vec2 p) {
+                vec3 p3 = fract(vec3(p.xyx) * .1031);
+                p3 += dot(p3, p3.yzx + 33.33);
+                return fract((p3.x + p3.y) * p3.z);
+            }
 
-        // Hardware-Accelerated Smooth Lerp Scrub Loop (60 FPS)
-        function renderVideoFrame() {
-            if (effectiveDuration > 0) {
-                // Lerp smooth frame interpolation (0.15 factor for crisp responsiveness)
-                currentTime += (targetTime - currentTime) * 0.15;
-                
-                if (Math.abs(targetTime - currentTime) > 0.001) {
-                    try {
-                        video.currentTime = Math.min(effectiveDuration, Math.max(0, currentTime));
-                    } catch (e) {}
+            mat2 rotate2d(float theta) {
+                float c = cos(theta);
+                float s = sin(theta);
+                return mat2(c, -s, s, c);
+            }
+
+            float noise(vec2 p) {
+                vec2 ip = floor(p);
+                vec2 fp = fract(p);
+                float a = hash12(ip);
+                float b = hash12(ip + vec2(1.0, 0.0));
+                float c = hash12(ip + vec2(0.0, 1.0));
+                float d = hash12(ip + vec2(1.0, 1.0));
+                vec2 t = smoothstep(0.0, 1.0, fp);
+                return mix(mix(a, b, t.x), mix(c, d, t.x), t.y);
+            }
+
+            float fbm(vec2 p) {
+                float value = 0.0;
+                float amplitude = 0.5;
+                for (int i = 0; i < OCTAVE_COUNT; ++i) {
+                    value += amplitude * noise(p);
+                    p *= rotate2d(0.45);
+                    p *= 2.0;
+                    amplitude *= 0.5;
                 }
+                return value;
             }
-            requestAnimationFrame(renderVideoFrame);
+
+            float lightningBranch(vec2 uv, vec2 origin, float angle, float time, float noiseScale) {
+                vec2 p = uv - origin;
+                p = rotate2d(angle) * p;
+                float n = fbm(p * noiseScale + vec2(0.0, time * 2.5));
+                return abs(p.x + (n - 0.5) * 0.45);
+            }
+
+            void main() {
+                vec2 uv = gl_FragCoord.xy / iResolution.xy;
+                uv = 2.0 * uv - 1.0;
+                uv.x *= iResolution.x / iResolution.y;
+                
+                vec2 nodeOrigin = vec2(0.0, 0.65);
+                float time = iTime;
+                
+                float d1 = lightningBranch(uv, nodeOrigin, -0.55, time, 2.5);
+                float d2 = lightningBranch(uv, nodeOrigin,  0.00, time * 1.1, 2.8);
+                float d3 = lightningBranch(uv, nodeOrigin,  0.55, time * 0.9, 2.5);
+                
+                float d4 = lightningBranch(uv, nodeOrigin, -0.28, time * 1.4, 4.0);
+                float d5 = lightningBranch(uv, nodeOrigin,  0.28, time * 1.3, 4.0);
+                
+                float bolt1 = 0.055 / max(d1, 0.001);
+                float bolt2 = 0.070 / max(d2, 0.001);
+                float bolt3 = 0.055 / max(d3, 0.001);
+                float spark4 = 0.025 / max(d4, 0.001);
+                float spark5 = 0.025 / max(d5, 0.001);
+                
+                float totalLightning = bolt1 + bolt2 + bolt3 + spark4 + spark5;
+                
+                float nodeDist = length(uv - nodeOrigin);
+                float nodeGlow = 0.12 / max(nodeDist, 0.01);
+                float pulse = 0.85 + 0.15 * sin(time * 6.0);
+                nodeGlow *= pulse;
+                
+                vec3 baseColor = hsv2rgb(vec3(uHue / 360.0, 0.85, 0.98));
+                vec3 col = baseColor * (totalLightning * 0.85 + nodeGlow);
+                
+                gl_FragColor = vec4(col, 0.65);
+            }
+        `;
+
+        function compileShader(source, type) {
+            const s = gl.createShader(type);
+            gl.shaderSource(s, source);
+            gl.compileShader(s);
+            if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+                return null;
+            }
+            return s;
         }
 
-        requestAnimationFrame(renderVideoFrame);
+        const vs = compileShader(vsSource, gl.VERTEX_SHADER);
+        const fs = compileShader(fsSource, gl.FRAGMENT_SHADER);
+        if (!vs || !fs) return;
+
+        const program = gl.createProgram();
+        gl.attachShader(program, vs);
+        gl.attachShader(program, fs);
+        gl.linkProgram(program);
+        gl.useProgram(program);
+
+        const vertices = new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]);
+        const buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+        const aPosition = gl.getAttribLocation(program, "aPosition");
+        gl.enableVertexAttribArray(aPosition);
+        gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+
+        const uResolution = gl.getUniformLocation(program, "iResolution");
+        const uTime = gl.getUniformLocation(program, "iTime");
+        const uHue = gl.getUniformLocation(program, "uHue");
+
+        const startTime = performance.now();
+        function render() {
+            gl.uniform2f(uResolution, canvas.width, canvas.height);
+            gl.uniform1f(uTime, (performance.now() - startTime) / 1000.0);
+            gl.uniform1f(uHue, lightningHue);
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
+            requestAnimationFrame(render);
+        }
+        requestAnimationFrame(render);
     }
 });

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Agentic AI Weather Monitoring System - Real-time atmospheric analysis, Scroll-Driven Video Background, Machine Learning intelligence, and multi-agent risk evaluation.">
+    <meta name="description" content="Agentic AI Weather Monitoring System - Real-time atmospheric analysis, WebGL Shader visualizer, Machine Learning intelligence, and multi-agent risk evaluation.">
     <title>Agentic AI Weather Monitoring System</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,21 +16,19 @@
 </head>
 <body>
 
-<!-- Fullscreen Scroll-Driven Video Background -->
-<video id="scroll-weather-video" class="scroll-weather-video" playsinline muted preload="auto">
-    <source src="{{ url_for('static', filename='videos/weather_bg.mp4') }}" type="video/mp4">
-</video>
-<div class="video-overlay-glow"></div>
+<!-- WebGL Background Lightning Shader & Radial Backdrop -->
+<canvas id="lightning-canvas" class="lightning-bg-canvas"></canvas>
+<div class="glow-backdrop"></div>
 
 <div class="container">
 
-    <!-- Header Navbar -->
-    <header class="navbar glass-card">
+    <!-- Premium Flat Floating Glass Navbar (No 3D Tilt) -->
+    <header class="navbar navbar-sleek">
         <div class="brand">
             <span class="brand-icon">⚡</span>
             <div>
                 <span class="brand-title">Agentic Weather AI</span>
-                <span class="brand-badge">Multi-Agent v5.0 + Cinematic Video</span>
+                <span class="brand-badge">Multi-Agent v5.0 + WebGL Shader</span>
             </div>
         </div>
 
@@ -44,6 +42,13 @@
         </div>
 
         <div class="nav-controls">
+            <!-- WebGL Lightning Hue Controller -->
+            <div class="hue-slider-box" title="Adjust WebGL Background Lightning Hue">
+                <span>⚡ Aura:</span>
+                <input type="range" id="hue-slider" class="hue-slider-input" min="0" max="360" value="210">
+                <span id="hue-val-display">210°</span>
+            </div>
+
             <div id="mode-badge" class="mode-indicator">
                 <span>📡</span> Satellite Mode
             </div>
@@ -389,7 +394,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>Agentic AI Weather Monitoring System • Cinematic Video Background & Multi-Agent Intelligence</p>
+        <p>Agentic AI Weather Monitoring System • WebGL Shader & Multi-Agent Intelligence</p>
     </footer>
 
 </div>
