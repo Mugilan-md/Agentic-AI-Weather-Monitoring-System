@@ -3,7 +3,6 @@ import os
 import tempfile
 from typing import List, Dict, Any
 
-# On Vercel, the filesystem is read-only except /tmp
 if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
     DB_PATH = os.path.join(tempfile.gettempdir(), "weather_system.db")
 else:
@@ -48,11 +47,11 @@ def init_db():
         cursor.execute("SELECT COUNT(*) as count FROM favorite_cities")
         if cursor.fetchone()["count"] == 0:
             default_favorites = [
-                ("Chennai", "India"),
                 ("London", "United Kingdom"),
                 ("Tokyo", "Japan"),
                 ("New York", "United States"),
-                ("Paris", "France")
+                ("Paris", "France"),
+                ("Sydney", "Australia")
             ]
             cursor.executemany("INSERT INTO favorite_cities (city, country) VALUES (?, ?)", default_favorites)
 
@@ -107,9 +106,9 @@ def get_favorites() -> List[Dict[str, Any]]:
         return [dict(row) for row in rows]
     except Exception:
         return [
-            {"id": 1, "city": "Chennai", "country": "India"},
-            {"id": 2, "city": "London", "country": "United Kingdom"},
-            {"id": 3, "city": "Tokyo", "country": "Japan"}
+            {"id": 1, "city": "London", "country": "United Kingdom"},
+            {"id": 2, "city": "Tokyo", "country": "Japan"},
+            {"id": 3, "city": "New York", "country": "United States"}
         ]
 
 
@@ -150,7 +149,7 @@ def get_db_analytics() -> Dict[str, Any]:
         
         cursor.execute("SELECT city, COUNT(city) as count FROM search_history GROUP BY city ORDER BY count DESC LIMIT 1")
         top_city_row = cursor.fetchone()
-        top_city = top_city_row["city"] if top_city_row else "Chennai"
+        top_city = top_city_row["city"] if top_city_row else "London"
 
         conn.close()
         return {
@@ -163,6 +162,6 @@ def get_db_analytics() -> Dict[str, Any]:
         return {
             "total_queries": 1,
             "avg_safety_score": 85.0,
-            "top_city": "Chennai",
+            "top_city": "London",
             "db_status": "Serverless Active"
         }

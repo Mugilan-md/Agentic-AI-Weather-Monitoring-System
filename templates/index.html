@@ -35,7 +35,7 @@
         <div class="search-wrapper">
             <div class="search-bar">
                 <span style="font-size: 1.1rem; margin-right: 4px;">🔍</span>
-                <input type="text" id="search-input" class="search-input" placeholder="Search city (e.g. Chennai, London, Tokyo)..." autocomplete="off">
+                <input type="text" id="search-input" class="search-input" placeholder="Search city (e.g. London, Tokyo, New York)..." autocomplete="off">
                 <button id="search-btn" class="search-btn" title="Search Weather">➔</button>
             </div>
             <div id="autocomplete-dropdown" class="autocomplete-dropdown"></div>
@@ -45,8 +45,8 @@
             <!-- WebGL Lightning Hue Controller -->
             <div class="hue-slider-box" title="Adjust WebGL Background Lightning Hue">
                 <span>⚡ Aura:</span>
-                <input type="range" id="hue-slider" class="hue-slider-input" min="0" max="360" value="220">
-                <span id="hue-val-display">220°</span>
+                <input type="range" id="hue-slider" class="hue-slider-input" min="0" max="360" value="210">
+                <span id="hue-val-display">210°</span>
             </div>
 
             <div id="mode-badge" class="mode-indicator">
@@ -63,9 +63,10 @@
     <div class="bookmarks-bar">
         <span class="bookmark-label">⭐ DB Favorites:</span>
         <div id="bookmarks-chips" style="display: flex; gap: 8px;">
-            <button class="chip" data-city="Chennai">Chennai</button>
             <button class="chip" data-city="London">London</button>
             <button class="chip" data-city="Tokyo">Tokyo</button>
+            <button class="chip" data-city="New York">New York</button>
+            <button class="chip" data-city="Paris">Paris</button>
         </div>
     </div>
 
@@ -190,7 +191,7 @@
                 </div>
 
                 <div class="db-stat-card">
-                    <div id="stat-top-city" class="db-stat-val">Chennai</div>
+                    <div id="stat-top-city" class="db-stat-val">London</div>
                     <div class="db-stat-lbl">Most Searched City</div>
                 </div>
 

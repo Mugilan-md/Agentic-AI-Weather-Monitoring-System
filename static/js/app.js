@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentUnit = "C";
     let weatherData = null;
     let hourlyChart = null;
-    let lightningHue = 220; // Default electric cyan/blue
+    let lightningHue = 210; // Vivid Deep Electric Blue
 
     const searchInput = document.getElementById("search-input");
     const searchBtn = document.getElementById("search-btn");
@@ -19,11 +19,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatSendBtn = document.getElementById("chat-send-btn");
     const chatHistory = document.getElementById("chat-history");
 
-    // Initialize WebGL Lightning Background Shader
+    // Initialize High-FPS Blue Lightning Background Shader
     initLightningShader();
 
     // Hue Slider Listener
     if (hueSlider) {
+        hueSlider.value = lightningHue;
         hueSlider.addEventListener("input", (e) => {
             lightningHue = parseFloat(e.target.value);
             if (hueValDisplay) hueValDisplay.textContent = `${Math.round(lightningHue)}°`;
@@ -58,8 +59,8 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDbAnalytics();
     loadDbHistory();
 
-    // Default load
-    const initialCity = window.INITIAL_CITY || "Chennai";
+    // Default load (London)
+    const initialCity = window.INITIAL_CITY || "London";
     fetchWeatherData(initialCity);
 
     // Event Listeners
@@ -202,19 +203,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const analysis = res.analysis;
         const recs = res.recommendations;
         const logs = res.agent_logs;
-
-        // Automatically adjust WebGL Lightning Hue based on Weather Safety Level
-        if (analysis.status_level === "CRITICAL RISK") {
-            lightningHue = 0; // Crimson Warning
-        } else if (analysis.status_level === "HIGH RISK") {
-            lightningHue = 35; // Amber Warning
-        } else if (analysis.status_level === "MODERATE") {
-            lightningHue = 280; // Violet Warning
-        } else {
-            lightningHue = 215; // Electric Blue Favorable
-        }
-        if (hueSlider) hueSlider.value = lightningHue;
-        if (hueValDisplay) hueValDisplay.textContent = `${Math.round(lightningHue)}°`;
 
         // Mode Indicator
         const modeBadge = document.getElementById("mode-badge");
@@ -479,13 +467,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // -------------------------------------------------------------
-    // WebGL Shader Background (Lightning Odyssey Effect)
+    // High-FPS WebGL Shader Background (Electric Blue Lightning)
     // -------------------------------------------------------------
     function initLightningShader() {
         const canvas = document.getElementById("lightning-canvas");
         if (!canvas) return;
 
-        const gl = canvas.getContext("webgl");
+        const gl = canvas.getContext("webgl", { alpha: true, antialias: true, preserveDrawingBuffer: false });
         if (!gl) return;
 
         function resize() {
@@ -556,11 +544,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 uv = 2.0 * uv - 1.0;
                 uv.x *= iResolution.x / iResolution.y;
                 
-                uv += 1.8 * fbm(uv * 1.8 + 0.6 * iTime) - 0.9;
+                // Fast electric lightning motion (high speed 1.6x)
+                uv += 1.8 * fbm(uv * 2.2 + 1.6 * iTime) - 0.9;
                 float dist = abs(uv.x);
-                vec3 baseColor = hsv2rgb(vec3(uHue / 360.0, 0.75, 0.85));
-                vec3 col = baseColor * (0.045 / dist);
-                gl_FragColor = vec4(col, 0.35);
+                
+                // Deep Electric Blue base color (hue ~210)
+                vec3 baseColor = hsv2rgb(vec3(uHue / 360.0, 0.85, 0.95));
+                vec3 col = baseColor * (0.065 / dist);
+                gl_FragColor = vec4(col, 0.55);
             }
         `;
 

@@ -11,7 +11,7 @@ database.init_db()
 
 @app.route("/", methods=["GET"])
 def index():
-    initial_city = request.args.get("city", "Chennai")
+    initial_city = request.args.get("city", "London")
     return render_template("index.html", initial_city=initial_city)
 
 @app.route("/api/weather", methods=["POST"])
@@ -20,7 +20,7 @@ def get_weather():
     city = data.get("city", "").strip()
     
     if not city:
-        city = "Chennai"
+        city = "London"
 
     try:
         result = run_weather_agent(city)
@@ -38,7 +38,7 @@ def get_weather():
         )
         return jsonify({"success": True, "result": result})
     except Exception as e:
-        fallback_result = run_weather_agent("Chennai")
+        fallback_result = run_weather_agent("London")
         return jsonify({"success": True, "result": fallback_result, "warning": f"Switched to resilient mode: {str(e)}"})
 
 @app.route("/api/agent/chat", methods=["POST"])
@@ -51,7 +51,7 @@ def agent_chat():
         return jsonify({"success": False, "error": "Query cannot be empty."}), 400
 
     if not weather_result:
-        weather_result = run_weather_agent("Chennai")
+        weather_result = run_weather_agent("London")
 
     response = run_agent_chat(query, weather_result)
     return jsonify({"success": True, "response": response})
