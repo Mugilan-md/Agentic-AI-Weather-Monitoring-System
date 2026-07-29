@@ -1,54 +1,220 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Agentic AI Weather System</title>
-    <style>
-        body {
-            background: #e1f5fe;
-            font-family: Arial;
-            text-align: center;
-            padding-top: 50px;
-        }
-        .card {
-            background: white;
-            width: 400px;
-            margin: auto;
-            padding: 20px;
-            border-radius: 10px;
-        }
-        input, button {
-            padding: 10px;
-            width: 80%;
-            margin: 5px;
-        }
-        button {
-            background: #2196f3;
-            color: white;
-            border: none;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Agentic AI Weather Monitoring System - Real-time atmospheric analysis, multi-agent AI risk evaluation, and emergency advisories.">
+    <title>Agentic AI Weather Monitoring System</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
-<div class="card">
-    <h2>🌦 Agentic AI Weather Monitoring</h2>
+<div class="container">
 
-    <form method="POST">
-        <input type="text" name="city" placeholder="Enter City Name" required>
-        <button type="submit">Check Weather</button>
-    </form>
+    <!-- Header Navbar -->
+    <header class="navbar glass-card">
+        <div class="brand">
+            <span class="brand-icon">⚡</span>
+            <div>
+                <span class="brand-title">Agentic Weather AI</span>
+                <span class="brand-badge">Multi-Agent v2.0</span>
+            </div>
+        </div>
 
-    {% if result %}
-        <hr>
-        <p>🌡 Temperature: {{ result.weather.temp }} °C</p>
-        <p>💧 Humidity: {{ result.weather.humidity }}%</p>
-        <p>🌥 Condition: {{ result.weather.condition }}</p>
-        <p>🌬 Wind Speed: {{ result.weather.wind }} m/s</p>
+        <div class="search-wrapper">
+            <div class="search-bar">
+                <span style="font-size: 1.1rem; margin-right: 4px;">🔍</span>
+                <input type="text" id="search-input" class="search-input" placeholder="Search city (e.g. London, Tokyo, New York)..." autocomplete="off">
+                <button id="search-btn" class="search-btn" title="Search Weather">➔</button>
+            </div>
+            <div id="autocomplete-dropdown" class="autocomplete-dropdown"></div>
+        </div>
 
-        <h3>⚠ Decision: {{ result.decision }}</h3>
-        <p>✅ Action: {{ result.action }}</p>
-    {% endif %}
+        <div class="nav-controls">
+            <div class="unit-toggle">
+                <button id="unit-c" class="unit-btn active">°C</button>
+                <button id="unit-f" class="unit-btn">°F</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Quick City Bookmarks -->
+    <div class="bookmarks-bar">
+        <span class="bookmark-label">⚡ Quick Cities:</span>
+        <button class="chip" data-city="London">🇬🇧 London</button>
+        <button class="chip" data-city="Tokyo">🇯🇵 Tokyo</button>
+        <button class="chip" data-city="New York">🇺🇸 New York</button>
+        <button class="chip" data-city="Paris">🇫🇷 Paris</button>
+        <button class="chip" data-city="Sydney">🇦🇺 Sydney</button>
+        <button class="chip" data-city="Chennai">🇮🇳 Chennai</button>
+    </div>
+
+    <!-- Top Dashboard Section -->
+    <section class="dashboard-grid">
+
+        <!-- Hero Current Weather Card -->
+        <div class="glass-card hero-card">
+            <div>
+                <div class="hero-header">
+                    <div>
+                        <h1 id="location-name" class="location-name">--</h1>
+                        <p id="location-country" class="location-country">--</p>
+                    </div>
+                    <div id="safety-badge" class="safety-badge safety-OPTIMAL">
+                        <span>🛡️</span> Analyzing...
+                    </div>
+                </div>
+
+                <div class="temp-display-wrapper">
+                    <div id="weather-icon" class="weather-icon-large">☀️</div>
+                    <div>
+                        <div id="temp-display" class="temp-large">--°C</div>
+                        <div id="condition-text" class="condition-title">--</div>
+                        <div id="feels-like-text" class="feels-like">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-footer-pills">
+                <div class="pill-metric">☀️ <span id="pill-uv">UV Index: --</span></div>
+                <div class="pill-metric">🍃 <span id="pill-aqi">US AQI: --</span></div>
+                <div class="pill-metric">🌧️ <span id="pill-precip">Precip: --</span></div>
+            </div>
+        </div>
+
+        <!-- Agent Workflow Reasoning Visualizer -->
+        <div class="glass-card agent-card">
+            <h2 class="section-title"><span class="title-icon">🤖</span> Autonomous Multi-Agent Reasoning Trace</h2>
+            <div id="agent-timeline" class="agent-timeline">
+                <div class="agent-step-item">
+                    <div class="agent-step-header">
+                        <span class="agent-name">🤖 System Initializing</span>
+                    </div>
+                    <div class="agent-thought">Awaiting location query...</div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Metrics Cards Grid -->
+    <section class="metrics-section">
+        <div class="metrics-grid">
+            <div class="glass-card metric-card">
+                <div class="metric-header">
+                    <span>Humidity</span>
+                    <span class="metric-icon">💧</span>
+                </div>
+                <div id="val-humidity" class="metric-value">--%</div>
+                <div class="metric-sub">Relative Moisture</div>
+            </div>
+
+            <div class="glass-card metric-card">
+                <div class="metric-header">
+                    <span>Wind Velocity</span>
+                    <span class="metric-icon">💨</span>
+                </div>
+                <div id="val-wind" class="metric-value">-- km/h</div>
+                <div id="val-gusts" class="metric-sub">Gusts: --</div>
+            </div>
+
+            <div class="glass-card metric-card">
+                <div class="metric-header">
+                    <span>Barometric Pressure</span>
+                    <span class="metric-icon">⏲️</span>
+                </div>
+                <div id="val-pressure" class="metric-value">-- hPa</div>
+                <div class="metric-sub">Surface Pressure</div>
+            </div>
+
+            <div class="glass-card metric-card">
+                <div class="metric-header">
+                    <span>Cloud Cover</span>
+                    <span class="metric-icon">☁️</span>
+                </div>
+                <div id="val-clouds" class="metric-value">--%</div>
+                <div class="metric-sub">Sky Coverage</div>
+            </div>
+
+            <div class="glass-card metric-card">
+                <div class="metric-header">
+                    <span>UV Index</span>
+                    <span class="metric-icon">☀️</span>
+                </div>
+                <div id="val-uv" class="metric-value">--</div>
+                <div class="metric-sub">Solar Exposure</div>
+            </div>
+
+            <div class="glass-card metric-card">
+                <div class="metric-header">
+                    <span>Air Quality</span>
+                    <span class="metric-icon">🍃</span>
+                </div>
+                <div id="val-aqi" class="metric-value">--</div>
+                <div class="metric-sub">US AQI Level</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Charts & 7-Day Forecast Section -->
+    <section class="charts-grid">
+
+        <!-- Hourly Trend Chart -->
+        <div class="glass-card chart-card">
+            <h2 class="section-title"><span class="title-icon">📈</span> 24-Hour Temperature & Rain Trend</h2>
+            <div class="chart-container">
+                <canvas id="hourlyChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 7-Day Daily Forecast -->
+        <div class="glass-card forecast-card">
+            <h2 class="section-title"><span class="title-icon">📅</span> 7-Day Forecast</h2>
+            <div id="forecast-list" class="forecast-list">
+                <div style="color: var(--text-muted); font-size: 0.9rem;">Loading forecast...</div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Action Advisories Section -->
+    <section class="actions-section">
+        <div class="glass-card advisory-card">
+            <h2 class="section-title"><span class="title-icon">🛡️</span> Agent Safety Recommendations & Advisories</h2>
+            
+            <div id="primary-banner" class="primary-banner">
+                Initializing safety engine...
+            </div>
+
+            <div id="actions-list" class="actions-list">
+                <!-- Action Cards dynamically rendered -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>Agentic AI Weather Monitoring System • Multi-Agent Atmospheric Intelligence</p>
+    </footer>
+
 </div>
 
+<!-- Loading Spinner Overlay -->
+<div id="loading-overlay" class="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Executing Multi-Agent Pipeline...</div>
+</div>
+
+<script>
+    window.INITIAL_CITY = "{{ initial_city }}";
+</script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>
