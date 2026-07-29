@@ -43,29 +43,30 @@ body {
     perspective: 1200px;
 }
 
-/* Background WebGL Lightning Shader Canvas */
-.lightning-bg-canvas {
+/* Fullscreen Scroll-Driven Video Background */
+.scroll-weather-video {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
+    object-fit: cover;
     z-index: 0;
     pointer-events: none;
-    opacity: 0.85;
+    display: block;
+    filter: brightness(0.85) contrast(1.05);
+    transform: translateZ(0);
+    will-change: currentTime;
 }
 
-/* Radial Glow Behind Content */
-.glow-backdrop {
+/* Translucent Contrast Overlay */
+.video-overlay-glow {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 900px;
-    height: 900px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(56, 189, 248, 0.14) 0%, rgba(168, 85, 247, 0.06) 50%, transparent 75%);
-    filter: blur(80px);
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at center, rgba(3, 7, 18, 0.25) 0%, rgba(3, 7, 18, 0.65) 100%);
     z-index: 1;
     pointer-events: none;
 }
@@ -251,35 +252,11 @@ body {
     box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
 }
 
-/* Controls & Hue Slider */
+/* Controls */
 .nav-controls {
     display: flex;
     align-items: center;
     gap: 16px;
-}
-
-.hue-slider-box {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(15, 23, 42, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 20px;
-    padding: 6px 14px;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    transition: var(--transition-fast);
-}
-
-.hue-slider-box:hover {
-    border-color: var(--primary-cyan);
-    box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
-}
-
-.hue-slider-input {
-    width: 80px;
-    accent-color: var(--primary-cyan);
-    cursor: pointer;
 }
 
 .unit-toggle {
