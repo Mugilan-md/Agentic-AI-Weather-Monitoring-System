@@ -66,6 +66,29 @@ graph TD
 
 ---
 
+## 📁 Project Directory Structure
+
+```
+Agentic-AI-Weather-Monitoring-System/
+├── app.py                  # Flask Application Server & REST Endpoints
+├── agents.py               # 5-Agent Pipeline (Collector, Analyzer, Predictor, Advisor, Chat)
+├── ml_service.py           # Machine Learning Engine (Random Forest, Isolation Forest, Ridge)
+├── weather_knowledge.py    # Global Disaster & Emergency Management Knowledge Base
+├── database.py             # SQLite Persistence (Search Logs, Favorites, Analytics)
+├── config.py               # System Configuration & External API URLs
+├── requirements.txt        # Python Dependency Manifest
+├── vercel.json             # Vercel Serverless Hosting Configuration
+├── templates/
+│   └── index.html          # Glassmorphic HTML5 Dashboard Template
+└── static/
+    ├── css/
+    │   └── style.css       # Glassmorphic Design System, 3D Perspective & Animations
+    └── js/
+        └── app.js          # WebGL 3-Way Lightning Shader, 3D Tilt & Chart Engine
+```
+
+---
+
 ## 📂 Codebase File Alignment & Roles
 
 | Target File | Architectural Role & Implementation Details |
