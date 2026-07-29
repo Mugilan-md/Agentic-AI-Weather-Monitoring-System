@@ -23,6 +23,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize WebGL Lightning Background Shader
     initLightningShader();
 
+    // Initialize 3D Parallax Tilt Effects
+    init3DTiltEffects();
+
     // Hue Slider Listener
     if (hueSlider) {
         hueSlider.value = lightningHue;
@@ -540,6 +543,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
         chatHistory.appendChild(bubble);
         chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+
+    // -------------------------------------------------------------
+    // Interactive 3D Parallax Tilt Effect
+    // -------------------------------------------------------------
+    function init3DTiltEffects() {
+        const cards = document.querySelectorAll(".glass-card, .metric-card");
+        cards.forEach(card => {
+            card.addEventListener("mousemove", (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -5; // 5 deg tilt max
+                const rotateY = ((x - centerX) / centerX) * 5;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.015, 1.015, 1.015)`;
+            });
+
+            card.addEventListener("mouseleave", () => {
+                card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+            });
+        });
     }
 
     // -------------------------------------------------------------
