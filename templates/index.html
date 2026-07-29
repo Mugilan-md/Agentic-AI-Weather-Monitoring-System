@@ -24,7 +24,7 @@
             <span class="brand-icon">⚡</span>
             <div>
                 <span class="brand-title">Agentic Weather AI</span>
-                <span class="brand-badge">Multi-Agent v2.5</span>
+                <span class="brand-badge">Multi-Agent v3.0 + SQLite</span>
             </div>
         </div>
 
@@ -48,15 +48,14 @@
         </div>
     </header>
 
-    <!-- Quick City Bookmarks -->
+    <!-- Quick City Bookmarks (Populated from SQLite Database) -->
     <div class="bookmarks-bar">
-        <span class="bookmark-label">⚡ Quick Cities:</span>
-        <button class="chip" data-city="Chennai">🇮🇳 Chennai</button>
-        <button class="chip" data-city="London">🇬🇧 London</button>
-        <button class="chip" data-city="Tokyo">🇯🇵 Tokyo</button>
-        <button class="chip" data-city="New York">🇺🇸 New York</button>
-        <button class="chip" data-city="Paris">🇫🇷 Paris</button>
-        <button class="chip" data-city="Sydney">🇦🇺 Sydney</button>
+        <span class="bookmark-label">⭐ DB Favorites:</span>
+        <div id="bookmarks-chips" style="display: flex; gap: 8px;">
+            <button class="chip" data-city="Chennai">Chennai</button>
+            <button class="chip" data-city="London">London</button>
+            <button class="chip" data-city="Tokyo">Tokyo</button>
+        </div>
     </div>
 
     <!-- Top Dashboard Section -->
@@ -67,7 +66,10 @@
             <div>
                 <div class="hero-header">
                     <div>
-                        <h1 id="location-name" class="location-name">--</h1>
+                        <div class="location-title-row">
+                            <h1 id="location-name" class="location-name">--</h1>
+                            <button id="fav-star-btn" class="fav-star-btn" title="Save / Remove Favorite in DB">⭐</button>
+                        </div>
                         <p id="location-country" class="location-country">--</p>
                     </div>
                     <div id="safety-badge" class="safety-badge safety-OPTIMAL">
@@ -131,7 +133,7 @@
 
     </section>
 
-    <!-- NEW INNOVATIVE FEATURE: AI Conversational Weather Assistant -->
+    <!-- AI Conversational Weather Assistant -->
     <section class="ai-assistant-section">
         <div class="glass-card chat-card">
             <h2 class="section-title"><span class="title-icon">💬</span> Interactive AI Agent Assistant</h2>
@@ -156,6 +158,54 @@
             <div class="chat-input-wrapper">
                 <input type="text" id="chat-input" class="chat-input" placeholder="Ask AI Weather Agent a question (e.g. 'Can I play outdoor sports today?')..." autocomplete="off">
                 <button id="chat-send-btn" class="chat-send-btn">Ask AI Agent</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW FEATURE: SQLite Database Analytics & Search Query History -->
+    <section class="database-section">
+        <div class="glass-card db-card">
+            <h2 class="section-title"><span class="title-icon">🗄️</span> SQLite Persistent Intelligence & Query Analytics</h2>
+            
+            <div class="db-analytics-grid">
+                <div class="db-stat-card">
+                    <div id="stat-total-queries" class="db-stat-val">0</div>
+                    <div class="db-stat-lbl">Total Queries Logged</div>
+                </div>
+
+                <div class="db-stat-card">
+                    <div id="stat-avg-safety" class="db-stat-val">85/100</div>
+                    <div class="db-stat-lbl">Average Safety Score</div>
+                </div>
+
+                <div class="db-stat-card">
+                    <div id="stat-top-city" class="db-stat-val">Chennai</div>
+                    <div class="db-stat-lbl">Most Searched City</div>
+                </div>
+
+                <div class="db-stat-card">
+                    <div id="stat-db-status" class="db-stat-val" style="color: var(--accent-emerald);">SQLite Active</div>
+                    <div class="db-stat-lbl">Engine Status</div>
+                </div>
+            </div>
+
+            <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 12px; color: var(--text-secondary);">📜 Recent Search Query Log</h3>
+            <div class="history-table-container">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>City & Location</th>
+                            <th>Temperature</th>
+                            <th>Condition</th>
+                            <th>Safety Index</th>
+                            <th>Timestamp</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-table-body">
+                        <tr><td colspan="6" style="color: var(--text-muted);">Loading database logs...</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
@@ -257,7 +307,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>Agentic AI Weather Monitoring System • Multi-Agent Atmospheric Intelligence</p>
+        <p>Agentic AI Weather Monitoring System • Multi-Agent Atmospheric Intelligence with SQLite</p>
     </footer>
 
 </div>

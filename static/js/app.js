@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const searchBtn = document.getElementById("search-btn");
     const autocompleteDropdown = document.getElementById("autocomplete-dropdown");
     const loadingOverlay = document.getElementById("loading-overlay");
+    const favStarBtn = document.getElementById("fav-star-btn");
 
     const unitBtnC = document.getElementById("unit-c");
     const unitBtnF = document.getElementById("unit-f");
@@ -15,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatSendBtn = document.getElementById("chat-send-btn");
     const chatHistory = document.getElementById("chat-history");
 
-    // Toast notification utility (Replaces browser alert)
+    // Toast notification utility
     function showToast(msg, isError = false) {
         const toastContainer = document.getElementById("toast-container") || createToastContainer();
         const toast = document.createElement("div");
@@ -37,6 +38,11 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.appendChild(container);
         return container;
     }
+
+    // Load DB Favorites & Analytics
+    loadFavoritesFromDB();
+    loadDbAnalytics();
+    loadDbHistory();
 
     // Default load
     const initialCity = window.INITIAL_CITY || "Chennai";
@@ -102,12 +108,23 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Bookmarks chips
-    document.querySelectorAll(".chip").forEach(chip => {
-        chip.addEventListener("click", () => {
-            const city = chip.getAttribute("data-city");
-            searchInput.value = city;
-            fetchWeatherData(city);
+    // Favorite Star Button Click
+    favStarBtn.addEventListener("click", () => {
+        if (!weatherData) return;
+        const loc = weatherData.data.location;
+        fetch("/api/favorites/toggle", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ city: loc.city, country: loc.country })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                const isFav = data.is_favorite;
+                favStarBtn.textContent = isFav ? "⭐" : "☆";
+                showToast(isFav ? `Saved ${loc.city} to DB Favorites!` : `Removed ${loc.city} from Favorites.`);
+                loadFavoritesFromDB();
+            }
         });
     });
 
@@ -152,9 +169,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (data.success) {
                 weatherData = data.result;
                 updateUI(weatherData);
-                if (data.warning) {
-                    showToast(data.warning, false);
-                }
+                loadDbAnalytics();
+                loadDbHistory();
             } else {
                 showToast(`Error: ${data.error}`, true);
             }
@@ -309,7 +325,75 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // AI Conversational Assistant Logic (NEW INNOVATIVE FEATURE)
+    // Database Loaders
+    function loadFavoritesFromDB() {
+        fetch("/api/favorites")
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.favorites) {
+                    const container = document.getElementById("bookmarks-chips");
+                    container.innerHTML = data.favorites.map(f => `
+                        <button class="chip" data-city="${f.city}">${f.city}</button>
+                    `).join("");
+
+                    container.querySelectorAll(".chip").forEach(chip => {
+                        chip.addEventListener("click", () => {
+                            const city = chip.getAttribute("data-city");
+                            searchInput.value = city;
+                            fetchWeatherData(city);
+                        });
+                    });
+                }
+            }).catch(() => {});
+    }
+
+    function loadDbAnalytics() {
+        fetch("/api/analytics")
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.analytics) {
+                    const a = data.analytics;
+                    document.getElementById("stat-total-queries").textContent = a.total_queries;
+                    document.getElementById("stat-avg-safety").textContent = `${a.avg_safety_score}/100`;
+                    document.getElementById("stat-top-city").textContent = a.top_city;
+                    document.getElementById("stat-db-status").textContent = a.db_status;
+                }
+            }).catch(() => {});
+    }
+
+    function loadDbHistory() {
+        fetch("/api/history")
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.history) {
+                    const tbody = document.getElementById("history-table-body");
+                    if (!data.history.length) {
+                        tbody.innerHTML = `<tr><td colspan="6" style="color: var(--text-muted);">No queries recorded yet.</td></tr>`;
+                        return;
+                    }
+                    tbody.innerHTML = data.history.map(h => `
+                        <tr>
+                            <td><strong>${h.city}</strong> <span style="color: var(--text-muted); font-size: 0.8rem;">(${h.country})</span></td>
+                            <td>${formatTemp(h.temperature)}</td>
+                            <td>${h.condition}</td>
+                            <td><span class="safety-badge safety-${h.status_level.replace(" ", "_")}" style="padding: 2px 8px; font-size: 0.75rem;">${h.safety_score} / 100</span></td>
+                            <td style="color: var(--text-muted);">${h.time_str}</td>
+                            <td><button class="requery-btn" data-city="${h.city}">Re-query</button></td>
+                        </tr>
+                    `).join("");
+
+                    tbody.querySelectorAll(".requery-btn").forEach(btn => {
+                        btn.addEventListener("click", () => {
+                            const city = btn.getAttribute("data-city");
+                            searchInput.value = city;
+                            fetchWeatherData(city);
+                        });
+                    });
+                }
+            }).catch(() => {});
+    }
+
+    // AI Conversational Assistant Logic
     chatSendBtn.addEventListener("click", sendChatMessage);
     chatInput.addEventListener("keypress", (e) => {
         if (e.key === "Enter") sendChatMessage();

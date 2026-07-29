@@ -1,9 +1,13 @@
 from flask import Flask, render_template, request, jsonify
 from agents import run_weather_agent, run_agent_chat, DataCollectionAgent
 from config import Config
+import database
 
 app = Flask(__name__)
 collector = DataCollectionAgent()
+
+# Initialize SQLite Database
+database.init_db()
 
 @app.route("/", methods=["GET"])
 def index():
@@ -20,9 +24,20 @@ def get_weather():
 
     try:
         result = run_weather_agent(city)
+        raw = result["data"]
+        analysis = result["analysis"]
+        
+        # Log query to SQLite Database
+        database.log_search(
+            city=raw["location"]["city"],
+            country=raw["location"]["country"],
+            temp=raw["current"]["temperature"],
+            condition=raw["current"]["condition"],
+            safety_score=analysis["safety_score"],
+            status_level=analysis["status_level"]
+        )
         return jsonify({"success": True, "result": result})
     except Exception as e:
-        # Guarantee a valid response even under extreme unexpected errors
         fallback_result = run_weather_agent("Chennai")
         return jsonify({"success": True, "result": fallback_result, "warning": f"Switched to resilient mode: {str(e)}"})
 
@@ -49,6 +64,34 @@ def search_city():
     
     results = collector.search_city(query)
     return jsonify({"results": results})
+
+# Database REST Endpoints
+@app.route("/api/history", methods=["GET"])
+def get_history():
+    history = database.get_recent_history(limit=8)
+    return jsonify({"success": True, "history": history})
+
+@app.route("/api/favorites", methods=["GET"])
+def get_favorites():
+    favorites = database.get_favorites()
+    return jsonify({"success": True, "favorites": favorites})
+
+@app.route("/api/favorites/toggle", methods=["POST"])
+def toggle_favorite():
+    data = request.get_json(silent=True) or {}
+    city = data.get("city", "").strip()
+    country = data.get("country", "").strip()
+    
+    if not city:
+        return jsonify({"success": False, "error": "City name required"}), 400
+        
+    is_fav = database.toggle_favorite(city, country)
+    return jsonify({"success": True, "is_favorite": is_fav})
+
+@app.route("/api/analytics", methods=["GET"])
+def get_analytics():
+    analytics = database.get_db_analytics()
+    return jsonify({"success": True, "analytics": analytics})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=Config.PORT, debug=Config.DEBUG)
