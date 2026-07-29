@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Agentic AI Weather Monitoring System - Real-time atmospheric analysis, multi-agent AI risk evaluation, and emergency advisories.">
+    <meta name="description" content="Agentic AI Weather Monitoring System - Real-time atmospheric analysis, WebGL Shader visualizer, multi-agent risk evaluation, and emergency advisories.">
     <title>Agentic AI Weather Monitoring System</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,6 +16,10 @@
 </head>
 <body>
 
+<!-- WebGL Background Lightning Shader & Radial Backdrop -->
+<canvas id="lightning-canvas" class="lightning-bg-canvas"></canvas>
+<div class="glow-backdrop"></div>
+
 <div class="container">
 
     <!-- Header Navbar -->
@@ -24,7 +28,7 @@
             <span class="brand-icon">⚡</span>
             <div>
                 <span class="brand-title">Agentic Weather AI</span>
-                <span class="brand-badge">Multi-Agent v3.0 + SQLite</span>
+                <span class="brand-badge">Multi-Agent v3.5 + WebGL</span>
             </div>
         </div>
 
@@ -38,6 +42,13 @@
         </div>
 
         <div class="nav-controls">
+            <!-- WebGL Lightning Hue Controller -->
+            <div class="hue-slider-box" title="Adjust WebGL Background Lightning Hue">
+                <span>⚡ Aura:</span>
+                <input type="range" id="hue-slider" class="hue-slider-input" min="0" max="360" value="220">
+                <span id="hue-val-display">220°</span>
+            </div>
+
             <div id="mode-badge" class="mode-indicator">
                 <span>📡</span> Satellite Mode
             </div>
@@ -162,7 +173,7 @@
         </div>
     </section>
 
-    <!-- NEW FEATURE: SQLite Database Analytics & Search Query History -->
+    <!-- SQLite Database Analytics & Search Query History -->
     <section class="database-section">
         <div class="glass-card db-card">
             <h2 class="section-title"><span class="title-icon">🗄️</span> SQLite Persistent Intelligence & Query Analytics</h2>
@@ -307,7 +318,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>Agentic AI Weather Monitoring System • Multi-Agent Atmospheric Intelligence with SQLite</p>
+        <p>Agentic AI Weather Monitoring System • WebGL Shader & Multi-Agent Intelligence</p>
     </footer>
 
 </div>

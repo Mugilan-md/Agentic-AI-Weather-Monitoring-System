@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 :root {
-    --bg-gradient: linear-gradient(135deg, #0b132b 0%, #1c2541 40%, #111827 100%);
-    --card-bg: rgba(255, 255, 255, 0.05);
+    --bg-gradient: linear-gradient(135deg, #060b19 0%, #0f172a 40%, #030712 100%);
+    --card-bg: rgba(15, 23, 42, 0.55);
     --card-border: rgba(255, 255, 255, 0.12);
-    --card-hover-border: rgba(56, 189, 248, 0.4);
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --card-hover-border: rgba(56, 189, 248, 0.5);
+    --glass-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.55);
     
     --primary-cyan: #38bdf8;
-    --primary-glow: rgba(56, 189, 248, 0.3);
+    --primary-glow: rgba(56, 189, 248, 0.35);
     --accent-purple: #a855f7;
     --accent-emerald: #10b981;
     --accent-amber: #f59e0b;
@@ -34,16 +34,45 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background: var(--bg-gradient);
-    background-attachment: fixed;
+    background: #030712;
     color: var(--text-primary);
     min-height: 100vh;
     padding-bottom: 50px;
     overflow-x: hidden;
+    position: relative;
+}
+
+/* Background WebGL Lightning Shader Canvas */
+.lightning-bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.85;
+}
+
+/* Radial Glow Behind Content */
+.glow-backdrop {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 900px;
+    height: 900px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, rgba(168, 85, 247, 0.05) 50%, transparent 75%);
+    filter: blur(80px);
+    z-index: 1;
+    pointer-events: none;
 }
 
 /* Container */
 .container {
+    position: relative;
+    z-index: 10;
     max-width: 1280px;
     margin: 0 auto;
     padding: 20px 24px;
@@ -52,8 +81,8 @@ body {
 /* Glassmorphism Card Utility */
 .glass-card {
     background: var(--card-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--card-border);
     border-radius: var(--radius-lg);
     box-shadow: var(--glass-shadow);
@@ -62,6 +91,7 @@ body {
 
 .glass-card:hover {
     border-color: var(--card-hover-border);
+    box-shadow: 0 16px 48px rgba(56, 189, 248, 0.15);
 }
 
 /* Header Navbar */
@@ -114,7 +144,7 @@ body {
 .search-bar {
     display: flex;
     align-items: center;
-    background: rgba(15, 23, 42, 0.6);
+    background: rgba(15, 23, 42, 0.75);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 30px;
     padding: 6px 16px;
@@ -123,7 +153,7 @@ body {
 
 .search-bar:focus-within {
     border-color: var(--primary-cyan);
-    box-shadow: 0 0 16px var(--primary-glow);
+    box-shadow: 0 0 20px var(--primary-glow);
 }
 
 .search-input {
@@ -208,11 +238,29 @@ body {
     color: var(--accent-emerald);
 }
 
-/* Controls */
+/* Controls & Hue Slider */
 .nav-controls {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
+}
+
+.hue-slider-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.hue-slider-input {
+    width: 80px;
+    accent-color: var(--primary-cyan);
+    cursor: pointer;
 }
 
 .unit-toggle {
@@ -409,7 +457,7 @@ body {
 }
 
 .pill-metric {
-    background: rgba(0, 0, 0, 0.25);
+    background: rgba(0, 0, 0, 0.35);
     border: 1px solid rgba(255, 255, 255, 0.08);
     padding: 8px 14px;
     border-radius: 12px;
@@ -444,7 +492,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 12px;
-    background: rgba(15, 23, 42, 0.4);
+    background: rgba(15, 23, 42, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-md);
     margin-bottom: 18px;
@@ -487,7 +535,7 @@ body {
 }
 
 .agent-step-item {
-    background: rgba(15, 23, 42, 0.5);
+    background: rgba(15, 23, 42, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-md);
     padding: 12px 14px;
@@ -567,7 +615,7 @@ body {
 }
 
 .chat-history {
-    background: rgba(15, 23, 42, 0.6);
+    background: rgba(15, 23, 42, 0.7);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-md);
     padding: 16px;
@@ -649,7 +697,7 @@ body {
     box-shadow: 0 0 16px rgba(168, 85, 247, 0.4);
 }
 
-/* Database Analytics & History Panel (NEW FEATURE) */
+/* Database Analytics & History Panel */
 .database-section {
     margin-bottom: 28px;
 }
@@ -666,7 +714,7 @@ body {
 }
 
 .db-stat-card {
-    background: rgba(15, 23, 42, 0.4);
+    background: rgba(15, 23, 42, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-md);
     padding: 14px 18px;
