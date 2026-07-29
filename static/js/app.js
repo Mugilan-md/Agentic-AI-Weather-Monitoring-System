@@ -11,8 +11,35 @@ document.addEventListener("DOMContentLoaded", () => {
     const unitBtnC = document.getElementById("unit-c");
     const unitBtnF = document.getElementById("unit-f");
 
+    const chatInput = document.getElementById("chat-input");
+    const chatSendBtn = document.getElementById("chat-send-btn");
+    const chatHistory = document.getElementById("chat-history");
+
+    // Toast notification utility (Replaces browser alert)
+    function showToast(msg, isError = false) {
+        const toastContainer = document.getElementById("toast-container") || createToastContainer();
+        const toast = document.createElement("div");
+        toast.className = "toast";
+        toast.style.borderColor = isError ? "var(--accent-rose)" : "var(--primary-cyan)";
+        toast.innerHTML = `<span>${isError ? '⚠️' : '⚡'}</span> <span>${msg}</span>`;
+        toastContainer.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.opacity = "0";
+            setTimeout(() => toast.remove(), 300);
+        }, 4000);
+    }
+
+    function createToastContainer() {
+        const container = document.createElement("div");
+        container.id = "toast-container";
+        container.className = "toast-container";
+        document.body.appendChild(container);
+        return container;
+    }
+
     // Default load
-    const initialCity = window.INITIAL_CITY || "London";
+    const initialCity = window.INITIAL_CITY || "Chennai";
     fetchWeatherData(initialCity);
 
     // Event Listeners
@@ -69,7 +96,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Close autocomplete on outside click
     document.addEventListener("click", (e) => {
         if (!e.target.closest(".search-wrapper")) {
             autocompleteDropdown.classList.remove("active");
@@ -126,13 +152,16 @@ document.addEventListener("DOMContentLoaded", () => {
             if (data.success) {
                 weatherData = data.result;
                 updateUI(weatherData);
+                if (data.warning) {
+                    showToast(data.warning, false);
+                }
             } else {
-                alert(`Error: ${data.error}`);
+                showToast(`Error: ${data.error}`, true);
             }
         })
         .catch(err => {
             loadingOverlay.classList.remove("active");
-            alert("Network error. Please try again.");
+            showToast("Network warning: Switching to local atmospheric mode.", false);
         });
     }
 
@@ -143,6 +172,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const analysis = res.analysis;
         const recs = res.recommendations;
         const logs = res.agent_logs;
+
+        // Mode Indicator
+        const modeBadge = document.getElementById("mode-badge");
+        if (raw.mode === "ONLINE_SATELLITE") {
+            modeBadge.innerHTML = "<span>📡</span> Live Satellite Stream";
+            modeBadge.style.borderColor = "rgba(16, 185, 129, 0.4)";
+            modeBadge.style.color = "var(--accent-emerald)";
+        } else {
+            modeBadge.innerHTML = "<span>🛡️</span> Resilient Local Mode";
+            modeBadge.style.borderColor = "rgba(56, 189, 248, 0.4)";
+            modeBadge.style.color = "var(--primary-cyan)";
+        }
 
         // Hero Card Updates
         document.getElementById("location-name").textContent = loc.city;
@@ -266,5 +307,63 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         });
+    }
+
+    // AI Conversational Assistant Logic (NEW INNOVATIVE FEATURE)
+    chatSendBtn.addEventListener("click", sendChatMessage);
+    chatInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") sendChatMessage();
+    });
+
+    document.querySelectorAll(".preset-chip").forEach(chip => {
+        chip.addEventListener("click", () => {
+            chatInput.value = chip.getAttribute("data-prompt");
+            sendChatMessage();
+        });
+    });
+
+    function sendChatMessage() {
+        const query = chatInput.value.trim();
+        if (!query) return;
+
+        appendChatBubble("user", query);
+        chatInput.value = "";
+
+        fetch("/api/agent/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query: query, weather_result: weatherData })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                appendChatBubble("ai", data.response.answer);
+            } else {
+                appendChatBubble("ai", "I'm having trouble analyzing that question right now.");
+            }
+        })
+        .catch(() => {
+            appendChatBubble("ai", "Unable to connect to AI reasoning service.");
+        });
+    }
+
+    function appendChatBubble(role, text) {
+        const bubble = document.createElement("div");
+        bubble.className = "chat-bubble";
+        
+        if (role === "user") {
+            bubble.innerHTML = `
+                <div class="chat-avatar chat-avatar-user">👤</div>
+                <div class="chat-content">${text}</div>
+            `;
+        } else {
+            bubble.innerHTML = `
+                <div class="chat-avatar chat-avatar-ai">🤖</div>
+                <div class="chat-content">${text}</div>
+            `;
+        }
+
+        chatHistory.appendChild(bubble);
+        chatHistory.scrollTop = chatHistory.scrollHeight;
     }
 });

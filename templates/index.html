@@ -24,20 +24,23 @@
             <span class="brand-icon">⚡</span>
             <div>
                 <span class="brand-title">Agentic Weather AI</span>
-                <span class="brand-badge">Multi-Agent v2.0</span>
+                <span class="brand-badge">Multi-Agent v2.5</span>
             </div>
         </div>
 
         <div class="search-wrapper">
             <div class="search-bar">
                 <span style="font-size: 1.1rem; margin-right: 4px;">🔍</span>
-                <input type="text" id="search-input" class="search-input" placeholder="Search city (e.g. London, Tokyo, New York)..." autocomplete="off">
+                <input type="text" id="search-input" class="search-input" placeholder="Search city (e.g. Chennai, London, Tokyo)..." autocomplete="off">
                 <button id="search-btn" class="search-btn" title="Search Weather">➔</button>
             </div>
             <div id="autocomplete-dropdown" class="autocomplete-dropdown"></div>
         </div>
 
         <div class="nav-controls">
+            <div id="mode-badge" class="mode-indicator">
+                <span>📡</span> Satellite Mode
+            </div>
             <div class="unit-toggle">
                 <button id="unit-c" class="unit-btn active">°C</button>
                 <button id="unit-f" class="unit-btn">°F</button>
@@ -48,12 +51,12 @@
     <!-- Quick City Bookmarks -->
     <div class="bookmarks-bar">
         <span class="bookmark-label">⚡ Quick Cities:</span>
+        <button class="chip" data-city="Chennai">🇮🇳 Chennai</button>
         <button class="chip" data-city="London">🇬🇧 London</button>
         <button class="chip" data-city="Tokyo">🇯🇵 Tokyo</button>
         <button class="chip" data-city="New York">🇺🇸 New York</button>
         <button class="chip" data-city="Paris">🇫🇷 Paris</button>
         <button class="chip" data-city="Sydney">🇦🇺 Sydney</button>
-        <button class="chip" data-city="Chennai">🇮🇳 Chennai</button>
     </div>
 
     <!-- Top Dashboard Section -->
@@ -91,7 +94,31 @@
 
         <!-- Agent Workflow Reasoning Visualizer -->
         <div class="glass-card agent-card">
-            <h2 class="section-title"><span class="title-icon">🤖</span> Autonomous Multi-Agent Reasoning Trace</h2>
+            <h2 class="section-title"><span class="title-icon">🤖</span> Autonomous Multi-Agent Pipeline</h2>
+            
+            <!-- Agent Nodes Flowchart -->
+            <div class="agent-nodes-diagram">
+                <div class="node-item">
+                    <div class="node-circle" title="Data Collector Agent">📡</div>
+                    <span>Collector</span>
+                </div>
+                <div class="node-arrow">➔</div>
+                <div class="node-item">
+                    <div class="node-circle" title="Risk & Anomaly Analyzer">🛡️</div>
+                    <span>Risk Analyzer</span>
+                </div>
+                <div class="node-arrow">➔</div>
+                <div class="node-item">
+                    <div class="node-circle" title="Predictive Engine">📈</div>
+                    <span>Predictor</span>
+                </div>
+                <div class="node-arrow">➔</div>
+                <div class="node-item">
+                    <div class="node-circle" title="Action Advisory Engine">💡</div>
+                    <span>Advisor</span>
+                </div>
+            </div>
+
             <div id="agent-timeline" class="agent-timeline">
                 <div class="agent-step-item">
                     <div class="agent-step-header">
@@ -102,6 +129,35 @@
             </div>
         </div>
 
+    </section>
+
+    <!-- NEW INNOVATIVE FEATURE: AI Conversational Weather Assistant -->
+    <section class="ai-assistant-section">
+        <div class="glass-card chat-card">
+            <h2 class="section-title"><span class="title-icon">💬</span> Interactive AI Agent Assistant</h2>
+            
+            <!-- Quick Preset Chips -->
+            <div class="chat-presets">
+                <button class="preset-chip" data-prompt="Is it safe for outdoor running right now?">🏃 Safe for outdoor running?</button>
+                <button class="preset-chip" data-prompt="Do I need an umbrella today?">☔ Umbrella needed?</button>
+                <button class="preset-chip" data-prompt="What should I wear today?">👕 What to wear?</button>
+                <button class="preset-chip" data-prompt="Is air quality safe for kids?">😷 Air quality for kids?</button>
+            </div>
+
+            <div id="chat-history" class="chat-history">
+                <div class="chat-bubble">
+                    <div class="chat-avatar chat-avatar-ai">🤖</div>
+                    <div class="chat-content">
+                        Hello! I am your <strong>Agentic AI Weather Assistant</strong>. Ask me anything about current weather safety, outdoor activities, or clothing recommendations for your selected city!
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-wrapper">
+                <input type="text" id="chat-input" class="chat-input" placeholder="Ask AI Weather Agent a question (e.g. 'Can I play outdoor sports today?')..." autocomplete="off">
+                <button id="chat-send-btn" class="chat-send-btn">Ask AI Agent</button>
+            </div>
+        </div>
     </section>
 
     <!-- Metrics Cards Grid -->
