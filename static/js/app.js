@@ -20,8 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatSendBtn = document.getElementById("chat-send-btn");
     const chatHistory = document.getElementById("chat-history");
 
-    // Initialize Full-Page Cinematic Scroll-Driven Weather Engine
-    initCinematicWeatherEngine();
+    // Initialize 60+ FPS 3-Way Branching WebGL Lightning Background Shader
+    initLightningShader();
 
     // Initialize 3D Parallax Tilt Effects on Cards
     init3DTiltEffects();
@@ -567,317 +567,162 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // =========================================================================
-    // FULL-PAGE CINEMATIC SCROLL-DRIVEN WEATHER ENGINE (60 FPS GPU ACCELERATED)
-    // =========================================================================
-    function initCinematicWeatherEngine() {
-        const canvas = document.getElementById("cinematic-weather-canvas");
-        const sunOverlay = document.getElementById("sun-god-rays");
-        const frostOverlay = document.getElementById("frost-vignette");
-        const snowBottom = document.getElementById("snow-bottom-layer");
-
+    // -------------------------------------------------------------
+    // High-FPS 3-Way Branching WebGL Lightning Shader
+    // -------------------------------------------------------------
+    function initLightningShader() {
+        const canvas = document.getElementById("lightning-canvas");
         if (!canvas) return;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
 
-        let width = (canvas.width = window.innerWidth);
-        let height = (canvas.height = window.innerHeight);
+        const gl = canvas.getContext("webgl", { alpha: true, antialias: true, preserveDrawingBuffer: false });
+        if (!gl) return;
 
-        window.addEventListener("resize", () => {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        });
-
-        // Target vs Current Scroll Ratio for 100% Smooth Lerp Interpolation
-        let currentScroll = 0;
-        let targetScroll = 0;
-
-        function updateScroll() {
-            const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-            targetScroll = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            gl.viewport(0, 0, canvas.width, canvas.height);
         }
-        window.addEventListener("scroll", updateScroll, { passive: true });
-        updateScroll();
+        resize();
+        window.addEventListener("resize", resize);
 
-        // -------------------------------------------------------------
-        // Particle Systems & Asset Objects
-        // -------------------------------------------------------------
-        
-        // 1. Rain Drops Pool (300 Drops)
-        const rainDrops = [];
-        for (let i = 0; i < 350; i++) {
-            rainDrops.push({
-                x: Math.random() * width,
-                y: Math.random() * height,
-                length: Math.random() * 25 + 15,
-                speed: Math.random() * 18 + 12,
-                depth: Math.random() * 0.8 + 0.2,
-                opacity: Math.random() * 0.7 + 0.3
-            });
-        }
+        const vsSource = `
+            attribute vec2 aPosition;
+            void main() {
+                gl_Position = vec4(aPosition, 0.0, 1.0);
+            }
+        `;
 
-        // 2. Snowflakes Pool (300 Flakes)
-        const snowflakes = [];
-        for (let i = 0; i < 300; i++) {
-            snowflakes.push({
-                x: Math.random() * width,
-                y: Math.random() * height,
-                radius: Math.random() * 3.5 + 1.2,
-                speed: Math.random() * 1.8 + 0.8,
-                swayOffset: Math.random() * Math.PI * 2,
-                opacity: Math.random() * 0.8 + 0.2
-            });
-        }
+        const fsSource = `
+            precision mediump float;
+            uniform vec2 iResolution;
+            uniform float iTime;
+            uniform float uHue;
+            
+            #define OCTAVE_COUNT 8
 
-        // 3. Sun Dust & God Ray Dust Particles (120 Particles)
-        const sunParticles = [];
-        for (let i = 0; i < 120; i++) {
-            sunParticles.push({
-                x: Math.random() * width,
-                y: Math.random() * height,
-                radius: Math.random() * 2.5 + 0.8,
-                speedY: Math.random() * -0.5 - 0.2,
-                speedX: Math.random() * 0.4 - 0.2,
-                opacity: Math.random() * 0.6 + 0.2
-            });
-        }
-
-        // 4. Volumetric Cloud Layers (6 Clouds)
-        const clouds = [
-            { x: width * 0.1, y: height * 0.15, radius: 180, speed: 0.25 },
-            { x: width * 0.4, y: height * 0.08, radius: 240, speed: 0.18 },
-            { x: width * 0.75, y: height * 0.18, radius: 210, speed: 0.22 },
-            { x: width * 0.25, y: height * 0.28, radius: 190, speed: 0.30 },
-            { x: width * 0.6, y: height * 0.32, radius: 220, speed: 0.20 }
-        ];
-
-        // 5. Parallax Distant Birds (3 Birds)
-        const birds = [
-            { x: -50, y: height * 0.20, speed: 1.5, scale: 0.8 },
-            { x: -120, y: height * 0.25, speed: 1.2, scale: 0.6 },
-            { x: -200, y: height * 0.18, speed: 1.8, scale: 0.9 }
-        ];
-
-        // Lightning State for Scene 1
-        let lightningFlashOpacity = 0;
-
-        // Color Helper Interpolation
-        function hexToRgb(hex) {
-            let c = hex.replace("#", "");
-            if (c.length === 3) c = c.split("").map(x => x + x).join("");
-            const num = parseInt(c, 16);
-            return [num >> 16, (num >> 8) & 255, num & 255];
-        }
-
-        function interpolateColor(color1, color2, factor) {
-            const rgb1 = hexToRgb(color1);
-            const rgb2 = hexToRgb(color2);
-            const r = Math.round(rgb1[0] + factor * (rgb2[0] - rgb1[0]));
-            const g = Math.round(rgb1[1] + factor * (rgb2[1] - rgb1[1]));
-            const b = Math.round(rgb1[2] + factor * (rgb2[2] - rgb1[2]));
-            return `rgb(${r}, ${g}, ${b})`;
-        }
-
-        // Main Render Loop (60 FPS)
-        let startTime = performance.now();
-        function renderCinematicLoop(now) {
-            const time = (now - startTime) / 1000.0;
-
-            // Smooth Scroll Interpolation (Lerp 0.08)
-            currentScroll += (targetScroll - currentScroll) * 0.08;
-
-            ctx.clearRect(0, 0, width, height);
-
-            // Calculate Scene Blends based on Scroll Ratio (0.0 -> 1.0)
-            let skyColorTop, skyColorBottom;
-            let lightningIntensity = 0;
-            let sunIntensity = 0;
-            let rainIntensity = 0;
-            let snowIntensity = 0;
-
-            if (currentScroll < 0.28) {
-                // Scene 1: Thunderstorm (0.00 - 0.28)
-                const s = currentScroll / 0.28;
-                skyColorTop = interpolateColor("#030712", "#0f172a", s);
-                skyColorBottom = interpolateColor("#0f172a", "#1e293b", s);
-                lightningIntensity = 1.0 - s * 0.7;
-            } else if (currentScroll < 0.38) {
-                // Transition 1: Thunderstorm -> Sunny Day (0.28 - 0.38)
-                const t = (currentScroll - 0.28) / 0.10;
-                skyColorTop = interpolateColor("#0f172a", "#0284c7", t);
-                skyColorBottom = interpolateColor("#1e293b", "#38bdf8", t);
-                lightningIntensity = 0.3 * (1.0 - t);
-                sunIntensity = t;
-            } else if (currentScroll < 0.62) {
-                // Scene 2: Bright Sunny Day (0.38 - 0.62)
-                skyColorTop = "#0284c7";
-                skyColorBottom = "#38bdf8";
-                sunIntensity = 1.0;
-            } else if (currentScroll < 0.72) {
-                // Transition 2: Sunny Day -> Continuous Rain (0.62 - 0.72)
-                const t = (currentScroll - 0.62) / 0.10;
-                skyColorTop = interpolateColor("#0284c7", "#1e293b", t);
-                skyColorBottom = interpolateColor("#38bdf8", "#334155", t);
-                sunIntensity = 1.0 - t;
-                rainIntensity = t * 0.6;
-            } else if (currentScroll < 0.86) {
-                // Scene 3: Continuous Rain (0.72 - 0.86)
-                skyColorTop = "#1e293b";
-                skyColorBottom = "#334155";
-                rainIntensity = 1.0;
-            } else if (currentScroll < 0.92) {
-                // Transition 3: Continuous Rain -> Winter Snow (0.86 - 0.92)
-                const t = (currentScroll - 0.86) / 0.06;
-                skyColorTop = interpolateColor("#1e293b", "#0f172a", t);
-                skyColorBottom = interpolateColor("#334155", "#1e1b4b", t);
-                rainIntensity = 1.0 - t;
-                snowIntensity = t;
-            } else {
-                // Scene 4: Winter Snow (0.92 - 1.00)
-                skyColorTop = "#0f172a";
-                skyColorBottom = "#1e1b4b";
-                snowIntensity = 1.0;
+            vec3 hsv2rgb(vec3 c) {
+                vec3 rgb = clamp(abs(mod(c.x * 6.0 + vec3(0.0,4.0,2.0), 6.0) - 3.0) - 1.0, 0.0, 1.0);
+                return c.z * mix(vec3(1.0), rgb, c.y);
             }
 
-            // Draw Background Sky Gradient
-            const gradient = ctx.createLinearGradient(0, 0, 0, height);
-            gradient.addColorStop(0, skyColorTop);
-            gradient.addColorStop(1, skyColorBottom);
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
-
-            // Handle Overlays (Sun God Rays & Sub-Zero Frost)
-            if (sunIntensity > 0.3) {
-                sunOverlay.classList.add("active");
-                sunOverlay.style.opacity = (sunIntensity - 0.3) / 0.7;
-            } else {
-                sunOverlay.classList.remove("active");
+            float hash12(vec2 p) {
+                vec3 p3 = fract(vec3(p.xyx) * .1031);
+                p3 += dot(p3, p3.yzx + 33.33);
+                return fract((p3.x + p3.y) * p3.z);
             }
 
-            if (snowIntensity > 0.4) {
-                frostOverlay.classList.add("active");
-                snowBottom.classList.add("active");
-                frostOverlay.style.opacity = (snowIntensity - 0.4) / 0.6;
-                snowBottom.style.opacity = (snowIntensity - 0.4) / 0.6;
-            } else {
-                frostOverlay.classList.remove("active");
-                snowBottom.classList.remove("active");
+            mat2 rotate2d(float theta) {
+                float c = cos(theta);
+                float s = sin(theta);
+                return mat2(c, -s, s, c);
             }
 
-            // -------------------------------------------------------------
-            // Scene 1: Thunderstorm Lightning Flashes & Clouds
-            // -------------------------------------------------------------
-            if (lightningIntensity > 0) {
-                if (Math.random() < 0.03 * lightningIntensity) {
-                    lightningFlashOpacity = Math.random() * 0.45 * lightningIntensity;
-                } else {
-                    lightningFlashOpacity *= 0.88;
+            float noise(vec2 p) {
+                vec2 ip = floor(p);
+                vec2 fp = fract(p);
+                float a = hash12(ip);
+                float b = hash12(ip + vec2(1.0, 0.0));
+                float c = hash12(ip + vec2(0.0, 1.0));
+                float d = hash12(ip + vec2(1.0, 1.0));
+                vec2 t = smoothstep(0.0, 1.0, fp);
+                return mix(mix(a, b, t.x), mix(c, d, t.x), t.y);
+            }
+
+            float fbm(vec2 p) {
+                float value = 0.0;
+                float amplitude = 0.5;
+                for (int i = 0; i < OCTAVE_COUNT; ++i) {
+                    value += amplitude * noise(p);
+                    p *= rotate2d(0.45);
+                    p *= 2.0;
+                    amplitude *= 0.5;
                 }
-
-                if (lightningFlashOpacity > 0.02) {
-                    ctx.fillStyle = `rgba(56, 189, 248, ${lightningFlashOpacity})`;
-                    ctx.fillRect(0, 0, width, height);
-                }
+                return value;
             }
 
-            // Volumetric Cloud Layer (Scenes 1 & 2)
-            if (currentScroll < 0.65) {
-                ctx.fillStyle = currentScroll < 0.35 
-                    ? "rgba(15, 23, 42, 0.45)" 
-                    : "rgba(248, 250, 252, 0.18)";
-
-                clouds.forEach(c => {
-                    c.x += c.speed;
-                    if (c.x - c.radius > width) c.x = -c.radius;
-
-                    ctx.beginPath();
-                    ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
-                    ctx.arc(c.x + c.radius * 0.5, c.y - c.radius * 0.2, c.radius * 0.7, 0, Math.PI * 2);
-                    ctx.arc(c.x - c.radius * 0.5, c.y - c.radius * 0.2, c.radius * 0.7, 0, Math.PI * 2);
-                    ctx.fill();
-                });
+            float lightningBranch(vec2 uv, vec2 origin, float angle, float time, float noiseScale) {
+                vec2 p = uv - origin;
+                p = rotate2d(angle) * p;
+                float n = fbm(p * noiseScale + vec2(0.0, time * 2.5));
+                return abs(p.x + (n - 0.5) * 0.45);
             }
 
-            // -------------------------------------------------------------
-            // Scene 2: Bright Sunny Day Birds & Dust Particles
-            // -------------------------------------------------------------
-            if (sunIntensity > 0) {
-                // Flying Birds
-                ctx.strokeStyle = `rgba(255, 255, 255, ${0.6 * sunIntensity})`;
-                ctx.lineWidth = 2;
-                birds.forEach(b => {
-                    b.x += b.speed;
-                    if (b.x > width + 100) b.x = -100;
-
-                    ctx.beginPath();
-                    const wingSway = Math.sin(time * 6 + b.x * 0.05) * 8;
-                    ctx.moveTo(b.x - 12 * b.scale, b.y + wingSway);
-                    ctx.quadraticCurveTo(b.x, b.y - 6 * b.scale, b.x + 12 * b.scale, b.y + wingSway);
-                    ctx.stroke();
-                });
-
-                // Sun Particles
-                ctx.fillStyle = `rgba(253, 224, 71, ${0.4 * sunIntensity})`;
-                sunParticles.forEach(p => {
-                    p.y += p.speedY;
-                    p.x += p.speedX;
-                    if (p.y < 0) p.y = height;
-                    if (p.x < 0) p.x = width;
-                    if (p.x > width) p.x = 0;
-
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                    ctx.fill();
-                });
+            void main() {
+                vec2 uv = gl_FragCoord.xy / iResolution.xy;
+                uv = 2.0 * uv - 1.0;
+                uv.x *= iResolution.x / iResolution.y;
+                
+                vec2 nodeOrigin = vec2(0.0, 0.65);
+                float time = iTime;
+                
+                float d1 = lightningBranch(uv, nodeOrigin, -0.55, time, 2.5);
+                float d2 = lightningBranch(uv, nodeOrigin,  0.00, time * 1.1, 2.8);
+                float d3 = lightningBranch(uv, nodeOrigin,  0.55, time * 0.9, 2.5);
+                
+                float d4 = lightningBranch(uv, nodeOrigin, -0.28, time * 1.4, 4.0);
+                float d5 = lightningBranch(uv, nodeOrigin,  0.28, time * 1.3, 4.0);
+                
+                float bolt1 = 0.055 / max(d1, 0.001);
+                float bolt2 = 0.070 / max(d2, 0.001);
+                float bolt3 = 0.055 / max(d3, 0.001);
+                float spark4 = 0.025 / max(d4, 0.001);
+                float spark5 = 0.025 / max(d5, 0.001);
+                
+                float totalLightning = bolt1 + bolt2 + bolt3 + spark4 + spark5;
+                
+                float nodeDist = length(uv - nodeOrigin);
+                float nodeGlow = 0.12 / max(nodeDist, 0.01);
+                float pulse = 0.85 + 0.15 * sin(time * 6.0);
+                nodeGlow *= pulse;
+                
+                vec3 baseColor = hsv2rgb(vec3(uHue / 360.0, 0.85, 0.98));
+                vec3 col = baseColor * (totalLightning * 0.85 + nodeGlow);
+                
+                gl_FragColor = vec4(col, 0.65);
             }
+        `;
 
-            // -------------------------------------------------------------
-            // Scene 3: Continuous Rain Particles
-            // -------------------------------------------------------------
-            if (rainIntensity > 0) {
-                ctx.strokeStyle = "rgba(186, 230, 253, 0.65)";
-                ctx.lineWidth = 1.2;
-
-                rainDrops.forEach(drop => {
-                    drop.y += drop.speed;
-                    drop.x += Math.sin(time) * 0.8;
-
-                    if (drop.y > height) {
-                        drop.y = -drop.length;
-                        drop.x = Math.random() * width;
-                    }
-
-                    ctx.beginPath();
-                    ctx.moveTo(drop.x, drop.y);
-                    ctx.lineTo(drop.x - 2, drop.y + drop.length * rainIntensity);
-                    ctx.stroke();
-                });
+        function compileShader(source, type) {
+            const s = gl.createShader(type);
+            gl.shaderSource(s, source);
+            gl.compileShader(s);
+            if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+                return null;
             }
-
-            // -------------------------------------------------------------
-            // Scene 4: Winter Snow Particles
-            // -------------------------------------------------------------
-            if (snowIntensity > 0) {
-                ctx.fillStyle = `rgba(248, 250, 252, ${0.85 * snowIntensity})`;
-
-                snowflakes.forEach(flake => {
-                    flake.y += flake.speed;
-                    flake.x += Math.sin(time + flake.swayOffset) * 1.2;
-
-                    if (flake.y > height) {
-                        flake.y = -5;
-                        flake.x = Math.random() * width;
-                    }
-
-                    ctx.beginPath();
-                    ctx.arc(flake.x, flake.y, flake.radius * snowIntensity, 0, Math.PI * 2);
-                    ctx.fill();
-                });
-            }
-
-            requestAnimationFrame(renderCinematicLoop);
+            return s;
         }
 
-        requestAnimationFrame(renderCinematicLoop);
+        const vs = compileShader(vsSource, gl.VERTEX_SHADER);
+        const fs = compileShader(fsSource, gl.FRAGMENT_SHADER);
+        if (!vs || !fs) return;
+
+        const program = gl.createProgram();
+        gl.attachShader(program, vs);
+        gl.attachShader(program, fs);
+        gl.linkProgram(program);
+        gl.useProgram(program);
+
+        const vertices = new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]);
+        const buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+        const aPosition = gl.getAttribLocation(program, "aPosition");
+        gl.enableVertexAttribArray(aPosition);
+        gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+
+        const uResolution = gl.getUniformLocation(program, "iResolution");
+        const uTime = gl.getUniformLocation(program, "iTime");
+        const uHue = gl.getUniformLocation(program, "uHue");
+
+        const startTime = performance.now();
+        function render() {
+            gl.uniform2f(uResolution, canvas.width, canvas.height);
+            gl.uniform1f(uTime, (performance.now() - startTime) / 1000.0);
+            gl.uniform1f(uHue, lightningHue);
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
+            requestAnimationFrame(render);
+        }
+        requestAnimationFrame(render);
     }
 });
