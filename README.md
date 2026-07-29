@@ -1,92 +1,87 @@
-# 🌦️ Agentic AI Weather Monitoring System
+# 🌤️ Agentic AI Weather Monitoring System
 
-An autonomous, multi-agent AI system designed to monitor real-time atmospheric conditions, evaluate weather hazards, forecast 24-hour and 7-day environmental trends, and generate personalized safety advisories.
-
-![License](https://img.shields.io/badge/License-MIT-blue.svg)
-![Python](https://img.shields.io/badge/Python-3.9%2B-brightgreen.svg)
-![Flask](https://img.shields.io/badge/Flask-3.0%2B-black.svg)
-![API](https://img.shields.io/badge/Weather_API-Open--Meteo-cyan.svg)
+An enterprise-grade, multi-agent AI weather monitoring platform featuring machine learning predictive models, real-time atmospheric anomaly detection, interactive WebGL shaders, zero-config SQLite persistence, and natural language conversational intelligence.
 
 ---
 
-## 🚀 Features
+## 🌟 Key System Capabilities
 
-- 🤖 **Multi-Agent AI Architecture**: 4 specialized AI agents working together in a synchronized pipeline.
-- ⚡ **Zero Setup Required**: Uses Open-Meteo free real-time weather & geocoding APIs. No API key signup required out-of-the-box!
-- 🔍 **City Search & Autocomplete**: Instant city search suggestion dropdown with worldwide coordinate geocoding.
-- 📊 **Interactive Weather Visualizations**: 24-hour temperature and precipitation probability charts powered by Chart.js.
-- 🛡️ **Multi-Parameter Hazard Scoring**: Real-time evaluation of heatwaves, storms, high wind gusts, UV index, and US AQI (Air Quality Index).
-- 🧠 **Autonomous Agent Reasoning Log**: Live UI step-by-step trace showing each agent's execution duration, thoughts, and output decisions.
-- 🌡️ **Unit Toggle (°C / °F)**: Dynamic temperature unit switching.
-- 🎨 **Modern Glassmorphic Dashboard**: Sleek dark-mode aesthetic with micro-animations, quick-access city chips, and metric cards.
+- 🤖 **Autonomous Multi-Agent Pipeline**: 5 specialized AI agents (Data Collector, Risk Analyzer, Trend Predictor, Action Advisor, Conversational Assistant) collaborating synchronously.
+- 🧠 **Machine Learning Service Layer**: Powered by Scikit-Learn Random Forest classifiers, Isolation Forest anomaly detectors, and Ridge time-series regression.
+- ⚡ **High-FPS WebGL Shader Visualizer**: Real-time Fractional Brownian Motion (FBM) lightning background shader with 3-way directional branching.
+- 💬 **AI Conversational Weather Assistant**: Natural language query reasoning agent providing instant safety, activity, and outfit advisories.
+- 🛡️ **Resilient Dual-Mode Operation**: Automatic fallback to local atmospheric presets if external API or DNS resolution drops.
+- 🗄️ **Zero-Config SQLite Persistence**: Built-in search query logging, persistent favorite city bookmarks, and system analytics.
+- 🚀 **Serverless Vercel Ready**: Pre-configured `vercel.json` and ephemeral `/tmp` storage handling for instant cloud deployment.
 
 ---
 
-## 🧠 Multi-Agent Architecture
+## 🏗️ System Architecture & Data Flow
 
-```
-                    ┌──────────────────────────────┐
-                    │    User City Query (Input)    │
-                    └──────────────┬───────────────┘
-                                   │
-                                   ▼
-                   ┌────────────────────────────────┐
-                   │    Data Collection Agent       │
-                   │  - Geocoding & Coordinates     │
-                   │  - Atmospheric Data Fetcher    │
-                   └──────────────┬─────────────────┘
-                                  │
-                                  ▼
-                   ┌────────────────────────────────┐
-                   │ Risk & Anomaly Analysis Agent  │
-                   │  - Hazard Level Assessment     │
-                   │  - Safety Score Calculation    │
-                   └──────────────┬─────────────────┘
-                                  │
-                                  ▼
-                   ┌────────────────────────────────┐
-                   │   Predictive & Trend Agent     │
-                   │  - 24H Rain Probability Window │
-                   │  - Thermal Swing Calculation   │
-                   └──────────────┬─────────────────┘
-                                  │
-                                  ▼
-                   ┌────────────────────────────────┐
-                   │   Decision & Action Agent      │
-                   │  - Actionable Advisories       │
-                   │  - Emergency Guidance          │
-                   └──────────────┬─────────────────┘
-                                  │
-                                  ▼
-                 ┌───────────────────────────────────┐
-                 │  Agentic Orchestrator (Final UI)  │
-                 └───────────────────────────────────┘
+```mermaid
+graph TD
+    A["👤 User Query / City Search"] --> B["📡 Data Collection Agent"]
+    B --> C["🛰️ Open-Meteo Satellite API / Fallback Presets"]
+    C --> D["🧠 Machine Learning Service Layer"]
+    
+    subgraph ML_Engine ["Machine Learning Intelligence Engine"]
+        D1["🌧️ Random Forest Rainfall Model"]
+        D2["🎯 Multiclass Risk Classifier"]
+        D3["🚨 Isolation Forest Anomaly Detector"]
+        D4["📈 Ridge Temperature Forecaster"]
+    end
+    
+    D --> D1
+    D --> D2
+    D --> D3
+    D --> D4
+    
+    D1 & D2 & D3 & D4 --> E["🛡️ Risk & Anomaly Analysis Agent"]
+    E --> F["📈 Predictive & Trend Agent"]
+    F --> G["💡 Decision & Action Advisory Agent"]
+    G --> H["💬 AI Conversational Assistant"]
+    
+    H --> I["🗄️ SQLite Database Logging"]
+    H --> J["💻 WebGL Shader Glassmorphic Dashboard"]
 ```
 
-1. **Data Collection Agent**: Resolves city coordinates via Open-Meteo Geocoding API and retrieves real-time weather, 24h hourly forecast, 7-day daily forecast, and US Air Quality Index metrics.
-2. **Risk & Anomaly Analysis Agent**: Computes an overall **Safety Index Score (0-100)** by analyzing temperature extremes, storm risks, high wind velocity, UV exposure, and particulate air pollution.
-3. **Predictive & Trend Agent**: Identifies upcoming 24-hour hazard windows (e.g. peak rain timing, temperature drops) and 7-day weather patterns.
-4. **Decision & Action Agent**: Formulates clear, categorized advice (Hydration, Thermal Gear, Sun Protection, Respiratory Care, Travel Guidance).
-5. **Agentic Orchestrator**: Coordinates execution flow and constructs detailed reasoning logs for full system transparency.
+---
+
+## 📂 Project Directory Structure & File Alignment
+
+| File Path | Description & Architectural Responsibility |
+| :--- | :--- |
+| **[app.py](file:///c:/Users/acer/OneDrive%20-%20ELCOT/PROJECTS/project%200/app.py)** | Primary Flask web server, REST API routing, WSGI entry point, and endpoint orchestrator. |
+| **[agents.py](file:///c:/Users/acer/OneDrive%20-%20ELCOT/PROJECTS/project%200/agents.py)** | Core Agentic AI Pipeline (Data Collection, Risk Analysis, Predictive, Action, and Conversational Agents). |
+| **[ml_service.py](file:///c:/Users/acer/OneDrive%20-%20ELCOT/PROJECTS/project%200/ml_service.py)** | Machine Learning Service Layer (Random Forest, Isolation Forest, Feature Importance, Model Retraining). |
+| **[database.py](file:///c:/Users/acer/OneDrive%20-%20ELCOT/PROJECTS/project%200/database.py)** | SQLite persistence layer handling query history logging, favorite bookmarks, and analytics. |
+| **[config.py](file:///c:/Users/acer/OneDrive%20-%20ELCOT/PROJECTS/project%200/config.py)** | Centralized configuration management and API endpoint definitions. |
+| **[templates/index.html](file:///c:/Users/acer/OneDrive%20-%20ELCOT/PROJECTS/project%200/templates/index.html)** | Responsive HTML5 dashboard UI template with WebGL canvas, metric cards, and ML panels. |
+| **[static/css/style.css](file:///c:/Users/acer/OneDrive%20-%20ELCOT/PROJECTS/project%200/static/css/style.css)** | Glassmorphic design system, color tokens, micro-animations, and layout styles. |
+| **[static/js/app.js](file:///c:/Users/acer/OneDrive%20-%20ELCOT/PROJECTS/project%200/static/js/app.js)** | WebGL Lightning Shader renderer, Chart.js trends graph, AJAX pipeline, and chat handlers. |
+| **[vercel.json](file:///c:/Users/acer/OneDrive%20-%20ELCOT/PROJECTS/project%200/vercel.json)** | Deployment configuration for Vercel Python serverless hosting. |
+| **[requirements.txt](file:///c:/Users/acer/OneDrive%20-%20ELCOT/PROJECTS/project%200/requirements.txt)** | Python dependencies list (`flask`, `requests`, `python-dotenv`, `numpy`, `scikit-learn`). |
 
 ---
 
-## 🛠️ Technology Stack
+## 📡 REST API Reference
 
-- **Backend**: Python 3.14, Flask, Requests, Python-Dotenv
-- **Frontend**: HTML5, Vanilla CSS3 (Glassmorphism), JavaScript (ES6+ AJAX)
-- **Data & Charts**: Open-Meteo Free Weather & Air Quality APIs, Chart.js CDN
-- **Fonts**: Google Fonts (Inter & Outfit)
+| Endpoint | Method | Description |
+| :--- | :--- | :--- |
+| `/` | `GET` | Renders the primary weather dashboard UI. |
+| `/api/weather` | `POST` | Executes the complete Multi-Agent & ML pipeline for a requested city. |
+| `/api/agent/chat` | `POST` | Processes natural language questions via the Conversational AI Agent. |
+| `/api/search` | `GET` | Returns city autocomplete suggestions. |
+| `/api/ml/metrics` | `GET` | Returns ML model accuracy, precision, recall, F1-score, MAE, and feature importances. |
+| `/api/ml/retrain` | `POST` | Triggers the online ML model retraining pipeline. |
+| `/api/history` | `GET` | Retrieves recent search query history logs from SQLite database. |
+| `/api/favorites` | `GET` | Returns saved favorite bookmarked cities. |
+| `/api/favorites/toggle` | `POST` | Adds or removes a city from SQLite favorite bookmarks. |
+| `/api/analytics` | `GET` | Returns system query analytics and SQLite database status. |
 
 ---
 
-## 💻 Installation & Local Execution Guide
-
-### Prerequisites
-- Python 3.9+ installed on your system.
-- Git installed.
-
-### Steps
+## 🛠️ Quick Local Execution Guide
 
 1. **Clone the Repository**:
    ```bash
@@ -99,50 +94,15 @@ An autonomous, multi-agent AI system designed to monitor real-time atmospheric c
    pip install -r requirements.txt
    ```
 
-3. **Run the Application**:
+3. **Start Application Server**:
    ```bash
    python app.py
    ```
 
-4. **Open in Browser**:
-   Navigate to `http://127.0.0.1:5000` in your web browser.
-
----
-
-## 📡 API Endpoints
-
-### 1. `POST /api/weather`
-Executes the multi-agent pipeline for a specified city.
-
-**Request Body**:
-```json
-{
-  "city": "London"
-}
-```
-
-**Response**:
-```json
-{
-  "success": true,
-  "result": {
-    "data": { ... },
-    "analysis": {
-      "safety_score": 90,
-      "status_level": "OPTIMAL",
-      "status_text": "Safe & Favorable Conditions"
-    },
-    "predictions": { ... },
-    "recommendations": { ... },
-    "agent_logs": [ ... ]
-  }
-}
-```
-
-### 2. `GET /api/search?q={query}`
-Returns city autocomplete suggestions.
+4. **Access Dashboard**:
+   Open **`http://127.0.0.1:5000`** in your browser.
 
 ---
 
 ## 📄 License
-This project is licensed under the MIT License.
+This project is released under the **MIT License**.
