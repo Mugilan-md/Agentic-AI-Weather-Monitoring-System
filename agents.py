@@ -4,6 +4,7 @@ import random
 from typing import Dict, Any, List
 from config import Config
 from ml_service import ml_service
+import weather_knowledge
 
 # WMO Weather interpretation codes
 WMO_WEATHER_CODES = {
@@ -424,14 +425,13 @@ class ActionAgent:
 
 
 class ConversationalAgent:
-    """Agent 5: AI Conversational Weather Assistant enriched with ML Predictions."""
+    """Agent 5: AI Conversational Weather Assistant enriched with Global Disaster & Precautionary Knowledge."""
     
     def __init__(self):
         self.name = "AI Conversational Assistant"
-        self.role = "Natural Language Intelligence & ML Query Reasoning"
+        self.role = "Global Weather Intelligence & Precautionary Reasoning"
 
     def respond(self, query: str, weather_result: Dict[str, Any]) -> Dict[str, Any]:
-        q_lower = query.lower()
         curr = weather_result["data"]["current"]
         analysis = weather_result["analysis"]
         city = weather_result["data"]["location"]["city"]
@@ -441,31 +441,24 @@ class ConversationalAgent:
         ml_analytics = weather_result.get("ml_analytics", {})
         ml_rain = ml_analytics.get("rainfall_prediction", {})
         ml_risk = ml_analytics.get("risk_classification", {})
+        risk_cat = ml_risk.get("category", "Normal")
 
-        if any(word in q_lower for word in ["run", "running", "jog", "outdoor"]):
-            if safety >= 70:
-                answer = f"🏃 **Yes! Conditions are favorable for running in {city}.** Temperature: {temp}°C ({cond}). ML Safety Index: {safety}/100."
-            else:
-                answer = f"⚠️ **Caution advised for running in {city}.** ML Risk Classifier predicts '{ml_risk.get('category', 'Moderate')}' (Score: {safety}/100)."
+        # Retrieve global weather knowledge & precautions
+        knowledge = weather_knowledge.query_global_knowledge(
+            query=query,
+            current_temp=temp,
+            precip_prob=ml_rain.get("probability_pct", 20),
+            risk_cat=risk_cat
+        )
+
+        precautions_html = "<br>• " + "<br>• ".join(knowledge["precautions"])
         
-        elif any(word in q_lower for word in ["rain", "umbrella", "wet"]):
-            prob = ml_rain.get("probability_pct", 20)
-            conf = ml_rain.get("confidence_pct", 90)
-            if prob > 45:
-                answer = f"☔ **Yes, carry an umbrella!** ML Rainfall Model predicts **{prob}% rain probability** with {conf}% model confidence for {city}."
-            else:
-                answer = f"☀️ **Low rain risk in {city}.** ML Rainfall Model estimates only {prob}% rain chance ({conf}% confidence)."
-
-        elif any(word in q_lower for word in ["wear", "cloth", "outfit"]):
-            if temp >= 30:
-                answer = f"👕 **Wear light cotton clothing.** It is hot in {city} ({temp}°C). Don't forget sunscreen!"
-            elif temp <= 12:
-                answer = f"🧥 **Bundle up!** Temperature in {city} is {temp}°C. Wear a heavy warm coat."
-            else:
-                answer = f"🧥 **Casual comfortable attire.** Temperature is {temp}°C with {cond}. Light jacket is ideal."
-
-        else:
-            answer = f"🤖 **ML-Powered AI Report for {city}**: Temp: **{temp}°C** ({cond}). ML Risk Level: **{ml_risk.get('category', 'Normal')}** (Safety Score: {safety}/100)."
+        answer = f"🤖 **AI Agent Diagnostic Report for {city}**:<br>" \
+                 f"Current Temperature: **{temp}°C** ({cond}) | ML Safety Score: **{safety}/100** ({risk_cat})<br><br>" \
+                 f"**{knowledge['title']}**<br>" \
+                 f"📜 *Historical Context*: {knowledge['historical_context']}<br><br>" \
+                 f"🛡️ **Precautionary Measures**:{precautions_html}<br><br>" \
+                 f"💡 **Optimal Solution**: {knowledge['best_solution']}"
 
         return {
             "query": query,
@@ -487,7 +480,6 @@ class AgenticWeatherSystem:
     def run_pipeline(self, city_name: str) -> Dict[str, Any]:
         logs = []
         
-        # Step 1: Data Collection
         t0 = time.time()
         raw_data = self.collector.fetch_data(city_name)
         dt1 = round((time.time() - t0) * 1000, 2)
@@ -499,12 +491,10 @@ class AgenticWeatherSystem:
             "thought": f"Retrieved atmospheric metrics for '{raw_data['location']['city']}'. Temp: {raw_data['current']['temperature']}°C, Humidity: {raw_data['current']['humidity']}%, Pressure: {raw_data['current']['pressure']} hPa."
         })
 
-        # Step 2: ML Service Layer Inference
         t0 = time.time()
         ml_res = ml_service.predict_weather_features(raw_data["current"], raw_data["air_quality"])
         dt_ml = round((time.time() - t0) * 1000, 2)
 
-        # Step 3: Risk Analysis Agent consuming ML
         t0 = time.time()
         analysis = self.analyzer.analyze(raw_data, ml_res)
         dt2 = round((time.time() - t0) * 1000, 2)
@@ -516,7 +506,6 @@ class AgenticWeatherSystem:
             "thought": f"ML Service Inference completed. Category: '{ml_res['risk_classification']['category']}' ({ml_res['risk_classification']['confidence_pct']}% conf), Rain Prob: {ml_res['rainfall_prediction']['probability_pct']}%, Anomaly: {ml_res['anomaly_detection']['status']}. ML Risk Score: {analysis['safety_score']}/100."
         })
 
-        # Step 4: Predictive Agent
         t0 = time.time()
         predictions = self.predictor.predict(raw_data, ml_res)
         dt3 = round((time.time() - t0) * 1000, 2)
@@ -528,7 +517,6 @@ class AgenticWeatherSystem:
             "thought": predictions["predictive_summary"]
         })
 
-        # Step 5: Action Agent
         t0 = time.time()
         recommendations = self.actioner.recommend(raw_data, analysis, predictions, ml_res)
         dt4 = round((time.time() - t0) * 1000, 2)
