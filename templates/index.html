@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Agentic AI Weather Monitoring System - Real-time atmospheric analysis, WebGL Shader visualizer, multi-agent risk evaluation, and emergency advisories.">
+    <meta name="description" content="Agentic AI Weather Monitoring System - Real-time atmospheric analysis, WebGL Shader visualizer, Machine Learning intelligence, and multi-agent risk evaluation.">
     <title>Agentic AI Weather Monitoring System</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,7 +28,7 @@
             <span class="brand-icon">⚡</span>
             <div>
                 <span class="brand-title">Agentic Weather AI</span>
-                <span class="brand-badge">Multi-Agent v3.5 + WebGL</span>
+                <span class="brand-badge">Multi-Agent v4.0 + ML Engine</span>
             </div>
         </div>
 
@@ -143,6 +143,81 @@
             </div>
         </div>
 
+    </section>
+
+    <!-- NEW MACHINE LEARNING INTELLIGENCE & PERFORMANCE DASHBOARD -->
+    <section class="ml-dashboard-section">
+        <div class="glass-card ml-card">
+            <div class="ml-header-bar">
+                <h2 class="section-title" style="margin-bottom: 0;"><span class="title-icon">🧠</span> Machine Learning Intelligence & Model Performance</h2>
+                <button id="retrain-btn" class="retrain-btn">🔄 Retrain ML Models</button>
+            </div>
+
+            <!-- ML Real-time Prediction Cards -->
+            <div class="ml-metrics-grid">
+                <div class="ml-metric-box">
+                    <div class="ml-metric-lbl">Rainfall ML Prediction</div>
+                    <div id="ml-rain-prob" class="ml-metric-val">--%</div>
+                    <div id="ml-rain-conf" class="ml-sub-tag">Model Conf: --%</div>
+                </div>
+
+                <div class="ml-metric-box">
+                    <div class="ml-metric-lbl">ML Risk Classification</div>
+                    <div id="ml-risk-cat" class="ml-metric-val" style="font-size: 1.3rem;">--</div>
+                    <div id="ml-risk-conf" class="ml-sub-tag">Class Conf: --%</div>
+                </div>
+
+                <div class="ml-metric-box">
+                    <div class="ml-metric-lbl">Environmental Anomaly Status</div>
+                    <div id="ml-anomaly-status" class="ml-metric-val" style="font-size: 1.15rem;">Analyzing...</div>
+                    <div class="ml-sub-tag">Isolation Forest Model</div>
+                </div>
+
+                <div class="ml-metric-box">
+                    <div class="ml-metric-lbl">24H Temp Forecast (Ridge ML)</div>
+                    <div id="ml-temp-24h" class="ml-metric-val">--°C</div>
+                    <div id="ml-temp-trend" class="ml-sub-tag">Trend: --</div>
+                </div>
+            </div>
+
+            <!-- Feature Importance & Model Metrics Grid -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <!-- Feature Importance Progress Bars -->
+                <div class="feature-importance-box">
+                    <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 14px; color: var(--primary-cyan);">📊 Feature Importance Weights</h3>
+                    <div id="feature-importance-list">
+                        <div style="color: var(--text-muted); font-size: 0.85rem;">Calculating feature weights...</div>
+                    </div>
+                </div>
+
+                <!-- Model Evaluation Metrics -->
+                <div class="feature-importance-box">
+                    <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 14px; color: var(--accent-purple);">🎯 Model Accuracy & Performance Metrics</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div style="background: rgba(15,23,42,0.4); padding: 12px; border-radius: 10px;">
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Accuracy</div>
+                            <div id="ml-acc" style="font-size: 1.3rem; font-weight: 700; color: var(--accent-emerald);">--%</div>
+                        </div>
+                        <div style="background: rgba(15,23,42,0.4); padding: 12px; border-radius: 10px;">
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">F1 Score</div>
+                            <div id="ml-f1" style="font-size: 1.3rem; font-weight: 700; color: var(--primary-cyan);">--%</div>
+                        </div>
+                        <div style="background: rgba(15,23,42,0.4); padding: 12px; border-radius: 10px;">
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Temp MAE</div>
+                            <div id="ml-mae" style="font-size: 1.3rem; font-weight: 700; color: var(--accent-amber);">--°C</div>
+                        </div>
+                        <div style="background: rgba(15,23,42,0.4); padding: 12px; border-radius: 10px;">
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Temp RMSE</div>
+                            <div id="ml-rmse" style="font-size: 1.3rem; font-weight: 700; color: var(--accent-rose);">--°C</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 14px; font-size: 0.8rem; color: var(--text-secondary);">
+                        Engine: <strong id="ml-engine-name" style="color: var(--primary-cyan);">Initializing...</strong>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </section>
 
     <!-- AI Conversational Weather Assistant -->
@@ -319,7 +394,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>Agentic AI Weather Monitoring System • WebGL Shader & Multi-Agent Intelligence</p>
+        <p>Agentic AI Weather Monitoring System • Machine Learning & Multi-Agent Intelligence</p>
     </footer>
 
 </div>
@@ -327,7 +402,7 @@
 <!-- Loading Spinner Overlay -->
 <div id="loading-overlay" class="loading-overlay">
     <div class="spinner"></div>
-    <div class="loading-text">Executing Multi-Agent Pipeline...</div>
+    <div class="loading-text">Executing Multi-Agent & ML Pipeline...</div>
 </div>
 
 <script>

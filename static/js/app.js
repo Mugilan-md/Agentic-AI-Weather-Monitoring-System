@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const favStarBtn = document.getElementById("fav-star-btn");
     const hueSlider = document.getElementById("hue-slider");
     const hueValDisplay = document.getElementById("hue-val-display");
+    const retrainBtn = document.getElementById("retrain-btn");
 
     const unitBtnC = document.getElementById("unit-c");
     const unitBtnF = document.getElementById("unit-f");
@@ -19,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatSendBtn = document.getElementById("chat-send-btn");
     const chatHistory = document.getElementById("chat-history");
 
-    // Initialize 3-Way Branching Lightning Shader
+    // Initialize WebGL Lightning Background Shader
     initLightningShader();
 
     // Hue Slider Listener
@@ -28,6 +29,21 @@ document.addEventListener("DOMContentLoaded", () => {
         hueSlider.addEventListener("input", (e) => {
             lightningHue = parseFloat(e.target.value);
             if (hueValDisplay) hueValDisplay.textContent = `${Math.round(lightningHue)}°`;
+        });
+    }
+
+    // Retrain Model Button Listener
+    if (retrainBtn) {
+        retrainBtn.addEventListener("click", () => {
+            showToast("Retraining ML Models on updated dataset...", false);
+            fetch("/api/ml/retrain", { method: "POST" })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast(`ML Retraining complete! New Accuracy: ${data.result.metrics.accuracy}%`, false);
+                        loadMlMetrics();
+                    }
+                });
         });
     }
 
@@ -54,10 +70,11 @@ document.addEventListener("DOMContentLoaded", () => {
         return container;
     }
 
-    // Load DB Favorites & Analytics
+    // Load DB Favorites, Analytics & ML Metrics
     loadFavoritesFromDB();
     loadDbAnalytics();
     loadDbHistory();
+    loadMlMetrics();
 
     // Default load (London)
     const initialCity = window.INITIAL_CITY || "London";
@@ -186,6 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 updateUI(weatherData);
                 loadDbAnalytics();
                 loadDbHistory();
+                loadMlMetrics();
             } else {
                 showToast(`Error: ${data.error}`, true);
             }
@@ -203,6 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const analysis = res.analysis;
         const recs = res.recommendations;
         const logs = res.agent_logs;
+        const ml = res.ml_analytics;
 
         // Mode Indicator
         const modeBadge = document.getElementById("mode-badge");
@@ -243,6 +262,30 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("val-uv").textContent = `${curr.uv_index.toFixed(1)}`;
         document.getElementById("val-aqi").textContent = `${raw.air_quality.us_aqi}`;
 
+        // ML Predictions Display
+        if (ml) {
+            document.getElementById("ml-rain-prob").textContent = `${ml.rainfall_prediction.probability_pct}%`;
+            document.getElementById("ml-rain-conf").textContent = `Model Conf: ${ml.rainfall_prediction.confidence_pct}%`;
+
+            document.getElementById("ml-risk-cat").textContent = ml.risk_classification.category;
+            document.getElementById("ml-risk-conf").textContent = `Class Conf: ${ml.risk_classification.confidence_pct}%`;
+
+            const anomalyBadge = document.getElementById("ml-anomaly-status");
+            if (ml.anomaly_detection.is_anomaly) {
+                anomalyBadge.textContent = "🚨 Anomaly Flagged!";
+                anomalyBadge.style.color = "var(--accent-rose)";
+            } else {
+                anomalyBadge.textContent = "✅ Normal Pattern";
+                anomalyBadge.style.color = "var(--accent-emerald)";
+            }
+
+            document.getElementById("ml-temp-24h").textContent = formatTemp(ml.temperature_forecast.predicted_temp_24h);
+            document.getElementById("ml-temp-trend").textContent = `Trend: ${ml.temperature_forecast.trend} (${ml.temperature_forecast.delta > 0 ? '+' : ''}${ml.temperature_forecast.delta}°C)`;
+
+            // Render Feature Importance Progress Bars
+            renderFeatureImportance(ml.feature_importance);
+        }
+
         // Agent Execution Timeline
         const agentTimeline = document.getElementById("agent-timeline");
         agentTimeline.innerHTML = logs.map(log => `
@@ -280,6 +323,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Render Chart
         renderHourlyChart(raw.hourly);
+    }
+
+    function renderFeatureImportance(importanceMap) {
+        const container = document.getElementById("feature-importance-list");
+        if (!container || !importanceMap) return;
+
+        const items = Object.entries(importanceMap).sort((a, b) => b[1] - a[1]);
+        container.innerHTML = items.map(([feat, pct]) => `
+            <div class="feature-item">
+                <div class="feature-info">
+                    <span style="text-transform: capitalize; font-weight: 500;">${feat.replace("_", " ")}</span>
+                    <span style="color: var(--primary-cyan); font-weight: 600;">${pct}%</span>
+                </div>
+                <div class="feature-bar-bg">
+                    <div class="feature-bar-fill" style="width: ${pct}%;"></div>
+                </div>
+            </div>
+        `).join("");
     }
 
     function renderHourlyChart(hourlyData) {
@@ -340,7 +401,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Database Loaders
+    // Database & ML Loaders
     function loadFavoritesFromDB() {
         fetch("/api/favorites")
             .then(res => res.json())
@@ -408,6 +469,21 @@ document.addEventListener("DOMContentLoaded", () => {
             }).catch(() => {});
     }
 
+    function loadMlMetrics() {
+        fetch("/api/ml/metrics")
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.metrics) {
+                    const m = data.metrics;
+                    document.getElementById("ml-acc").textContent = `${m.accuracy}%`;
+                    document.getElementById("ml-f1").textContent = `${m.f1_score}%`;
+                    document.getElementById("ml-mae").textContent = `${m.mae}°C`;
+                    document.getElementById("ml-rmse").textContent = `${m.rmse}°C`;
+                    document.getElementById("ml-engine-name").textContent = m.engine;
+                }
+            }).catch(() => {});
+    }
+
     // AI Conversational Assistant Logic
     chatSendBtn.addEventListener("click", sendChatMessage);
     chatInput.addEventListener("keypress", (e) => {
@@ -467,7 +543,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // -------------------------------------------------------------
-    // High-FPS 3-Way Branching Lightning Shader (Node Origin + Plasma)
+    // High-FPS 3-Way Branching Lightning Shader
     // -------------------------------------------------------------
     function initLightningShader() {
         const canvas = document.getElementById("lightning-canvas");
@@ -539,7 +615,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 return value;
             }
 
-            // Distance from a ray angled from origin node
             float lightningBranch(vec2 uv, vec2 origin, float angle, float time, float noiseScale) {
                 vec2 p = uv - origin;
                 p = rotate2d(angle) * p;
@@ -555,12 +630,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 vec2 nodeOrigin = vec2(0.0, 0.65);
                 float time = iTime;
                 
-                // 3 Directional Branches: Left (-0.55 rad), Center (0.0 rad), Right (+0.55 rad)
                 float d1 = lightningBranch(uv, nodeOrigin, -0.55, time, 2.5);
                 float d2 = lightningBranch(uv, nodeOrigin,  0.00, time * 1.1, 2.8);
                 float d3 = lightningBranch(uv, nodeOrigin,  0.55, time * 0.9, 2.5);
                 
-                // 2 Secondary Plasma Spark Tendrils
                 float d4 = lightningBranch(uv, nodeOrigin, -0.28, time * 1.4, 4.0);
                 float d5 = lightningBranch(uv, nodeOrigin,  0.28, time * 1.3, 4.0);
                 
@@ -572,7 +645,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 float totalLightning = bolt1 + bolt2 + bolt3 + spark4 + spark5;
                 
-                // Glowing Origin Energy Node Effect
                 float nodeDist = length(uv - nodeOrigin);
                 float nodeGlow = 0.12 / max(nodeDist, 0.01);
                 float pulse = 0.85 + 0.15 * sin(time * 6.0);

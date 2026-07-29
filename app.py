@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from agents import run_weather_agent, run_agent_chat, DataCollectionAgent
+from ml_service import ml_service
 from config import Config
 import database
 
@@ -92,6 +93,17 @@ def toggle_favorite():
 def get_analytics():
     analytics = database.get_db_analytics()
     return jsonify({"success": True, "analytics": analytics})
+
+# Machine Learning REST Endpoints
+@app.route("/api/ml/metrics", methods=["GET"])
+def get_ml_metrics():
+    metrics = ml_service.performance_metrics
+    return jsonify({"success": True, "metrics": metrics, "logs": ml_service.prediction_logs})
+
+@app.route("/api/ml/retrain", methods=["POST"])
+def retrain_ml_model():
+    retrain_res = ml_service.retrain_pipeline()
+    return jsonify({"success": True, "result": retrain_res})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=Config.PORT, debug=Config.DEBUG)
