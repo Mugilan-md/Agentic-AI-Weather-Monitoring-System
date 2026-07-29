@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatSendBtn = document.getElementById("chat-send-btn");
     const chatHistory = document.getElementById("chat-history");
 
-    // Initialize High-FPS Blue Lightning Background Shader
+    // Initialize 3-Way Branching Lightning Shader
     initLightningShader();
 
     // Hue Slider Listener
@@ -467,7 +467,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // -------------------------------------------------------------
-    // High-FPS WebGL Shader Background (Electric Blue Lightning)
+    // High-FPS 3-Way Branching Lightning Shader (Node Origin + Plasma)
     // -------------------------------------------------------------
     function initLightningShader() {
         const canvas = document.getElementById("lightning-canvas");
@@ -539,19 +539,49 @@ document.addEventListener("DOMContentLoaded", () => {
                 return value;
             }
 
+            // Distance from a ray angled from origin node
+            float lightningBranch(vec2 uv, vec2 origin, float angle, float time, float noiseScale) {
+                vec2 p = uv - origin;
+                p = rotate2d(angle) * p;
+                float n = fbm(p * noiseScale + vec2(0.0, time * 2.5));
+                return abs(p.x + (n - 0.5) * 0.45);
+            }
+
             void main() {
                 vec2 uv = gl_FragCoord.xy / iResolution.xy;
                 uv = 2.0 * uv - 1.0;
                 uv.x *= iResolution.x / iResolution.y;
                 
-                // Fast electric lightning motion (high speed 1.6x)
-                uv += 1.8 * fbm(uv * 2.2 + 1.6 * iTime) - 0.9;
-                float dist = abs(uv.x);
+                vec2 nodeOrigin = vec2(0.0, 0.65);
+                float time = iTime;
                 
-                // Deep Electric Blue base color (hue ~210)
-                vec3 baseColor = hsv2rgb(vec3(uHue / 360.0, 0.85, 0.95));
-                vec3 col = baseColor * (0.065 / dist);
-                gl_FragColor = vec4(col, 0.55);
+                // 3 Directional Branches: Left (-0.55 rad), Center (0.0 rad), Right (+0.55 rad)
+                float d1 = lightningBranch(uv, nodeOrigin, -0.55, time, 2.5);
+                float d2 = lightningBranch(uv, nodeOrigin,  0.00, time * 1.1, 2.8);
+                float d3 = lightningBranch(uv, nodeOrigin,  0.55, time * 0.9, 2.5);
+                
+                // 2 Secondary Plasma Spark Tendrils
+                float d4 = lightningBranch(uv, nodeOrigin, -0.28, time * 1.4, 4.0);
+                float d5 = lightningBranch(uv, nodeOrigin,  0.28, time * 1.3, 4.0);
+                
+                float bolt1 = 0.055 / max(d1, 0.001);
+                float bolt2 = 0.070 / max(d2, 0.001);
+                float bolt3 = 0.055 / max(d3, 0.001);
+                float spark4 = 0.025 / max(d4, 0.001);
+                float spark5 = 0.025 / max(d5, 0.001);
+                
+                float totalLightning = bolt1 + bolt2 + bolt3 + spark4 + spark5;
+                
+                // Glowing Origin Energy Node Effect
+                float nodeDist = length(uv - nodeOrigin);
+                float nodeGlow = 0.12 / max(nodeDist, 0.01);
+                float pulse = 0.85 + 0.15 * sin(time * 6.0);
+                nodeGlow *= pulse;
+                
+                vec3 baseColor = hsv2rgb(vec3(uHue / 360.0, 0.85, 0.98));
+                vec3 col = baseColor * (totalLightning * 0.85 + nodeGlow);
+                
+                gl_FragColor = vec4(col, 0.65);
             }
         `;
 
