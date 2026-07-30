@@ -5,17 +5,10 @@ import time
 from typing import List, Dict, Any
 
 def get_db_path():
-    if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME") or not os.access(base_dir, os.W_OK):
         return os.path.join(tempfile.gettempdir(), "weather_system.db")
-    try:
-        base_dir = os.path.dirname(__file__)
-        test_file = os.path.join(base_dir, ".perm_test")
-        with open(test_file, "w") as f:
-            f.write("1")
-        os.remove(test_file)
-        return os.path.join(base_dir, "weather_system.db")
-    except Exception:
-        return os.path.join(tempfile.gettempdir(), "weather_system.db")
+    return os.path.join(base_dir, "weather_system.db")
 
 def get_db_connection():
     db_file = get_db_path()

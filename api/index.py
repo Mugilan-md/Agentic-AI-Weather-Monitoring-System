@@ -7,3 +7,7 @@ if root_dir not in sys.path:
     sys.path.insert(0, root_dir)
 
 from app import app
+
+# Export app & handler for Vercel WSGI entrypoint compliance
+app = app
+handler = app
