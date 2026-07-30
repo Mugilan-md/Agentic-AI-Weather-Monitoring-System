@@ -122,5 +122,9 @@ def retrain_ml_model():
     retrain_res = ml_service.retrain_pipeline()
     return jsonify({"success": True, "result": retrain_res})
 
+@app.errorhandler(Exception)
+def handle_global_exception(e):
+    return jsonify({"success": False, "error": f"Serverless Function Notice: {str(e)}"}), 500
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=Config.PORT, debug=Config.DEBUG)
