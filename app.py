@@ -5,10 +5,17 @@ from config import Config
 import database
 
 app = Flask(__name__)
-collector = DataCollectionAgent()
 
-# Initialize SQLite Database
-database.init_db()
+# Safe initialization to guarantee successful import on Vercel
+try:
+    collector = DataCollectionAgent()
+except Exception:
+    collector = None
+
+try:
+    database.init_db()
+except Exception:
+    pass
 
 @app.route("/", methods=["GET"])
 def index():
@@ -74,7 +81,11 @@ def search_city():
     if len(query) < 2:
         return jsonify({"results": []})
     
-    results = collector.search_city(query)
+    try:
+        agent = collector if collector else DataCollectionAgent()
+        results = agent.search_city(query)
+    except Exception:
+        results = []
     return jsonify({"results": results})
 
 # Database REST Endpoints

@@ -4,13 +4,22 @@ import tempfile
 import time
 from typing import List, Dict, Any
 
-if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
-    DB_PATH = os.path.join(tempfile.gettempdir(), "weather_system.db")
-else:
-    DB_PATH = os.path.join(os.path.dirname(__file__), "weather_system.db")
+def get_db_path():
+    if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+        return os.path.join(tempfile.gettempdir(), "weather_system.db")
+    try:
+        base_dir = os.path.dirname(__file__)
+        test_file = os.path.join(base_dir, ".perm_test")
+        with open(test_file, "w") as f:
+            f.write("1")
+        os.remove(test_file)
+        return os.path.join(base_dir, "weather_system.db")
+    except Exception:
+        return os.path.join(tempfile.gettempdir(), "weather_system.db")
 
 def get_db_connection():
-    conn = sqlite3.connect(DB_PATH)
+    db_file = get_db_path()
+    conn = sqlite3.connect(db_file, timeout=5)
     conn.row_factory = sqlite3.Row
     return conn
 
