@@ -36,7 +36,35 @@ CITY_PRESETS = {
     "tokyo": {"lat": 35.6762, "lon": 139.6503, "country": "Japan", "temp": 26.0, "humidity": 58, "cond": "Clear Sky", "code": 0, "wind": 9.5, "uv": 6.8, "aqi": 35},
     "new york": {"lat": 40.7128, "lon": -74.0060, "country": "United States", "temp": 24.5, "humidity": 52, "cond": "Mainly Clear", "code": 1, "wind": 11.2, "uv": 5.5, "aqi": 55},
     "paris": {"lat": 48.8566, "lon": 2.3522, "country": "France", "temp": 21.0, "humidity": 60, "cond": "Partly Cloudy", "code": 2, "wind": 10.0, "uv": 5.0, "aqi": 48},
-    "sydney": {"lat": -33.8688, "lon": 151.2093, "country": "Australia", "temp": 19.5, "humidity": 70, "cond": "Moderate Rain", "code": 63, "wind": 18.2, "uv": 3.5, "aqi": 30}
+    "sydney": {"lat": -33.8688, "lon": 151.2093, "country": "Australia", "temp": 19.5, "humidity": 70, "cond": "Moderate Rain", "code": 63, "wind": 18.2, "uv": 3.5, "aqi": 30},
+    "mumbai": {"lat": 19.0760, "lon": 72.8777, "country": "India", "temp": 31.0, "humidity": 82, "cond": "Humid", "code": 2, "wind": 16.0, "uv": 7.5, "aqi": 110},
+    "delhi": {"lat": 28.6139, "lon": 77.2090, "country": "India", "temp": 34.0, "humidity": 60, "cond": "Hazy", "code": 45, "wind": 10.0, "uv": 8.0, "aqi": 210},
+    "bengaluru": {"lat": 12.9716, "lon": 77.5946, "country": "India", "temp": 27.5, "humidity": 68, "cond": "Partly Cloudy", "code": 2, "wind": 12.0, "uv": 6.5, "aqi": 65},
+    "kolkata": {"lat": 22.5726, "lon": 88.3639, "country": "India", "temp": 32.0, "humidity": 80, "cond": "Humid", "code": 2, "wind": 11.0, "uv": 7.8, "aqi": 130},
+    "hyderabad": {"lat": 17.3850, "lon": 78.4867, "country": "India", "temp": 30.0, "humidity": 65, "cond": "Partly Cloudy", "code": 2, "wind": 13.0, "uv": 7.2, "aqi": 90},
+    "beijing": {"lat": 39.9042, "lon": 116.4074, "country": "China", "temp": 25.0, "humidity": 50, "cond": "Clear Sky", "code": 0, "wind": 8.0, "uv": 6.0, "aqi": 75},
+    "shanghai": {"lat": 31.2304, "lon": 121.4737, "country": "China", "temp": 28.0, "humidity": 75, "cond": "Partly Cloudy", "code": 2, "wind": 14.0, "uv": 7.0, "aqi": 60},
+    "singapore": {"lat": 1.3521, "lon": 103.8198, "country": "Singapore", "temp": 30.5, "humidity": 85, "cond": "Rain Showers", "code": 80, "wind": 11.0, "uv": 8.5, "aqi": 40},
+    "dubai": {"lat": 25.2048, "lon": 55.2708, "country": "United Arab Emirates", "temp": 38.0, "humidity": 45, "cond": "Sunny", "code": 0, "wind": 15.0, "uv": 10.0, "aqi": 105},
+    "cairo": {"lat": 30.0444, "lon": 31.2357, "country": "Egypt", "temp": 35.0, "humidity": 40, "cond": "Sunny", "code": 0, "wind": 14.0, "uv": 9.5, "aqi": 120},
+    "berlin": {"lat": 52.5200, "lon": 13.4050, "country": "Germany", "temp": 20.0, "humidity": 55, "cond": "Partly Cloudy", "code": 2, "wind": 11.0, "uv": 4.5, "aqi": 35},
+    "rome": {"lat": 41.9028, "lon": 12.4964, "country": "Italy", "temp": 26.5, "humidity": 50, "cond": "Sunny", "code": 0, "wind": 10.0, "uv": 6.8, "aqi": 45},
+    "madrid": {"lat": 40.4168, "lon": -3.7038, "country": "Spain", "temp": 29.0, "humidity": 35, "cond": "Sunny", "code": 0, "wind": 9.0, "uv": 8.0, "aqi": 40},
+    "moscow": {"lat": 55.7558, "lon": 37.6173, "country": "Russia", "temp": 16.0, "humidity": 65, "cond": "Overcast", "code": 3, "wind": 13.0, "uv": 3.0, "aqi": 30},
+    "toronto": {"lat": 43.6532, "lon": -79.3832, "country": "Canada", "temp": 22.0, "humidity": 58, "cond": "Partly Cloudy", "code": 2, "wind": 12.0, "uv": 5.0, "aqi": 38},
+    "los angeles": {"lat": 34.0522, "lon": -118.2437, "country": "United States", "temp": 25.5, "humidity": 62, "cond": "Sunny", "code": 0, "wind": 10.0, "uv": 7.5, "aqi": 68},
+    "chicago": {"lat": 41.8781, "lon": -87.6298, "country": "United States", "temp": 21.0, "humidity": 60, "cond": "Partly Cloudy", "code": 2, "wind": 16.0, "uv": 5.5, "aqi": 50},
+    "mexico city": {"lat": 19.4326, "lon": -99.1332, "country": "Mexico", "temp": 23.0, "humidity": 50, "cond": "Partly Cloudy", "code": 2, "wind": 9.0, "uv": 8.5, "aqi": 95},
+    "são paulo": {"lat": -23.5505, "lon": -46.6333, "country": "Brazil", "temp": 22.0, "humidity": 70, "cond": "Cloudy", "code": 3, "wind": 11.0, "uv": 5.0, "aqi": 55},
+    "buenos aires": {"lat": -34.6037, "lon": -58.3816, "country": "Argentina", "temp": 17.5, "humidity": 72, "cond": "Partly Cloudy", "code": 2, "wind": 14.0, "uv": 4.0, "aqi": 35},
+    "cape town": {"lat": -33.9249, "lon": 18.4241, "country": "South Africa", "temp": 18.0, "humidity": 68, "cond": "Windy", "code": 2, "wind": 22.0, "uv": 4.5, "aqi": 30},
+    "seoul": {"lat": 37.5665, "lon": 126.9780, "country": "South Korea", "temp": 24.0, "humidity": 60, "cond": "Mainly Clear", "code": 1, "wind": 9.0, "uv": 6.2, "aqi": 65},
+    "istanbul": {"lat": 41.0082, "lon": 28.9784, "country": "Turkey", "temp": 25.0, "humidity": 58, "cond": "Partly Cloudy", "code": 2, "wind": 13.0, "uv": 6.5, "aqi": 50},
+    "coimbatore": {"lat": 11.0168, "lon": 76.9558, "country": "India", "temp": 30.0, "humidity": 70, "cond": "Partly Cloudy", "code": 2, "wind": 12.0, "uv": 8.0, "aqi": 45},
+    "madurai": {"lat": 9.9252, "lon": 78.1198, "country": "India", "temp": 33.0, "humidity": 65, "cond": "Sunny", "code": 0, "wind": 11.0, "uv": 8.8, "aqi": 60},
+    "trichy": {"lat": 10.7905, "lon": 78.7047, "country": "India", "temp": 34.0, "humidity": 62, "cond": "Sunny", "code": 0, "wind": 10.0, "uv": 9.0, "aqi": 55},
+    "salem": {"lat": 11.6643, "lon": 78.1460, "country": "India", "temp": 32.0, "humidity": 64, "cond": "Sunny", "code": 0, "wind": 11.0, "uv": 8.5, "aqi": 50},
+    "tirunelveli": {"lat": 8.7139, "lon": 77.7567, "country": "India", "temp": 32.5, "humidity": 70, "cond": "Partly Cloudy", "code": 2, "wind": 14.0, "uv": 8.6, "aqi": 42}
 }
 
 
@@ -139,16 +167,16 @@ class WeatherDataFusionEngine:
 
 
 class DataCollectionAgent:
-    """Agent 1: Multi-Source Atmospheric Telemetry Fetcher & Universal Geolocation."""
+    """Agent 1: Multi-Source Atmospheric Telemetry Fetcher & Universal Geolocation for All Global Cities, Towns & Villages."""
     
     def __init__(self):
         self.name = "Data Collection Agent & Fusion Engine"
-        self.role = "Multi-Provider Telemetry Integration & Validation"
+        self.role = "Multi-Provider Telemetry Integration & Universal Geolocation"
         self.fusion_engine = WeatherDataFusionEngine()
 
     def search_city(self, city_query: str) -> List[Dict[str, Any]]:
         try:
-            params = {"name": city_query, "count": 8, "language": "en", "format": "json"}
+            params = {"name": city_query, "count": 10, "language": "en", "format": "json"}
             resp = requests.get(Config.OPEN_METEO_GEOCODING_URL, params=params, timeout=4)
             if resp.status_code == 200:
                 results = resp.json().get("results", [])
@@ -159,10 +187,11 @@ class DataCollectionAgent:
                         "country": item.get("country", ""),
                         "country_code": item.get("country_code", ""),
                         "admin1": item.get("admin1", ""),
-                        "latitude": item.get("latitude"),
-                        "longitude": item.get("longitude")
+                        "latitude": round(item.get("latitude"), 4),
+                        "longitude": round(item.get("longitude"), 4)
                     })
-                return cities
+                if cities:
+                    return cities
         except Exception:
             pass
 
@@ -175,28 +204,30 @@ class DataCollectionAgent:
                     "country": val["country"],
                     "country_code": "",
                     "admin1": "Region",
-                    "latitude": val["lat"],
-                    "longitude": val["lon"]
+                    "latitude": round(val["lat"], 4),
+                    "longitude": round(val["lon"], 4)
                 })
         return matched
 
     def geolocate(self, city_name: str) -> Dict[str, Any]:
+        # Handle lat, lon string inputs
         if "," in city_name and any(c.isdigit() for c in city_name):
             try:
                 parts = [float(p.strip()) for p in city_name.split(",")]
                 if len(parts) == 2:
                     return {
-                        "city": f"Coords ({parts[0]:.2f}, {parts[1]:.2f})",
+                        "city": f"Coords ({parts[0]:.4f}, {parts[1]:.4f})",
                         "country": "Global Location",
-                        "latitude": parts[0],
-                        "longitude": parts[1],
+                        "latitude": round(parts[0], 4),
+                        "longitude": round(parts[1], 4),
                         "is_fallback": False
                     }
             except Exception:
                 pass
 
+        # Tier 1: Open-Meteo Universal Global Geocoding API (400,000+ cities, towns, villages)
         try:
-            params = {"name": city_name, "count": 1, "language": "en", "format": "json"}
+            params = {"name": city_name, "count": 5, "language": "en", "format": "json"}
             resp = requests.get(Config.OPEN_METEO_GEOCODING_URL, params=params, timeout=5)
             if resp.status_code == 200:
                 results = resp.json().get("results")
@@ -205,27 +236,50 @@ class DataCollectionAgent:
                     return {
                         "city": top.get("name"),
                         "country": top.get("country", "Global"),
-                        "latitude": top.get("latitude"),
-                        "longitude": top.get("longitude"),
+                        "latitude": round(top.get("latitude"), 4),
+                        "longitude": round(top.get("longitude"), 4),
                         "is_fallback": False
                     }
         except Exception:
             pass
 
+        # Tier 2: OpenStreetMap Nominatim Geocoding API for rural villages & small districts
+        try:
+            nom_params = {"q": city_name, "format": "json", "limit": 1}
+            headers = {"User-Agent": "AgenticAIWeatherSystem/2.0"}
+            nom_resp = requests.get("https://nominatim.openstreetmap.org/search", params=nom_params, headers=headers, timeout=4)
+            if nom_resp.status_code == 200:
+                nom_results = nom_resp.json()
+                if nom_results:
+                    item = nom_results[0]
+                    display_parts = item.get("display_name", "").split(",")
+                    country_str = display_parts[-1].strip() if display_parts else "Global"
+                    return {
+                        "city": item.get("name") or city_name.strip().capitalize(),
+                        "country": country_str,
+                        "latitude": round(float(item.get("lat")), 4),
+                        "longitude": round(float(item.get("lon")), 4),
+                        "is_fallback": False
+                    }
+        except Exception:
+            pass
+
+        # Tier 3: Global Preset Registry Lookup
         city_key = city_name.strip().lower()
         preset = CITY_PRESETS.get(city_key)
         if preset:
             return {
                 "city": city_name.strip().capitalize(),
                 "country": preset["country"],
-                "latitude": preset["lat"],
-                "longitude": preset["lon"],
+                "latitude": round(preset["lat"], 4),
+                "longitude": round(preset["lon"], 4),
                 "is_fallback": True
             }
         
+        # Tier 4: Hash Coordinate Synthesizer
         hash_val = sum(ord(c) for c in city_name)
-        lat = round((hash_val % 140) - 70, 4)
-        lon = round((hash_val % 360) - 180, 4)
+        lat = round((hash_val % 140) - 70 + (hash_val % 100) * 0.001, 4)
+        lon = round((hash_val % 360) - 180 + (hash_val % 100) * 0.001, 4)
         return {
             "city": city_name.strip().capitalize(),
             "country": "Regional Location",
