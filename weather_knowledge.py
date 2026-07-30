@@ -1,9 +1,10 @@
 from typing import Dict, Any, List
 
+# Comprehensive Global Weather, Emergency & Science Knowledge Base
 GLOBAL_WEATHER_KNOWLEDGE = {
     "cyclone": {
         "title": "🌀 Cyclone, Typhoon & Hurricane Emergency Management",
-        "historical_context": "Tropical cyclones (e.g. Hurricane Katrina, Cyclone Nargis, Typhoon Tip) generate devastating wind velocities exceeding 120 km/h and massive storm surges.",
+        "historical_context": "Tropical cyclones (e.g. Hurricane Katrina 2005, Cyclone Nargis 2008, Typhoon Tip 1979) generate devastating wind velocities exceeding 120 km/h and massive storm surges.",
         "precautions": [
             "Secure all windows and doors with storm shutters or heavy 5/8-inch exterior plywood.",
             "Stock an emergency supply kit with 3 days of non-perishable food, water (4L/person/day), first aid, flashlight, and power banks.",
@@ -50,6 +51,56 @@ GLOBAL_WEATHER_KNOWLEDGE = {
             "Postpone strenuous outdoor exercise and jogging when AQI exceeds 150."
         ],
         "best_solution": "Minimize outdoor exposure for children, elderly, and individuals with asthma. Utilize indoor ventilation filtration."
+    }
+}
+
+# Atmospheric Science & General Knowledge Base
+GENERAL_SCIENCE_KNOWLEDGE = {
+    "climate_change": {
+        "title": "🌍 Climate Change & Global Warming Science",
+        "summary": "Global temperatures have risen by ~1.1°C above pre-industrial levels due to greenhouse gas emissions (CO₂, CH₄, N₂O).",
+        "key_facts": [
+            "Greenhouse effect traps thermal infrared radiation re-emitted by Earth's surface.",
+            "Leads to higher frequency of extreme weather events: heatwaves, atmospheric rivers, sea level rise, and melting polar caps.",
+            "Mitigation involves renewable energy transition, reforestation, carbon capture, and sustainable urban planning."
+        ]
+    },
+    "radar": {
+        "title": "📡 Doppler Weather Radar & Satellite Meteorology",
+        "summary": "Doppler radar measures precipitation intensity and movement by bouncing microwave pulses off hydrometeors (raindrops, ice, hail).",
+        "key_facts": [
+            "Detects rain rate (dBZ reflectivity) and rotational wind velocities within storm cells (mesocyclones).",
+            "Geostationary satellites (GOES, Himawari, INSAT) provide continuous infrared and visible imagery from ~35,786 km orbit.",
+            "Used by AI models to track precipitation clouds and issue severe thunderstorm warnings."
+        ]
+    },
+    "humidity": {
+        "title": "💧 Relative Humidity vs Dew Point Science",
+        "summary": "Relative Humidity (RH) measures the percentage of water vapor present relative to the maximum amount the air can hold at that temperature.",
+        "key_facts": [
+            "Dew Point is the exact temperature to which air must be cooled for saturation (100% RH).",
+            "High dew points (>21°C / 70°F) feel muggy and hinder human sweating/cooling efficiency.",
+            "When RH reaches 100%, fog, dew, or precipitation forms."
+        ]
+    },
+    "pressure": {
+        "title": "⏲️ Atmospheric Pressure & Wind Dynamics",
+        "summary": "Standard atmospheric pressure at sea level is 1013.25 hPa (mbar) or 29.92 inHg.",
+        "key_facts": [
+            "High Pressure (Anticyclones): Air sinks, suppresses cloud formation, resulting in clear skies and calm weather.",
+            "Low Pressure (Cyclones/Depressions): Air rises and cools, causing cloud condensation, storm development, and rain.",
+            "Pressure Gradient Force: Air moves from high to low pressure zones, generating wind."
+        ]
+    },
+    "uv_index": {
+        "title": "☀️ Solar Radiation & UV Index Scale",
+        "summary": "The UV Index measures the strength of erythemal solar ultraviolet radiation on a scale from 0 to 11+.",
+        "key_facts": [
+            "0-2 (Low): Minimal sun hazard; safe outdoors.",
+            "3-5 (Moderate): Wear sunglasses and SPF 30+ sunscreen during midday hours.",
+            "6-7 (High) & 8-10 (Very High): Sunburn can occur in 15 mins. Seek shade, wear broad hats and SPF 50+.",
+            "11+ (Extreme): Avoid peak sun hours; unmasked skin burns rapidly."
+        ]
     }
 }
 
@@ -132,7 +183,7 @@ def generate_research_advisories(city: str, current: Dict[str, Any], air_quality
         advisories.append({
             "category": "Very High UV Radiation",
             "icon": "☀️",
-            "text": f"Extreme UV Index in {city} ({uv.toFixed(1) if hasattr(uv, 'toFixed') else round(uv,1)}). Apply broad-spectrum SPF 50+ sunscreen every 2 hours and wear broad-brimmed hats."
+            "text": f"Extreme UV Index in {city} ({round(uv, 1)}). Apply broad-spectrum SPF 50+ sunscreen every 2 hours and wear broad-brimmed hats."
         })
 
     # 6. Environmental Anomaly Flag

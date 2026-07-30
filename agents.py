@@ -456,50 +456,90 @@ class ConversationalAgent:
         rain_conf = ml_rain.get("confidence_pct", 90)
         risk_cat = ml_risk.get("category", "Normal")
 
-        # 1. Casual Greetings (hi, hello, hey, good morning, etc.)
-        greetings = ["hi", "hello", "hey", "greetings", "good morning", "good afternoon", "good evening", "howdy", "sup"]
-        if q_clean in greetings or any(q_clean.startswith(g + " ") or q_clean == g for g in greetings):
-            answer = f"Hello! 👋 I am your <strong>Agentic AI Weather Assistant</strong>.<br><br>" \
-                     f"I'm currently monitoring live atmospheric telemetry for <strong>{city}, {country}</strong> (Temp: <strong>{temp}°C</strong>, Condition: <strong>{cond}</strong>).<br><br>" \
-                     f"How can I assist you today? You can ask me questions like:<br>" \
-                     f"• <em>'Is it safe for outdoor running right now?'</em><br>" \
-                     f"• <em>'Do I need an umbrella today?'</em><br>" \
-                     f"• <em>'What should I wear in {city} today?'</em><br>" \
-                     f"• <em>'What are the emergency precautions for floods or heatwaves?'</em>"
+        # 1. Casual Greetings & Natural Chit-Chat
+        greetings = ["hi", "hello", "hey", "greetings", "good morning", "good afternoon", "good evening", "howdy", "sup", "yo"]
+        if q_clean in greetings or any(q_clean == g for g in greetings):
+            answer = f"Hello there! 👋 I am your <strong>Agentic AI Weather Assistant</strong>.<br><br>" \
+                     f"I'm currently connected to live satellite feeds and ML analysis for <strong>{city}, {country}</strong>.<br><br>" \
+                     f"How can I help you today? You can ask me about live weather conditions, travel safety, clothing recommendations, or atmospheric science!"
             return {"query": query, "answer": answer, "agent_name": self.name}
 
-        # 2. Conversational Capabilities / Gratitude (who are you, thank you, help, etc.)
-        if any(k in q_clean for k in ["who are you", "what can you do", "help me", "your name"]):
+        if any(k in q_clean for k in ["how are you", "how's it going", "how do you do"]):
+            answer = f"I'm doing great, thank you for asking! 😊 I'm monitoring global weather parameters in real-time. Currently looking at <strong>{city}</strong> at <strong>{temp}°C</strong> ({cond}). What would you like to know?"
+            return {"query": query, "answer": answer, "agent_name": self.name}
+
+        # 2. Conversational Capabilities / Identity / Gratitude
+        if any(k in q_clean for k in ["who are you", "what can you do", "help me", "your name", "what is your job"]):
             answer = f"I am your <strong>Interactive Agentic AI Weather Assistant</strong>! 🤖<br><br>" \
-                     f"I analyze live satellite data, run Scikit-Learn Machine Learning models (Rainfall probability, Risk classification, Anomaly detection), and cross-reference global emergency disaster management protocols to give you accurate, real-time safety advice for any location worldwide."
+                     f"I specialize in:<br>" \
+                     f"• <strong>Real-time Telemetry Analysis</strong> (Open-Meteo satellite & station data)<br>" \
+                     f"• <strong>Machine Learning Inference</strong> (Scikit-Learn models for rain probability, anomaly detection, risk index)<br>" \
+                     f"• <strong>Safety & Outdoor Advisories</strong> (Clothing, exercise, disaster precautions)<br>" \
+                     f"• <strong>Atmospheric Science & General Knowledge</strong><br><br>" \
+                     f"Feel free to ask me anything!"
             return {"query": query, "answer": answer, "agent_name": self.name}
 
-        if any(k in q_clean for k in ["thank you", "thanks", "awesome", "great", "cool"]):
-            answer = f"You're very welcome! 😊 Stay safe and feel free to ask if you need any more weather updates or travel advice for {city}!"
+        if any(k in q_clean for k in ["thank you", "thanks", "awesome", "great", "cool", "perfect", "good bot"]):
+            answer = f"You're very welcome! 😊 Stay safe and enjoy your day in <strong>{city}</strong>! Feel free to ask if you need anything else."
             return {"query": query, "answer": answer, "agent_name": self.name}
 
-        # 3. Outdoor Exercise / Running Intent
+        # 3. Science & Atmospheric Knowledge Queries
+        if any(k in q_clean for k in ["climate change", "global warming", "greenhouse"]):
+            info = weather_knowledge.GENERAL_SCIENCE_KNOWLEDGE["climate_change"]
+            facts = "".join([f"<li>{f}</li>" for f in info["key_facts"]])
+            answer = f"🌍 <strong>{info['title']}</strong>:<br><br>" \
+                     f"{info['summary']}<br><br>" \
+                     f"<strong>Key Takeaways</strong>:<ul>{facts}</ul>"
+            return {"query": query, "answer": answer, "agent_name": self.name}
+
+        if any(k in q_clean for k in ["radar", "satellite", "doppler"]):
+            info = weather_knowledge.GENERAL_SCIENCE_KNOWLEDGE["radar"]
+            facts = "".join([f"<li>{f}</li>" for f in info["key_facts"]])
+            answer = f"📡 <strong>{info['title']}</strong>:<br><br>" \
+                     f"{info['summary']}<br><br>" \
+                     f"<strong>Key Technologies</strong>:<ul>{facts}</ul>"
+            return {"query": query, "answer": answer, "agent_name": self.name}
+
+        if any(k in q_clean for k in ["humidity", "dew point", "relative humidity"]):
+            info = weather_knowledge.GENERAL_SCIENCE_KNOWLEDGE["humidity"]
+            facts = "".join([f"<li>{f}</li>" for f in info["key_facts"]])
+            answer = f"💧 <strong>{info['title']}</strong>:<br><br>" \
+                     f"{info['summary']}<br><br>" \
+                     f"Currently in <strong>{city}</strong>, Humidity is at <strong>{humidity}%</strong>.<br><br>" \
+                     f"<strong>Scientific Insight</strong>:<ul>{facts}</ul>"
+            return {"query": query, "answer": answer, "agent_name": self.name}
+
+        if any(k in q_clean for k in ["pressure", "barometer", "hpa", "mbar"]):
+            info = weather_knowledge.GENERAL_SCIENCE_KNOWLEDGE["pressure"]
+            facts = "".join([f"<li>{f}</li>" for f in info["key_facts"]])
+            answer = f"⏲️ <strong>{info['title']}</strong>:<br><br>" \
+                     f"{info['summary']}<br><br>" \
+                     f"Currently in <strong>{city}</strong>, Surface Pressure is <strong>{curr['pressure']} hPa</strong>.<br><br>" \
+                     f"<strong>Key Dynamics</strong>:<ul>{facts}</ul>"
+            return {"query": query, "answer": answer, "agent_name": self.name}
+
+        # 4. Outdoor Exercise / Sports / Running Intent
         if any(k in q_clean for k in ["run", "running", "jog", "jogging", "walk", "outdoor", "sport", "football", "cricket"]):
             if safety >= 70 and rain_prob < 40 and aqi < 100:
-                answer = f"🏃 <strong>Yes! Outdoor running conditions in {city} are excellent right now.</strong><br><br>" \
+                answer = f"🏃 <strong>Yes! Outdoor conditions in {city} are excellent right now.</strong><br><br>" \
                          f"• Temperature: <strong>{temp}°C</strong> (Feels like {feels}°C)<br>" \
                          f"• Condition: <strong>{cond}</strong> | Humidity: <strong>{humidity}%</strong><br>" \
                          f"• Air Quality: US AQI <strong>{aqi}</strong> (Safe) | ML Safety Score: <strong>{safety}/100</strong><br><br>" \
-                         f"💡 <em>Tip: Enjoy your run! Stay hydrated.</em>"
+                         f"💡 <em>Tip: Enjoy your workout! Keep hydrated.</em>"
             else:
                 answer = f"⚠️ <strong>Caution is advised for outdoor activities in {city}.</strong><br><br>" \
                          f"• ML Risk Level: <strong>{risk_cat}</strong> (Safety Score: <strong>{safety}/100</strong>)<br>" \
                          f"• Rain Probability: <strong>{rain_prob}%</strong> | US AQI: <strong>{aqi}</strong><br><br>" \
-                         f"💡 <em>Tip: Consider indoor gym exercise or waiting until weather conditions improve.</em>"
+                         f"💡 <em>Tip: Consider indoor exercise or waiting until atmospheric conditions improve.</em>"
             return {"query": query, "answer": answer, "agent_name": self.name}
 
-        # 4. Rain & Umbrella Intent
+        # 5. Rain & Umbrella Intent
         if any(k in q_clean for k in ["rain", "umbrella", "wet", "drizzle", "downpour", "shower"]):
             if rain_prob >= 45 or "Rain" in cond or "Drizzle" in cond:
                 answer = f"☔ <strong>Yes, carry an umbrella!</strong><br><br>" \
                          f"• ML Rainfall Prediction: <strong>{rain_prob}% probability</strong> (Model Confidence: <strong>{rain_conf}%</strong>)<br>" \
                          f"• Current Condition in {city}: <strong>{cond}</strong><br><br>" \
-                         f"💡 <em>Recommendation: Waterproof footwear and a sturdy windproof umbrella are recommended today.</em>"
+                         f"💡 <em>Recommendation: Waterproof footwear and a sturdy umbrella are advisable.</em>"
             else:
                 answer = f"☀️ <strong>Low chance of rain in {city} right now.</strong><br><br>" \
                          f"• ML Rainfall Probability: <strong>{rain_prob}%</strong><br>" \
@@ -507,7 +547,7 @@ class ConversationalAgent:
                          f"💡 <em>You likely won't need an umbrella today!</em>"
             return {"query": query, "answer": answer, "agent_name": self.name}
 
-        # 5. Clothing & Outfit Intent
+        # 6. Clothing & Outfit Intent
         if any(k in q_clean for k in ["wear", "cloth", "outfit", "jacket", "coat", "sweater", "dress"]):
             if temp >= 30:
                 answer = f"👕 <strong>Outfit Advice for {city} ({temp}°C)</strong>:<br>" \
@@ -520,7 +560,7 @@ class ConversationalAgent:
                          f"Comfortable moderate weather attire. A light jacket, hoodie, or sweater over jeans is ideal for {cond}."
             return {"query": query, "answer": answer, "agent_name": self.name}
 
-        # 6. Air Quality & Health Intent
+        # 7. Air Quality & Health Intent
         if any(k in q_clean for k in ["air", "aqi", "smog", "pollution", "kid", "asthma", "breath"]):
             if aqi < 50:
                 aq_status = "Good (Clean Air)"
@@ -530,11 +570,11 @@ class ConversationalAgent:
                 aq_status = "Unhealthy for Sensitive Groups"
             answer = f"😷 <strong>Air Quality Report for {city}</strong>:<br><br>" \
                      f"• US AQI Level: <strong>{aqi}</strong> — <strong>{aq_status}</strong><br>" \
-                     f"• PM2.5 / PM10 particles are within normal monitoring ranges.<br><br>" \
+                     f"• PM2.5 / PM10 particles are within monitored bounds.<br><br>" \
                      f"💡 <em>Recommendation: {'Clean air for all outdoor activities!' if aqi < 100 else 'Sensitive individuals should wear an N95 mask outdoors.'}</em>"
             return {"query": query, "answer": answer, "agent_name": self.name}
 
-        # 7. Severe Weather & Disaster Emergency Intent
+        # 8. Severe Weather & Disaster Emergency Intent
         if any(k in q_clean for k in ["cyclone", "hurricane", "flood", "heatwave", "blizzard", "typhoon", "disaster", "emergency"]):
             knowledge = weather_knowledge.query_global_knowledge(query, temp, rain_prob, risk_cat)
             precautions_html = "".join([f"<li>{p}</li>" for p in knowledge["precautions"]])
@@ -545,13 +585,13 @@ class ConversationalAgent:
                      f"💡 <strong>Optimal Solution</strong>:<br><strong>{knowledge['best_solution']}</strong>"
             return {"query": query, "answer": answer, "agent_name": self.name}
 
-        # 8. General Weather Query / Fallback
-        answer = f"🤖 <strong>Weather & Safety Briefing for {city}, {country}</strong>:<br><br>" \
+        # 9. General Weather Query / Fallback Response
+        answer = f"🤖 <strong>Weather Briefing for {city}, {country}</strong>:<br><br>" \
                  f"• Temperature: <strong>{temp}°C</strong> ({cond}) | Feels like <strong>{feels}°C</strong><br>" \
-                 f"• Moisture & Wind: Humidity <strong>{humidity}%</strong> | Wind <strong>{wind} km/h</strong><br>" \
-                 f"• ML Risk Level: <strong>{risk_cat}</strong> (Safety Index: <strong>{safety}/100</strong>)<br>" \
+                 f"• Humidity: <strong>{humidity}%</strong> | Wind: <strong>{wind} km/h</strong><br>" \
+                 f"• ML Safety Score: <strong>{safety}/100</strong> ({risk_cat})<br>" \
                  f"• ML Rain Probability: <strong>{rain_prob}%</strong> (Confidence: <strong>{rain_conf}%</strong>)<br><br>" \
-                 f"💡 <em>How else can I assist you with weather forecasts, outdoor activities, or clothing recommendations?</em>"
+                 f"💡 <em>How else can I assist you with weather forecasts, outdoor recommendations, or climate science?</em>"
 
         return {
             "query": query,
