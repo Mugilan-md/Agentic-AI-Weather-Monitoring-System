@@ -70,8 +70,27 @@
         </div>
     </div>
 
-    <!-- Top Dashboard Section -->
-    <section class="dashboard-grid">
+    <!-- Welcome Search Hero (Displayed when no city report is active) -->
+    <div id="welcome-search-hero" class="glass-card welcome-hero-card">
+        <div class="welcome-hero-content">
+            <div class="welcome-badge">🌐 Global Weather Intelligence</div>
+            <h1 class="welcome-title">Search Any City, Town, or Village Worldwide</h1>
+            <p class="welcome-subtitle">Search for any location above to fetch live satellite telemetry, Scikit-Learn risk classifications, 24-hour thermal trends, and multi-agent safety advisories in real time.</p>
+            <div class="welcome-chips-prompt">
+                <span>Quick Search:</span>
+                <button class="chip prompt-chip" data-city="Tokyo">Tokyo</button>
+                <button class="chip prompt-chip" data-city="Chennai">Chennai</button>
+                <button class="chip prompt-chip" data-city="New York">New York</button>
+                <button class="chip prompt-chip" data-city="Paris">Paris</button>
+                <button class="chip prompt-chip" data-city="Sydney">Sydney</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weather Dashboard Container (Hidden until a city is searched) -->
+    <div id="weather-dashboard" style="display: none;">
+        <!-- Top Dashboard Section -->
+        <section class="dashboard-grid">
 
         <!-- Hero Current Weather Card -->
         <div class="glass-card hero-card">
@@ -391,6 +410,8 @@
             </div>
         </div>
     </section>
+
+    </div><!-- End Weather Dashboard Container -->
 
     <!-- Footer -->
     <footer>

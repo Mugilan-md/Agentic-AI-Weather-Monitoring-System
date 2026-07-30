@@ -12,7 +12,7 @@ database.init_db()
 
 @app.route("/", methods=["GET"])
 def index():
-    initial_city = request.args.get("city", "London")
+    initial_city = request.args.get("city", "").strip()
     return render_template("index.html", initial_city=initial_city)
 
 @app.route("/api/weather", methods=["POST"])
@@ -21,7 +21,7 @@ def get_weather():
     city = data.get("city", "").strip()
     
     if not city:
-        city = "London"
+        return jsonify({"success": False, "error": "Please enter a city, town, or village name to search weather data."}), 400
 
     try:
         result = run_weather_agent(city)
@@ -39,8 +39,7 @@ def get_weather():
         )
         return jsonify({"success": True, "result": result})
     except Exception as e:
-        fallback_result = run_weather_agent("London")
-        return jsonify({"success": True, "result": fallback_result, "warning": f"Switched to resilient mode: {str(e)}"})
+        return jsonify({"success": False, "error": f"Unable to fetch weather data for '{city}': {str(e)}"})
 
 @app.route("/api/agent/chat", methods=["POST"])
 def agent_chat():
@@ -52,7 +51,19 @@ def agent_chat():
         return jsonify({"success": False, "error": "Query cannot be empty."}), 400
 
     if not weather_result:
-        weather_result = run_weather_agent("London")
+        # Construct clean default context without forcing a specific city report
+        weather_result = {
+            "data": {
+                "current": {"temperature": 22.0, "feels_like": 22.0, "humidity": 60, "condition": "Clear", "wind_speed": 10.0, "uv_index": 5.0, "pressure": 1013},
+                "location": {"city": "Global Location", "country": "Earth"},
+                "air_quality": {"us_aqi": 35}
+            },
+            "analysis": {"safety_score": 90, "status_level": "OPTIMAL"},
+            "ml_analytics": {
+                "rainfall_prediction": {"probability_pct": 10, "confidence_pct": 95},
+                "risk_classification": {"category": "Normal", "confidence_pct": 98}
+            }
+        }
 
     response = run_agent_chat(query, weather_result)
     return jsonify({"success": True, "response": response})

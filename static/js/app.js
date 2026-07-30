@@ -79,9 +79,22 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDbHistory();
     loadMlMetrics();
 
-    // Default load (London)
-    const initialCity = window.INITIAL_CITY || "London";
-    fetchWeatherData(initialCity);
+    // Initial city handling (Do NOT load default London report until searched)
+    const initialCity = (window.INITIAL_CITY || "").trim();
+    if (initialCity) {
+        fetchWeatherData(initialCity);
+    }
+
+    // Prompt Chips Listener
+    document.querySelectorAll(".prompt-chip").forEach(chip => {
+        chip.addEventListener("click", () => {
+            const city = chip.getAttribute("data-city");
+            if (city) {
+                searchInput.value = city;
+                fetchWeatherData(city);
+            }
+        });
+    });
 
     // Event Listeners
     searchBtn.addEventListener("click", () => {
@@ -225,6 +238,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const recs = res.recommendations;
         const logs = res.agent_logs;
         const ml = res.ml_analytics;
+
+        // Toggle Welcome Hero vs Weather Dashboard
+        const welcomeHero = document.getElementById("welcome-search-hero");
+        const weatherDashboard = document.getElementById("weather-dashboard");
+        if (welcomeHero) welcomeHero.style.display = "none";
+        if (weatherDashboard) weatherDashboard.style.display = "block";
 
         // Mode Indicator
         const modeBadge = document.getElementById("mode-badge");
