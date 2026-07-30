@@ -105,6 +105,12 @@ def get_analytics():
     analytics = database.get_db_analytics()
     return jsonify({"success": True, "analytics": analytics})
 
+@app.route("/api/analytics/historical", methods=["GET"])
+def get_historical_analytics():
+    city = request.args.get("city", "London").strip()
+    records = database.get_historical_city_analytics(city, limit=24)
+    return jsonify({"success": True, "city": city, "records": records})
+
 # Machine Learning REST Endpoints
 @app.route("/api/ml/metrics", methods=["GET"])
 def get_ml_metrics():
