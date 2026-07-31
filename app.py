@@ -1,5 +1,5 @@
 # Agentic AI Weather Monitoring System - Vercel Production Gateway
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 from agents import run_weather_agent, run_agent_chat, DataCollectionAgent
 from ml_service import ml_service
 from config import Config
@@ -25,6 +25,18 @@ def get_collector():
         except Exception:
             collector = None
     return collector
+
+@app.route("/favicon.ico")
+@app.route("/favicon.png")
+def favicon():
+    return "", 204
+
+@app.route("/static/<path:filename>")
+def serve_static(filename):
+    try:
+        return send_from_directory(os.path.join(base_dir, "static"), filename)
+    except Exception:
+        return "", 404
 
 @app.route("/", methods=["GET"])
 @app.route("/index", methods=["GET"])
