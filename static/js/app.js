@@ -753,11 +753,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* ==========================================================================
     /* ==========================================================================
-       ULTRA-FAST 3D DUAL-GOLD CURSOR & GLITTERING SPARKLE ENGINE (MAX FPS)
+       GOLDEN GLITTER SPARKLE PARTICLE ENGINE (MAX FPS)
        ========================================================================== */
     function init3DCursorGlitterEngine() {
-        const dot = document.getElementById("cursor-dot");
-        const ring = document.getElementById("cursor-ring");
         const canvas = document.getElementById("glitter-canvas");
         if (!canvas) return;
 
@@ -772,8 +770,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let mouseX = width / 2;
         let mouseY = height / 2;
-        let ringX = width / 2;
-        let ringY = height / 2;
 
         const particles = [];
         const goldColors = [
@@ -786,26 +782,9 @@ document.addEventListener("DOMContentLoaded", () => {
             mouseX = e.clientX;
             mouseY = e.clientY;
 
-            if (dot) {
-                dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
-            }
-
-            // Spawn 3D glittering particles on fast cursor movement
+            // Spawn 3D glittering particles on mouse movement
             if (particles.length < 50) {
                 spawnGlitterParticle(mouseX, mouseY, false);
-            }
-        });
-
-        // Hover scale on buttons & links
-        document.body.addEventListener("mouseover", (e) => {
-            if (e.target.closest("button, a, input, select, textarea, .glass-card, .clickable, .chip, .fav-item")) {
-                if (dot) dot.classList.add("hover-active");
-            }
-        });
-
-        document.body.addEventListener("mouseout", (e) => {
-            if (e.target.closest("button, a, input, select, textarea, .glass-card, .clickable, .chip, .fav-item")) {
-                if (dot) dot.classList.remove("hover-active");
             }
         });
 
