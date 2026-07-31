@@ -637,8 +637,8 @@ document.addEventListener("DOMContentLoaded", () => {
     function init3DTiltEffects() {
         const cards = document.querySelectorAll(".glass-card, .metric-card");
         cards.forEach(card => {
-            // Exclude navbar completely from 3D tilting
-            if (card.classList.contains("navbar") || card.classList.contains("navbar-sleek")) return;
+            // Exclude navbar and welcome hero search card completely from 3D wobble tilting
+            if (card.classList.contains("navbar") || card.classList.contains("navbar-sleek") || card.classList.contains("welcome-hero-card") || card.id === "welcome-search-hero") return;
 
             card.addEventListener("mousemove", (e) => {
                 const rect = card.getBoundingClientRect();
