@@ -26,9 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize 3D Parallax Tilt Effects ONLY on Dashboard Content Cards (Excluding Navbar)
     init3DTiltEffects();
 
-    // Initialize 3D Dual-Color Glowing Cursor & Glitter Sparkle Engine
-    init3DCursorGlitterEngine();
-
     // Hue Slider Listener
     if (hueSlider) {
         hueSlider.value = lightningHue;
@@ -748,23 +745,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 uv = 2.0 * uv - 1.0;
                 uv.x *= iResolution.x / iResolution.y;
                 
-                vec2 nodeOrigin = vec2(0.0, 0.65);
+                vec2 nodeOrigin = vec2(0.0, 0.85);
+                vec2 nodeBottom = vec2(0.0, -0.85);
                 float time = iTime;
                 
-                float d1 = lightningBranch(uv, nodeOrigin, -0.55, time, 2.5);
-                float d2 = lightningBranch(uv, nodeOrigin,  0.00, time * 1.1, 2.8);
-                float d3 = lightningBranch(uv, nodeOrigin,  0.55, time * 0.9, 2.5);
+                float d1 = lightningBranch(uv, nodeOrigin, -0.55, time, 2.2);
+                float d2 = lightningBranch(uv, nodeOrigin,  0.00, time * 1.1, 2.5);
+                float d3 = lightningBranch(uv, nodeOrigin,  0.55, time * 0.9, 2.2);
                 
-                float d4 = lightningBranch(uv, nodeOrigin, -0.28, time * 1.4, 4.0);
-                float d5 = lightningBranch(uv, nodeOrigin,  0.28, time * 1.3, 4.0);
+                float d4 = lightningBranch(uv, nodeBottom, -0.45, time * 1.3, 2.5);
+                float d5 = lightningBranch(uv, nodeBottom,  0.45, time * 1.2, 2.5);
                 
-                float bolt1 = 0.055 / max(d1, 0.001);
-                float bolt2 = 0.070 / max(d2, 0.001);
-                float bolt3 = 0.055 / max(d3, 0.001);
-                float spark4 = 0.025 / max(d4, 0.001);
-                float spark5 = 0.025 / max(d5, 0.001);
+                float bolt1 = 0.065 / max(d1, 0.001);
+                float bolt2 = 0.080 / max(d2, 0.001);
+                float bolt3 = 0.065 / max(d3, 0.001);
+                float bolt4 = 0.055 / max(d4, 0.001);
+                float bolt5 = 0.055 / max(d5, 0.001);
                 
-                float totalLightning = bolt1 + bolt2 + bolt3 + spark4 + spark5;
+                float totalLightning = bolt1 + bolt2 + bolt3 + bolt4 + bolt5;
                 
                 float nodeDist = length(uv - nodeOrigin);
                 float nodeGlow = 0.12 / max(nodeDist, 0.01);
@@ -772,9 +770,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 nodeGlow *= pulse;
                 
                 vec3 baseColor = hsv2rgb(vec3(uHue / 360.0, 0.85, 0.98));
-                vec3 col = baseColor * (totalLightning * 0.85 + nodeGlow);
+                vec3 col = baseColor * (totalLightning * 0.90 + nodeGlow);
                 
-                gl_FragColor = vec4(col, 0.65);
+                gl_FragColor = vec4(col, 0.75);
             }
         `;
 
