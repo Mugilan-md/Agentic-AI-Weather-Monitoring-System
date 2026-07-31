@@ -632,9 +632,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Interactive 3D Parallax Tilt Effect (EXCLUDING Navbar)
     // -------------------------------------------------------------
     function init3DTiltEffects() {
-        const cards = document.querySelectorAll(".glass-card, .metric-card");
+        const cards = document.querySelectorAll(".glass-card, .metric-card, .welcome-hero-card, .analytics-card, .advisory-card, .favorite-card, .history-card, .ml-card, .agent-card");
         cards.forEach(card => {
-            if (card.classList.contains("navbar") || card.classList.contains("navbar-sleek") || card.classList.contains("welcome-hero-card") || card.id === "welcome-search-hero") return;
+            // Exclude navbar and AI Weather Assistant card completely from 3D tilt
+            if (card.classList.contains("navbar") || card.classList.contains("navbar-sleek") || card.id === "ai-chat-card" || card.classList.contains("chat-card") || card.closest("#ai-chat-modal")) return;
 
             let rect = null;
             card.addEventListener("mouseenter", () => {
@@ -647,10 +648,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 const y = e.clientY - rect.top;
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
-                const rotateX = ((y - centerY) / centerY) * -4;
-                const rotateY = ((x - centerX) / centerX) * 4;
+                const rotateX = ((y - centerY) / centerY) * -5;
+                const rotateY = ((x - centerX) / centerX) * 5;
 
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01, 1.01, 1.01)`;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.012, 1.012, 1.012)`;
             });
 
             card.addEventListener("mouseleave", () => {
