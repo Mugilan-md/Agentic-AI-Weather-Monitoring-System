@@ -63,6 +63,30 @@ CITY_PRESETS = {
     "coimbatore": {"lat": 11.0168, "lon": 76.9558, "country": "India", "temp": 30.0, "humidity": 70, "cond": "Partly Cloudy", "code": 2, "wind": 12.0, "uv": 8.0, "aqi": 45},
     "madurai": {"lat": 9.9252, "lon": 78.1198, "country": "India", "temp": 33.0, "humidity": 65, "cond": "Sunny", "code": 0, "wind": 11.0, "uv": 8.8, "aqi": 60},
     "trichy": {"lat": 10.7905, "lon": 78.7047, "country": "India", "temp": 34.0, "humidity": 62, "cond": "Sunny", "code": 0, "wind": 10.0, "uv": 9.0, "aqi": 55},
+    "siberia": {"lat": 60.0000, "lon": 100.0000, "country": "Russia", "temp": 12.0, "humidity": 70, "cond": "Partly Cloudy", "code": 2, "wind": 15.0, "uv": 3.0, "aqi": 15},
+    "saint petersburg": {"lat": 59.9343, "lon": 30.3351, "country": "Russia", "temp": 17.0, "humidity": 68, "cond": "Overcast", "code": 3, "wind": 12.0, "uv": 3.5, "aqi": 25},
+    "kyiv": {"lat": 50.4501, "lon": 30.5234, "country": "Ukraine", "temp": 21.0, "humidity": 55, "cond": "Partly Cloudy", "code": 2, "wind": 10.0, "uv": 5.0, "aqi": 40},
+    "stockholm": {"lat": 59.3293, "lon": 18.0686, "country": "Sweden", "temp": 18.0, "humidity": 60, "cond": "Mainly Clear", "code": 1, "wind": 11.0, "uv": 4.0, "aqi": 20},
+    "oslo": {"lat": 59.9139, "lon": 10.7522, "country": "Norway", "temp": 17.5, "humidity": 62, "cond": "Partly Cloudy", "code": 2, "wind": 9.0, "uv": 3.8, "aqi": 18},
+    "amsterdam": {"lat": 52.3676, "lon": 4.9041, "country": "Netherlands", "temp": 19.0, "humidity": 70, "cond": "Light Rain", "code": 61, "wind": 16.0, "uv": 4.2, "aqi": 30},
+    "bangkok": {"lat": 13.7563, "lon": 100.5018, "country": "Thailand", "temp": 33.0, "humidity": 78, "cond": "Thunderstorm", "code": 95, "wind": 12.0, "uv": 9.0, "aqi": 85},
+    "jakarta": {"lat": -6.2088, "lon": 106.8456, "country": "Indonesia", "temp": 31.0, "humidity": 82, "cond": "Rain Showers", "code": 80, "wind": 10.0, "uv": 8.0, "aqi": 115},
+    "riyadh": {"lat": 24.7136, "lon": 46.6753, "country": "Saudi Arabia", "temp": 41.0, "humidity": 20, "cond": "Clear Sky", "code": 0, "wind": 18.0, "uv": 11.0, "aqi": 130},
+    "tashkent": {"lat": 41.2995, "lon": 69.2401, "country": "Uzbekistan", "temp": 32.0, "humidity": 30, "cond": "Sunny", "code": 0, "wind": 11.0, "uv": 8.0, "aqi": 60},
+    "almaty": {"lat": 43.2220, "lon": 76.8512, "country": "Kazakhstan", "temp": 27.0, "humidity": 45, "cond": "Partly Cloudy", "code": 2, "wind": 9.0, "uv": 6.5, "aqi": 50},
+    "vancouver": {"lat": 49.2827, "lon": -123.1207, "country": "Canada", "temp": 20.0, "humidity": 65, "cond": "Mainly Clear", "code": 1, "wind": 10.0, "uv": 5.5, "aqi": 25},
+    "honolulu": {"lat": 21.3069, "lon": -157.8583, "country": "United States", "temp": 29.0, "humidity": 70, "cond": "Tropical Breeze", "code": 1, "wind": 20.0, "uv": 9.5, "aqi": 20},
+    "anchorage": {"lat": 61.2181, "lon": -149.9003, "country": "United States", "temp": 14.0, "humidity": 60, "cond": "Cloudy", "code": 3, "wind": 12.0, "uv": 3.0, "aqi": 15},
+    "auckland": {"lat": -36.8485, "lon": 174.7633, "country": "New Zealand", "temp": 16.0, "humidity": 75, "cond": "Showers", "code": 80, "wind": 19.0, "uv": 3.5, "aqi": 22},
+    "melbourne": {"lat": -37.8136, "lon": 144.9631, "country": "Australia", "temp": 15.5, "humidity": 68, "cond": "Partly Cloudy", "code": 2, "wind": 17.0, "uv": 3.8, "aqi": 28},
+    "johannesburg": {"lat": -26.2041, "lon": 28.0473, "country": "South Africa", "temp": 21.0, "humidity": 40, "cond": "Sunny", "code": 0, "wind": 11.0, "uv": 7.0, "aqi": 55},
+    "nairobi": {"lat": -1.2921, "lon": 36.8219, "country": "Kenya", "temp": 23.0, "humidity": 55, "cond": "Partly Cloudy", "code": 2, "wind": 13.0, "uv": 8.5, "aqi": 45},
+    "casablanca": {"lat": 33.5731, "lon": -7.5898, "country": "Morocco", "temp": 24.0, "humidity": 65, "cond": "Sunny", "code": 0, "wind": 14.0, "uv": 7.5, "aqi": 40},
+    "lima": {"lat": -12.0464, "lon": -77.0428, "country": "Peru", "temp": 19.0, "humidity": 80, "cond": "Overcast", "code": 3, "wind": 11.0, "uv": 4.0, "aqi": 60},
+    "santiago": {"lat": -33.4489, "lon": -70.6693, "country": "Chile", "temp": 20.0, "humidity": 50, "cond": "Clear Sky", "code": 0, "wind": 10.0, "uv": 5.5, "aqi": 70},
+    "bogotá": {"lat": 4.7110, "lon": -74.0721, "country": "Colombia", "temp": 18.0, "humidity": 70, "cond": "Partly Cloudy", "code": 2, "wind": 9.0, "uv": 7.5, "aqi": 35},
+    "lagos": {"lat": 6.5244, "lon": 3.3792, "country": "Nigeria", "temp": 30.0, "humidity": 82, "cond": "Humid", "code": 2, "wind": 12.0, "uv": 8.0, "aqi": 110},
+    "addis ababa": {"lat": 9.0300, "lon": 38.7400, "country": "Ethiopia", "temp": 22.0, "humidity": 50, "cond": "Mainly Clear", "code": 1, "wind": 10.0, "uv": 8.5, "aqi": 30},
     "salem": {"lat": 11.6643, "lon": 78.1460, "country": "India", "temp": 32.0, "humidity": 64, "cond": "Sunny", "code": 0, "wind": 11.0, "uv": 8.5, "aqi": 50},
     "tirunelveli": {"lat": 8.7139, "lon": 77.7567, "country": "India", "temp": 32.5, "humidity": 70, "cond": "Partly Cloudy", "code": 2, "wind": 14.0, "uv": 8.6, "aqi": 42}
 }
@@ -225,44 +249,81 @@ class DataCollectionAgent:
             except Exception:
                 pass
 
-        # Tier 1: Open-Meteo Universal Global Geocoding API (400,000+ cities, towns, villages)
-        try:
-            params = {"name": city_name, "count": 5, "language": "en", "format": "json"}
-            resp = requests.get(Config.OPEN_METEO_GEOCODING_URL, params=params, timeout=5)
-            if resp.status_code == 200:
-                results = resp.json().get("results")
-                if results:
-                    top = results[0]
-                    return {
-                        "city": top.get("name"),
-                        "country": top.get("country", "Global"),
-                        "latitude": round(top.get("latitude"), 4),
-                        "longitude": round(top.get("longitude"), 4),
-                        "is_fallback": False
-                    }
-        except Exception:
-            pass
+        # Build candidate search terms for robust global matching (e.g. "Russia, siberia" -> ["Russia, siberia", "siberia", "Russia"])
+        raw_query = city_name.strip()
+        candidates = [raw_query]
+        if "," in raw_query:
+            parts = [p.strip() for p in raw_query.split(",") if p.strip()]
+            for p in reversed(parts):
+                if p and p not in candidates:
+                    candidates.append(p)
+            for p in parts:
+                if p and p not in candidates:
+                    candidates.append(p)
 
-        # Tier 2: OpenStreetMap Nominatim Geocoding API for rural villages & small districts
-        try:
-            nom_params = {"q": city_name, "format": "json", "limit": 1}
-            headers = {"User-Agent": "AgenticAIWeatherSystem/2.0"}
-            nom_resp = requests.get("https://nominatim.openstreetmap.org/search", params=nom_params, headers=headers, timeout=4)
-            if nom_resp.status_code == 200:
-                nom_results = nom_resp.json()
-                if nom_results:
-                    item = nom_results[0]
-                    display_parts = item.get("display_name", "").split(",")
-                    country_str = display_parts[-1].strip() if display_parts else "Global"
-                    return {
-                        "city": item.get("name") or city_name.strip().capitalize(),
-                        "country": country_str,
-                        "latitude": round(float(item.get("lat")), 4),
-                        "longitude": round(float(item.get("lon")), 4),
-                        "is_fallback": False
-                    }
-        except Exception:
-            pass
+        # Tier 1: If query has commas (e.g., "Russia, siberia" or "Dallas, TX"), try OpenStreetMap Nominatim first for full administrative location matching
+        if "," in raw_query:
+            try:
+                nom_params = {"q": raw_query, "format": "json", "limit": 1}
+                headers = {"User-Agent": "AgenticAIWeatherSystem/2.0"}
+                nom_resp = requests.get("https://nominatim.openstreetmap.org/search", params=nom_params, headers=headers, timeout=4)
+                if nom_resp.status_code == 200:
+                    nom_results = nom_resp.json()
+                    if nom_results:
+                        item = nom_results[0]
+                        display_parts = item.get("display_name", "").split(",")
+                        country_str = display_parts[-1].strip() if display_parts else "Global"
+                        city_disp = item.get("name") or display_parts[0].strip()
+                        return {
+                            "city": city_disp,
+                            "country": country_str,
+                            "latitude": round(float(item.get("lat")), 4),
+                            "longitude": round(float(item.get("lon")), 4),
+                            "is_fallback": False
+                        }
+            except Exception:
+                pass
+
+        # Tier 2: Open-Meteo Universal Global Geocoding API (400,000+ cities, towns, regions)
+        for q_term in candidates:
+            try:
+                params = {"name": q_term, "count": 5, "language": "en", "format": "json"}
+                resp = requests.get(Config.OPEN_METEO_GEOCODING_URL, params=params, timeout=4)
+                if resp.status_code == 200:
+                    results = resp.json().get("results")
+                    if results:
+                        top = results[0]
+                        return {
+                            "city": top.get("name"),
+                            "country": top.get("country", "Global"),
+                            "latitude": round(top.get("latitude"), 4),
+                            "longitude": round(top.get("longitude"), 4),
+                            "is_fallback": False
+                        }
+            except Exception:
+                pass
+
+        # Tier 3: OpenStreetMap Nominatim Fallback Search for single-term places
+        for q_term in candidates:
+            try:
+                nom_params = {"q": q_term, "format": "json", "limit": 1}
+                headers = {"User-Agent": "AgenticAIWeatherSystem/2.0"}
+                nom_resp = requests.get("https://nominatim.openstreetmap.org/search", params=nom_params, headers=headers, timeout=4)
+                if nom_resp.status_code == 200:
+                    nom_results = nom_resp.json()
+                    if nom_results:
+                        item = nom_results[0]
+                        display_parts = item.get("display_name", "").split(",")
+                        country_str = display_parts[-1].strip() if display_parts else "Global"
+                        return {
+                            "city": item.get("name") or q_term.capitalize(),
+                            "country": country_str,
+                            "latitude": round(float(item.get("lat")), 4),
+                            "longitude": round(float(item.get("lon")), 4),
+                            "is_fallback": False
+                        }
+            except Exception:
+                pass
 
         # Tier 3: Global Preset Registry Lookup
         city_key = city_name.strip().lower()

@@ -74,7 +74,7 @@ body {
 .container {
     position: relative;
     z-index: 10;
-    max-width: 1280px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 20px 24px;
     transform-style: preserve-3d;
@@ -102,13 +102,16 @@ body {
         0 0 15px rgba(168, 85, 247, 0.15);
 }
 
-/* Sleek Floating Premium Navbar (Flat, No 3D Tilting) */
+/* Sleek Floating Premium Navbar (Expanded Width, Zero Clipping) */
 .navbar-sleek {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 28px;
+    padding: 16px 32px;
     margin-bottom: 28px;
+    gap: 16px;
+    min-height: 76px;
+    width: 100%;
     background: rgba(15, 23, 42, 0.85);
     backdrop-filter: blur(28px);
     -webkit-backdrop-filter: blur(28px);
@@ -130,21 +133,29 @@ body {
 .brand {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .brand-icon {
     font-size: 2.2rem;
     animation: pulse3DGlow 3s infinite ease-in-out;
+    flex-shrink: 0;
 }
 
 .brand-title {
     font-family: 'Outfit', sans-serif;
-    font-size: 1.6rem;
+    font-size: 1.65rem;
     font-weight: 800;
     background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    display: inline-block;
+    padding-right: 6px;
+    padding-left: 2px;
+    line-height: 1.25;
+    overflow: visible;
 }
 
 .brand-badge {
@@ -153,10 +164,13 @@ body {
     color: var(--primary-cyan);
     font-size: 0.75rem;
     font-weight: 600;
-    padding: 4px 10px;
+    padding: 5px 12px;
     border-radius: 20px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    white-space: nowrap;
+    display: inline-block;
+    line-height: 1.2;
     box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
 }
 
