@@ -2,6 +2,26 @@ from typing import Dict, Any, List
 
 # Comprehensive Global Weather, Emergency & Science Knowledge Base
 GLOBAL_WEATHER_KNOWLEDGE = {
+    "tornado": {
+        "title": "🌪️ Tornado & Severe Supercell Emergency Protocol",
+        "historical_context": "Tornadoes (e.g. Tri-State Tornado 1925, Joplin 2011) develop from violent mesocyclone supercells with wind velocities exceeding 300 km/h on the Enhanced Fujita (EF0-EF5) scale.",
+        "precautions": [
+            "Seek shelter immediately in a basement, storm cellar, or an interior room on the lowest floor without windows.",
+            "Cover your head and neck with arms, heavy blankets, or a mattress to protect against flying debris.",
+            "If in a vehicle or mobile home, evacuate to a sturdy building immediately. Do not hide under highway overpasses."
+        ],
+        "best_solution": "Go to an interior windowless room (bathroom, closet, hallway) on the lowest level. Shield yourself from flying glass and structural debris."
+    },
+    "monsoon": {
+        "title": "🌧️ Tropical Monsoon & Seasonal Atmospheric Troughs",
+        "historical_context": "South Asian and East Asian Monsoons drive seasonal wind reversals, bringing 70-80% of annual rainfall but risking widespread flooding.",
+        "precautions": [
+            "Inspect house roof drainage, storm gutters, and sump pumps before monsoon season onset.",
+            "Avoid low-lying coastal and riverbank areas during active monsoonal depressions.",
+            "Ensure emergency water purification tablets and non-perishable rations are stored."
+        ],
+        "best_solution": "Monitor radar reflectivity and satellite cloud imagery during active monsoonal surges. Avoid driving through flooded causeways."
+    },
     "cyclone": {
         "title": "🌀 Cyclone, Typhoon & Hurricane Emergency Management",
         "historical_context": "Tropical cyclones (e.g. Hurricane Katrina 2005, Cyclone Nargis 2008, Typhoon Tip 1979) generate devastating wind velocities exceeding 120 km/h and massive storm surges.",
@@ -100,6 +120,24 @@ GENERAL_SCIENCE_KNOWLEDGE = {
             "3-5 (Moderate): Wear sunglasses and SPF 30+ sunscreen during midday hours.",
             "6-7 (High) & 8-10 (Very High): Sunburn can occur in 15 mins. Seek shade, wear broad hats and SPF 50+.",
             "11+ (Extreme): Avoid peak sun hours; unmasked skin burns rapidly."
+        ]
+    },
+    "agriculture": {
+        "title": "🌾 Agricultural Meteorology & Crop Microclimates",
+        "summary": "Weather telemetry directly influences crop evapotranspiration, soil moisture retention, and agricultural productivity.",
+        "key_facts": [
+            "Evapotranspiration (ET0) estimates water loss from soil and vegetation based on solar irradiance, temperature, and wind speed.",
+            "Unseasonal frost or severe heat stress during crop flowering stages causes significant yield reduction.",
+            "Smart precision irrigation systems utilize real-time soil moisture and precipitation probability forecasts."
+        ]
+    },
+    "solar_energy": {
+        "title": "⚡ Solar Energy Photovoltaic Efficiency",
+        "summary": "Solar PV panel output depends on global horizontal irradiance (GHI), cloud opacity, and thermal coefficients.",
+        "key_facts": [
+            "Standard test conditions (STC) rate solar panels at 25°C cell temperature.",
+            "Panel efficiency decreases by ~0.35% to 0.45% for every 1°C temperature increase above 25°C.",
+            "Cloud cover and haze reduce direct solar irradiance, causing PV power output drops of 50-80%."
         ]
     }
 }
@@ -207,7 +245,11 @@ def generate_research_advisories(city: str, current: Dict[str, Any], air_quality
 def query_global_knowledge(query: str, current_temp: float, precip_prob: float, risk_cat: str) -> Dict[str, Any]:
     q_lower = query.lower()
     
-    if any(k in q_lower for k in ["cyclone", "hurricane", "typhoon", "storm", "gale"]):
+    if any(k in q_lower for k in ["tornado", "twister", "funnel", "supercell"]):
+        topic = "tornado"
+    elif any(k in q_lower for k in ["monsoon", "seasonal rain", "trough", "itcz"]):
+        topic = "monsoon"
+    elif any(k in q_lower for k in ["cyclone", "hurricane", "typhoon", "storm", "gale"]):
         topic = "cyclone"
     elif any(k in q_lower for k in ["heat", "hot", "heatwave", "sunstroke", "summer"]):
         topic = "heatwave"

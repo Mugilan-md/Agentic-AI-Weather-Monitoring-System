@@ -677,10 +677,28 @@ class ConversationalAgent:
         if any(k in q_clean for k in ["pressure", "barometer", "hpa", "mbar"]):
             info = weather_knowledge.GENERAL_SCIENCE_KNOWLEDGE["pressure"]
             facts = "".join([f"<li>{f}</li>" for f in info["key_facts"]])
-            answer = f"庫 <strong>{info['title']}</strong>:<br><br>" \
+            answer = f"⏲️ <strong>{info['title']}</strong>:<br><br>" \
                      f"{info['summary']}<br><br>" \
                      f"Currently in <strong>{city}</strong>, Surface Pressure is <strong>{curr['pressure']} hPa</strong>.<br><br>" \
                      f"<strong>Key Dynamics</strong>:<ul>{facts}</ul>"
+            return {"query": query, "answer": answer, "agent_name": self.name}
+
+        if any(k in q_clean for k in ["crop", "farm", "agriculture", "soil", "evapotranspiration"]):
+            info = weather_knowledge.GENERAL_SCIENCE_KNOWLEDGE["agriculture"]
+            facts = "".join([f"<li>{f}</li>" for f in info["key_facts"]])
+            answer = f"🌾 <strong>{info['title']}</strong>:<br><br>" \
+                     f"{info['summary']}<br><br>" \
+                     f"Current atmospheric parameters in <strong>{city}</strong> (Temp: {temp}°C, Humidity: {humidity}%):<br><br>" \
+                     f"<strong>Agricultural Insights</strong>:<ul>{facts}</ul>"
+            return {"query": query, "answer": answer, "agent_name": self.name}
+
+        if any(k in q_clean for k in ["solar", "photovoltaic", "pv", "panel", "sunlight"]):
+            info = weather_knowledge.GENERAL_SCIENCE_KNOWLEDGE["solar_energy"]
+            facts = "".join([f"<li>{f}</li>" for f in info["key_facts"]])
+            answer = f"⚡ <strong>{info['title']}</strong>:<br><br>" \
+                     f"{info['summary']}<br><br>" \
+                     f"Solar radiation context in <strong>{city}</strong> (UV Index: {uv}, Cloud Cover: {curr.get('cloud_cover', 30)}%):<br><br>" \
+                     f"<strong>Solar Energy Takeaways</strong>:<ul>{facts}</ul>"
             return {"query": query, "answer": answer, "agent_name": self.name}
 
         # 4. Outdoor Exercise / Sports / Running Intent
