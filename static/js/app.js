@@ -752,7 +752,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ==========================================================================
-       3D DUAL-COLOR CURSOR & GLITTERING SPARKLE ENGINE
+    /* ==========================================================================
+       ULTRA-FAST 3D DUAL-GOLD CURSOR & GLITTERING SPARKLE ENGINE (MAX FPS)
        ========================================================================== */
     function init3DCursorGlitterEngine() {
         const dot = document.getElementById("cursor-dot");
@@ -760,7 +761,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const canvas = document.getElementById("glitter-canvas");
         if (!canvas) return;
 
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d", { alpha: true });
         let width = canvas.width = window.innerWidth;
         let height = canvas.height = window.innerHeight;
 
@@ -775,8 +776,11 @@ document.addEventListener("DOMContentLoaded", () => {
         let ringY = height / 2;
 
         const particles = [];
-        const colorCyan = { r: 56, g: 189, b: 248 };   // Electric Cyan (#38bdf8)
-        const colorPurple = { r: 192, g: 132, b: 252 }; // Neon Magenta (#c084fc)
+        const goldColors = [
+            { r: 255, g: 215, b: 0 },   // Pure Metallic Gold (#ffd700)
+            { r: 255, g: 170, b: 0 },   // Warm Amber Gold (#ffaa00)
+            { r: 255, g: 240, b: 160 }  // Champagne Sparkle Gold (#fff0a0)
+        ];
 
         window.addEventListener("mousemove", (e) => {
             mouseX = e.clientX;
@@ -786,8 +790,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
             }
 
-            // Spawn 3D glittering particles on move
-            spawnGlitterParticle(mouseX, mouseY, false);
+            // Spawn 3D glittering particles on fast cursor movement
+            if (particles.length < 50) {
+                spawnGlitterParticle(mouseX, mouseY, false);
+            }
         });
 
         // Hover scale on buttons & links
@@ -805,44 +811,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Click burst explosion effect
         window.addEventListener("click", (e) => {
-            for (let i = 0; i < 28; i++) {
+            const burstCount = Math.min(20, 50 - particles.length);
+            for (let i = 0; i < burstCount; i++) {
                 spawnGlitterParticle(e.clientX, e.clientY, true);
             }
         });
 
         function spawnGlitterParticle(x, y, isExplosion = false) {
-            const isCyan = Math.random() > 0.45;
-            const col = isCyan ? colorCyan : colorPurple;
+            const col = goldColors[Math.floor(Math.random() * goldColors.length)];
 
-            const speed = isExplosion ? (Math.random() * 5.0 + 1.8) : (Math.random() * 1.4 + 0.3);
+            const speed = isExplosion ? (Math.random() * 4.5 + 1.5) : (Math.random() * 1.5 + 0.4);
             const angle = Math.random() * Math.PI * 2;
 
             particles.push({
-                x: x + (Math.random() * 12 - 6),
-                y: y + (Math.random() * 12 - 6),
-                z: Math.random() * 200 - 100,
+                x: x + (Math.random() * 10 - 5),
+                y: y + (Math.random() * 10 - 5),
+                z: Math.random() * 160 - 80,
                 vx: Math.cos(angle) * speed,
-                vy: Math.sin(angle) * speed - (isExplosion ? 0 : 0.5),
-                size: Math.random() * 3.5 + 2.0,
-                maxSize: Math.random() * 6.5 + 3.0,
+                vy: Math.sin(angle) * speed - (isExplosion ? 0 : 0.4),
+                size: Math.random() * 3.5 + 1.8,
                 color: col,
                 alpha: 1.0,
-                decay: Math.random() * 0.025 + 0.015,
+                decay: Math.random() * 0.03 + 0.02,
                 rotation: Math.random() * Math.PI,
-                rotSpeed: (Math.random() - 0.5) * 0.12,
+                rotSpeed: (Math.random() - 0.5) * 0.15,
                 glimmerPhase: Math.random() * Math.PI * 2,
-                type: Math.random() > 0.45 ? "diamond" : "star"
+                type: Math.random() > 0.4 ? "diamond" : "star"
             });
         }
 
         function renderLoop() {
-            // Smooth 3D tilt tracking for ring
-            ringX += (mouseX - ringX) * 0.16;
-            ringY += (mouseY - ringY) * 0.16;
+            // High-speed instantaneous reaction tracking for ring (0.45 lerp factor)
+            ringX += (mouseX - ringX) * 0.45;
+            ringY += (mouseY - ringY) * 0.45;
 
             if (ring) {
-                const tiltX = (mouseY - ringY) * 0.35;
-                const tiltY = (ringX - mouseX) * 0.35;
+                const tiltX = (mouseY - ringY) * 0.25;
+                const tiltY = (ringX - mouseX) * 0.25;
                 ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
             }
 
@@ -852,10 +857,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 const p = particles[i];
                 p.x += p.vx;
                 p.y += p.vy;
-                p.z += 0.6;
+                p.z += 0.5;
                 p.alpha -= p.decay;
                 p.rotation += p.rotSpeed;
-                p.glimmerPhase += 0.16;
+                p.glimmerPhase += 0.18;
 
                 if (p.alpha <= 0) {
                     particles.splice(i, 1);
@@ -863,16 +868,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 const perspective = 300 / (300 + p.z);
-                const renderSize = p.size * perspective * (0.8 + 0.4 * Math.sin(p.glimmerPhase));
+                const renderSize = p.size * perspective * (0.85 + 0.35 * Math.sin(p.glimmerPhase));
 
                 ctx.save();
                 ctx.translate(p.x, p.y);
                 ctx.rotate(p.rotation);
                 ctx.scale(perspective, perspective);
 
-                const radGlow = ctx.createRadialGradient(0, 0, 0, 0, 0, renderSize * 2.5);
+                const radGlow = ctx.createRadialGradient(0, 0, 0, 0, 0, renderSize * 2.2);
                 radGlow.addColorStop(0, `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, ${p.alpha})`);
-                radGlow.addColorStop(0.5, `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, ${p.alpha * 0.5})`);
+                radGlow.addColorStop(0.5, `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, ${p.alpha * 0.4})`);
                 radGlow.addColorStop(1, `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, 0)`);
 
                 ctx.fillStyle = radGlow;
