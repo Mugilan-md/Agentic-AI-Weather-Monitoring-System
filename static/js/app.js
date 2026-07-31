@@ -637,22 +637,27 @@ document.addEventListener("DOMContentLoaded", () => {
     function init3DTiltEffects() {
         const cards = document.querySelectorAll(".glass-card, .metric-card");
         cards.forEach(card => {
-            // Exclude navbar and welcome hero search card completely from 3D wobble tilting
             if (card.classList.contains("navbar") || card.classList.contains("navbar-sleek") || card.classList.contains("welcome-hero-card") || card.id === "welcome-search-hero") return;
 
+            let rect = null;
+            card.addEventListener("mouseenter", () => {
+                rect = card.getBoundingClientRect();
+            });
+
             card.addEventListener("mousemove", (e) => {
-                const rect = card.getBoundingClientRect();
+                if (!rect) rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
-                const rotateX = ((y - centerY) / centerY) * -5;
-                const rotateY = ((x - centerX) / centerX) * 5;
+                const rotateX = ((y - centerY) / centerY) * -4;
+                const rotateY = ((x - centerX) / centerX) * 4;
 
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.015, 1.015, 1.015)`;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01, 1.01, 1.01)`;
             });
 
             card.addEventListener("mouseleave", () => {
+                rect = null;
                 card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
             });
         });
