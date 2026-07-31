@@ -27,6 +27,9 @@ def get_collector():
     return collector
 
 @app.route("/", methods=["GET"])
+@app.route("/index", methods=["GET"])
+@app.route("/api/index", methods=["GET"])
+@app.route("/api/index.py", methods=["GET"])
 def index():
     initial_city = request.args.get("city", "").strip()
     return render_template("index.html", initial_city=initial_city)
