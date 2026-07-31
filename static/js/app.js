@@ -799,13 +799,13 @@ document.addEventListener("DOMContentLoaded", () => {
         // Hover scale on buttons & links
         document.body.addEventListener("mouseover", (e) => {
             if (e.target.closest("button, a, input, select, textarea, .glass-card, .clickable, .chip, .fav-item")) {
-                if (ring) ring.classList.add("hover-active");
+                if (dot) dot.classList.add("hover-active");
             }
         });
 
         document.body.addEventListener("mouseout", (e) => {
             if (e.target.closest("button, a, input, select, textarea, .glass-card, .clickable, .chip, .fav-item")) {
-                if (ring) ring.classList.remove("hover-active");
+                if (dot) dot.classList.remove("hover-active");
             }
         });
 
@@ -841,16 +841,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         function renderLoop() {
-            // High-speed instantaneous reaction tracking for ring (0.45 lerp factor)
-            ringX += (mouseX - ringX) * 0.45;
-            ringY += (mouseY - ringY) * 0.45;
-
-            if (ring) {
-                const tiltX = (mouseY - ringY) * 0.25;
-                const tiltY = (ringX - mouseX) * 0.25;
-                ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-            }
-
             ctx.clearRect(0, 0, width, height);
 
             for (let i = particles.length - 1; i >= 0; i--) {

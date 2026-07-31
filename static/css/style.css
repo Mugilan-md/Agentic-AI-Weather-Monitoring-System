@@ -1361,53 +1361,17 @@ footer {
     z-index: 999999;
     will-change: transform;
     transform: translate3d(-50%, -50%, 0);
-    transition: width 0.15s ease, height 0.15s ease, opacity 0.15s ease;
+    transition: width 0.15s ease, height 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
     mix-blend-mode: screen;
 }
 
-/* 3D Outer Cursor Ring (Dual-Gold Rotating Metallic Ring) */
-.cursor-ring-3d {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: transparent;
-    border: 2px solid transparent;
-    background-image: linear-gradient(135deg, rgba(255, 215, 0, 0.95), rgba(255, 140, 0, 0.95));
-    background-origin: border-box;
-    background-clip: border-box;
+.cursor-dot-3d.hover-active {
+    width: 18px;
+    height: 18px;
     box-shadow: 
-        0 0 18px rgba(255, 215, 0, 0.75),
-        0 0 35px rgba(255, 170, 0, 0.65),
-        inset 0 0 14px rgba(255, 215, 0, 0.45);
-    pointer-events: none;
-    z-index: 999998;
-    will-change: transform;
-    transform: translate3d(-50%, -50%, 0) rotateX(0deg) rotateY(0deg);
-    transform-style: preserve-3d;
-    perspective: 500px;
-    transition: width 0.15s cubic-bezier(0.2, 0.8, 0.2, 1), height 0.15s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.15s ease;
-}
-
-/* Cursor Ring Hover Active State on Interactive Elements */
-.cursor-ring-3d.hover-active {
-    width: 54px;
-    height: 54px;
-    border-color: #ffd700;
-    background: radial-gradient(circle, rgba(255, 215, 0, 0.25) 0%, rgba(255, 140, 0, 0.25) 70%, transparent 100%);
-    box-shadow: 
-        0 0 32px rgba(255, 215, 0, 0.9),
-        0 0 55px rgba(255, 170, 0, 0.8),
-        inset 0 0 20px rgba(255, 215, 0, 0.6);
-    animation: cursorSpin3D 1.5s linear infinite;
-}
-
-@keyframes cursorSpin3D {
-    0% { transform: translate3d(-50%, -50%, 0) rotate(0deg) scale(1); }
-    50% { transform: translate3d(-50%, -50%, 0) rotate(180deg) scale(1.12); }
-    100% { transform: translate3d(-50%, -50%, 0) rotate(360deg) scale(1); }
+        0 0 22px #ffd700,
+        0 0 40px #ffaa00,
+        0 0 60px rgba(255, 215, 0, 1);
 }
 
 /* Fullscreen Hardware-Accelerated Glitter Particle Canvas Overlay */
