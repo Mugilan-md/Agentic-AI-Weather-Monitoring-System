@@ -756,6 +756,7 @@ document.addEventListener("DOMContentLoaded", () => {
        GOLDEN GLITTER SPARKLE PARTICLE ENGINE (MAX FPS)
        ========================================================================== */
     function init3DCursorGlitterEngine() {
+        const dot = document.getElementById("cursor-dot");
         const canvas = document.getElementById("glitter-canvas");
         if (!canvas) return;
 
@@ -782,9 +783,26 @@ document.addEventListener("DOMContentLoaded", () => {
             mouseX = e.clientX;
             mouseY = e.clientY;
 
+            if (dot) {
+                dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+            }
+
             // Spawn 3D glittering particles on mouse movement
             if (particles.length < 50) {
                 spawnGlitterParticle(mouseX, mouseY, false);
+            }
+        });
+
+        // Hover active expansion on buttons, inputs, links & cards
+        document.body.addEventListener("mouseover", (e) => {
+            if (e.target.closest("button, a, input, select, textarea, .glass-card, .clickable, .chip, .fav-item")) {
+                if (dot) dot.classList.add("hover-active");
+            }
+        });
+
+        document.body.addEventListener("mouseout", (e) => {
+            if (e.target.closest("button, a, input, select, textarea, .glass-card, .clickable, .chip, .fav-item")) {
+                if (dot) dot.classList.remove("hover-active");
             }
         });
 

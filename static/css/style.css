@@ -1335,8 +1335,45 @@ footer {
 }
 
 /* ==========================================================================
-   GOLDEN GLITTER SPARKLE PARTICLE SYSTEM (STANDARD ARROW CURSOR RESTORED)
+   3D GOLDEN GLOWING CURSOR & GLITTER SPARKLE SYSTEM (ARROW REPLACED BY GOLD CIRCLE)
    ========================================================================== */
+
+@media (hover: hover) and (pointer: fine) {
+    body, a, button, input, select, textarea, label, .glass-card, .clickable {
+        cursor: none !important;
+    }
+}
+
+/* 3D Golden Glowing Circle Dot (Replaces Default Mouse Arrow Pointer) */
+.cursor-dot-3d {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffffff 0%, #ffd700 50%, #ff8c00 100%);
+    box-shadow: 
+        0 0 16px #ffd700,
+        0 0 32px #ffaa00,
+        0 0 50px rgba(255, 215, 0, 0.95);
+    pointer-events: none;
+    z-index: 999999;
+    will-change: transform;
+    transform: translate3d(-50%, -50%, 0);
+    transition: width 0.15s cubic-bezier(0.2, 0.8, 0.2, 1), height 0.15s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.15s ease;
+    mix-blend-mode: screen;
+}
+
+.cursor-dot-3d.hover-active {
+    width: 24px;
+    height: 24px;
+    background: radial-gradient(circle, #ffffff 0%, #ffe600 45%, #ff7700 100%);
+    box-shadow: 
+        0 0 24px #ffd700,
+        0 0 45px #ffaa00,
+        0 0 70px rgba(255, 215, 0, 1);
+}
 
 /* Fullscreen Hardware-Accelerated Glitter Particle Canvas Overlay */
 .glitter-particle-canvas {
@@ -1349,5 +1386,18 @@ footer {
     z-index: 999997;
     mix-blend-mode: screen;
     will-change: transform;
+}
+
+/* Enhanced 3D Parallax Depth Rules for Glassmorphism Cards */
+.glass-card {
+    transform-style: preserve-3d;
+    transition: transform 0.15s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.25s ease;
+}
+
+.glass-card:hover {
+    box-shadow: 
+        0 20px 45px rgba(0, 0, 0, 0.45),
+        0 0 30px rgba(56, 189, 248, 0.25),
+        inset 0 0 15px rgba(255, 215, 0, 0.15);
 }
 
