@@ -26,6 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize 3D Parallax Tilt Effects ONLY on Dashboard Content Cards (Excluding Navbar)
     init3DTiltEffects();
 
+    // Initialize 3D Dual-Color Glowing Cursor & Glitter Sparkle Engine
+    init3DCursorGlitterEngine();
+
     // Hue Slider Listener
     if (hueSlider) {
         hueSlider.value = lightningHue;
@@ -746,5 +749,158 @@ document.addEventListener("DOMContentLoaded", () => {
             requestAnimationFrame(render);
         }
         requestAnimationFrame(render);
+    }
+
+    /* ==========================================================================
+       3D DUAL-COLOR CURSOR & GLITTERING SPARKLE ENGINE
+       ========================================================================== */
+    function init3DCursorGlitterEngine() {
+        const dot = document.getElementById("cursor-dot");
+        const ring = document.getElementById("cursor-ring");
+        const canvas = document.getElementById("glitter-canvas");
+        if (!canvas) return;
+
+        const ctx = canvas.getContext("2d");
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener("resize", () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        let mouseX = width / 2;
+        let mouseY = height / 2;
+        let ringX = width / 2;
+        let ringY = height / 2;
+
+        const particles = [];
+        const colorCyan = { r: 56, g: 189, b: 248 };   // Electric Cyan (#38bdf8)
+        const colorPurple = { r: 192, g: 132, b: 252 }; // Neon Magenta (#c084fc)
+
+        window.addEventListener("mousemove", (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            if (dot) {
+                dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+            }
+
+            // Spawn 3D glittering particles on move
+            spawnGlitterParticle(mouseX, mouseY, false);
+        });
+
+        // Hover scale on buttons & links
+        document.body.addEventListener("mouseover", (e) => {
+            if (e.target.closest("button, a, input, select, textarea, .glass-card, .clickable, .chip, .fav-item")) {
+                if (ring) ring.classList.add("hover-active");
+            }
+        });
+
+        document.body.addEventListener("mouseout", (e) => {
+            if (e.target.closest("button, a, input, select, textarea, .glass-card, .clickable, .chip, .fav-item")) {
+                if (ring) ring.classList.remove("hover-active");
+            }
+        });
+
+        // Click burst explosion effect
+        window.addEventListener("click", (e) => {
+            for (let i = 0; i < 28; i++) {
+                spawnGlitterParticle(e.clientX, e.clientY, true);
+            }
+        });
+
+        function spawnGlitterParticle(x, y, isExplosion = false) {
+            const isCyan = Math.random() > 0.45;
+            const col = isCyan ? colorCyan : colorPurple;
+
+            const speed = isExplosion ? (Math.random() * 5.0 + 1.8) : (Math.random() * 1.4 + 0.3);
+            const angle = Math.random() * Math.PI * 2;
+
+            particles.push({
+                x: x + (Math.random() * 12 - 6),
+                y: y + (Math.random() * 12 - 6),
+                z: Math.random() * 200 - 100,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed - (isExplosion ? 0 : 0.5),
+                size: Math.random() * 3.5 + 2.0,
+                maxSize: Math.random() * 6.5 + 3.0,
+                color: col,
+                alpha: 1.0,
+                decay: Math.random() * 0.025 + 0.015,
+                rotation: Math.random() * Math.PI,
+                rotSpeed: (Math.random() - 0.5) * 0.12,
+                glimmerPhase: Math.random() * Math.PI * 2,
+                type: Math.random() > 0.45 ? "diamond" : "star"
+            });
+        }
+
+        function renderLoop() {
+            // Smooth 3D tilt tracking for ring
+            ringX += (mouseX - ringX) * 0.16;
+            ringY += (mouseY - ringY) * 0.16;
+
+            if (ring) {
+                const tiltX = (mouseY - ringY) * 0.35;
+                const tiltY = (ringX - mouseX) * 0.35;
+                ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+            }
+
+            ctx.clearRect(0, 0, width, height);
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.z += 0.6;
+                p.alpha -= p.decay;
+                p.rotation += p.rotSpeed;
+                p.glimmerPhase += 0.16;
+
+                if (p.alpha <= 0) {
+                    particles.splice(i, 1);
+                    continue;
+                }
+
+                const perspective = 300 / (300 + p.z);
+                const renderSize = p.size * perspective * (0.8 + 0.4 * Math.sin(p.glimmerPhase));
+
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation);
+                ctx.scale(perspective, perspective);
+
+                const radGlow = ctx.createRadialGradient(0, 0, 0, 0, 0, renderSize * 2.5);
+                radGlow.addColorStop(0, `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, ${p.alpha})`);
+                radGlow.addColorStop(0.5, `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, ${p.alpha * 0.5})`);
+                radGlow.addColorStop(1, `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, 0)`);
+
+                ctx.fillStyle = radGlow;
+
+                if (p.type === "diamond") {
+                    ctx.beginPath();
+                    ctx.moveTo(0, -renderSize * 1.8);
+                    ctx.lineTo(renderSize * 1.2, 0);
+                    ctx.lineTo(0, renderSize * 1.8);
+                    ctx.lineTo(-renderSize * 1.2, 0);
+                    ctx.closePath();
+                    ctx.fill();
+                } else {
+                    ctx.beginPath();
+                    for (let s = 0; s < 4; s++) {
+                        ctx.lineTo(Math.cos(s * Math.PI / 2) * renderSize * 2, Math.sin(s * Math.PI / 2) * renderSize * 2);
+                        ctx.lineTo(Math.cos((s + 0.5) * Math.PI / 2) * (renderSize * 0.5), Math.sin((s + 0.5) * Math.PI / 2) * (renderSize * 0.5));
+                    }
+                    ctx.closePath();
+                    ctx.fill();
+                }
+
+                ctx.restore();
+            }
+
+            requestAnimationFrame(renderLoop);
+        }
+
+        renderLoop();
     }
 });
