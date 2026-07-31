@@ -1,4 +1,5 @@
 # Agentic AI Weather Monitoring System - Vercel Production Gateway
+# pyrefly: ignore [missing-import]
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from agents import run_weather_agent, run_agent_chat, DataCollectionAgent
 from ml_service import ml_service

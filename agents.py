@@ -2,7 +2,7 @@ import requests
 import time
 import random
 import math
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Tuple
 from config import Config
 from ml_service import ml_service
 import weather_knowledge
@@ -418,6 +418,7 @@ class DataCollectionAgent:
                     pass
 
                 # Execute Data Fusion Engine
+                # pyrefly: ignore [bad-unpacking]
                 fused_curr, fused_aq, audit_metrics = self.fusion_engine.fuse_telemetry(w_data, aq_data, location)
 
                 hourly_list = []
