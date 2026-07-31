@@ -13,16 +13,17 @@ app = Flask(
     static_folder=os.path.join(base_dir, "static")
 )
 
-# Safe initialization to guarantee successful import on Vercel
-try:
-    collector = DataCollectionAgent()
-except Exception:
-    collector = None
+# Lazy collector instance for request handling
+collector = None
 
-try:
-    database.init_db()
-except Exception:
-    pass
+def get_collector():
+    global collector
+    if collector is None:
+        try:
+            collector = DataCollectionAgent()
+        except Exception:
+            collector = None
+    return collector
 
 @app.route("/", methods=["GET"])
 def index():
@@ -89,7 +90,7 @@ def search_city():
         return jsonify({"results": []})
     
     try:
-        agent = collector if collector else DataCollectionAgent()
+        agent = get_collector() or DataCollectionAgent()
         results = agent.search_city(query)
     except Exception:
         results = []
