@@ -99,38 +99,103 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Event Listeners
-    searchBtn.addEventListener("click", () => {
-        const city = searchInput.value.trim();
-        if (city) fetchWeatherData(city);
-    });
-
-    searchInput.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") {
+    // Hero Search Bar Event Listeners
+    if (searchBtn && searchInput) {
+        searchBtn.addEventListener("click", () => {
             const city = searchInput.value.trim();
             if (city) fetchWeatherData(city);
-        }
-    });
+        });
 
-    // Autocomplete handling
-    let debounceTimer;
-    searchInput.addEventListener("input", (e) => {
-        clearTimeout(debounceTimer);
-        const query = e.target.value.trim();
-        if (query.length < 2) {
-            autocompleteDropdown.classList.remove("active");
+        searchInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                const city = searchInput.value.trim();
+                if (city) fetchWeatherData(city);
+            }
+        });
+    }
+
+    // Dashboard Search Bar Event Listeners
+    const dashSearchBtn = document.getElementById("dashboard-search-btn");
+    const dashSearchInput = document.getElementById("dashboard-search-input");
+    const dashAutocompleteDropdown = document.getElementById("dashboard-autocomplete-dropdown");
+
+    if (dashSearchBtn && dashSearchInput) {
+        dashSearchBtn.addEventListener("click", () => {
+            const city = dashSearchInput.value.trim();
+            if (city) fetchWeatherData(city);
+        });
+
+        dashSearchInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                const city = dashSearchInput.value.trim();
+                if (city) fetchWeatherData(city);
+            }
+        });
+
+        let dashDebounceTimer;
+        dashSearchInput.addEventListener("input", (e) => {
+            clearTimeout(dashDebounceTimer);
+            const query = e.target.value.trim();
+            if (query.length < 2) {
+                if (dashAutocompleteDropdown) dashAutocompleteDropdown.classList.remove("active");
+                return;
+            }
+            dashDebounceTimer = setTimeout(() => {
+                fetch(`/api/search?q=${encodeURIComponent(query)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        renderDashboardAutocomplete(data.results || []);
+                    }).catch(() => {});
+            }, 300);
+        });
+    }
+
+    function renderDashboardAutocomplete(results) {
+        if (!dashAutocompleteDropdown) return;
+        if (!results.length) {
+            dashAutocompleteDropdown.classList.remove("active");
             return;
         }
-        debounceTimer = setTimeout(() => {
-            fetch(`/api/search?q=${encodeURIComponent(query)}`)
-                .then(res => res.json())
-                .then(data => {
-                    renderAutocomplete(data.results || []);
-                }).catch(() => {});
-        }, 300);
-    });
+        dashAutocompleteDropdown.innerHTML = results.map(item => `
+            <div class="autocomplete-item dash-autocomplete-item" data-city="${item.name}">
+                <span><strong>${item.name}</strong> ${item.admin1 ? ', ' + item.admin1 : ''}</span>
+                <span style="color: var(--text-muted); font-size: 0.8rem;">${item.country}</span>
+            </div>
+        `).join("");
+        dashAutocompleteDropdown.classList.add("active");
+
+        document.querySelectorAll(".dash-autocomplete-item").forEach(item => {
+            item.addEventListener("click", () => {
+                const selectedCity = item.getAttribute("data-city");
+                if (dashSearchInput) dashSearchInput.value = selectedCity;
+                dashAutocompleteDropdown.classList.remove("active");
+                fetchWeatherData(selectedCity);
+            });
+        });
+    }
+
+    // Autocomplete handling for Hero Search Input
+    let debounceTimer;
+    if (searchInput) {
+        searchInput.addEventListener("input", (e) => {
+            clearTimeout(debounceTimer);
+            const query = e.target.value.trim();
+            if (query.length < 2) {
+                if (autocompleteDropdown) autocompleteDropdown.classList.remove("active");
+                return;
+            }
+            debounceTimer = setTimeout(() => {
+                fetch(`/api/search?q=${encodeURIComponent(query)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        renderAutocomplete(data.results || []);
+                    }).catch(() => {});
+            }, 300);
+        });
+    }
 
     function renderAutocomplete(results) {
+        if (!autocompleteDropdown) return;
         if (!results.length) {
             autocompleteDropdown.classList.remove("active");
             return;
@@ -143,10 +208,10 @@ document.addEventListener("DOMContentLoaded", () => {
         `).join("");
         autocompleteDropdown.classList.add("active");
 
-        document.querySelectorAll(".autocomplete-item").forEach(item => {
+        document.querySelectorAll(".autocomplete-item:not(.dash-autocomplete-item)").forEach(item => {
             item.addEventListener("click", () => {
                 const selectedCity = item.getAttribute("data-city");
-                searchInput.value = selectedCity;
+                if (searchInput) searchInput.value = selectedCity;
                 autocompleteDropdown.classList.remove("active");
                 fetchWeatherData(selectedCity);
             });
@@ -155,7 +220,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.addEventListener("click", (e) => {
         if (!e.target.closest(".search-wrapper")) {
-            autocompleteDropdown.classList.remove("active");
+            if (autocompleteDropdown) autocompleteDropdown.classList.remove("active");
+            if (dashAutocompleteDropdown) dashAutocompleteDropdown.classList.remove("active");
         }
     });
 

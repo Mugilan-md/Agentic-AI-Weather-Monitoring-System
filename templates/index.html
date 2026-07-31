@@ -36,15 +36,6 @@
             </div>
         </div>
 
-        <div class="search-wrapper">
-            <div class="search-bar">
-                <span style="font-size: 1.1rem; margin-right: 4px;">🔍</span>
-                <input type="text" id="search-input" class="search-input" placeholder="Search city (e.g. London, Tokyo, New York)..." autocomplete="off">
-                <button id="search-btn" class="search-btn" title="Search Weather">➔</button>
-            </div>
-            <div id="autocomplete-dropdown" class="autocomplete-dropdown"></div>
-        </div>
-
         <div class="nav-controls">
             <!-- WebGL Lightning Hue Controller -->
             <div class="hue-slider-box" title="Adjust WebGL Background Lightning Hue">
@@ -78,21 +69,46 @@
     <div id="welcome-search-hero" class="glass-card welcome-hero-card">
         <div class="welcome-hero-content">
             <div class="welcome-badge">🌐 Global Weather Intelligence</div>
-            <h1 class="welcome-title">Search Any City, Town, or Village Worldwide</h1>
-            <p class="welcome-subtitle">Search for any location above to fetch live satellite telemetry, Scikit-Learn risk classifications, 24-hour thermal trends, and multi-agent safety advisories in real time.</p>
+            <h1 class="welcome-title">Search Any City, State, District, Town, or Village Worldwide</h1>
+            <p class="welcome-subtitle">Enter any location below to fetch live satellite telemetry, Scikit-Learn risk classifications, 24-hour thermal trends, and multi-agent safety advisories in real time.</p>
+            
+            <!-- Expanded 3D Main Hero Search Bar -->
+            <div class="search-wrapper hero-search-wrapper">
+                <div class="search-bar hero-search-bar">
+                    <span class="hero-search-icon">🔍</span>
+                    <input type="text" id="search-input" class="search-input hero-search-input" placeholder="Enter city, district, state, town, or village name (e.g. Chennai, Tamil Nadu, India)..." autocomplete="off">
+                    <button id="search-btn" class="search-btn hero-search-btn" title="Search Weather Data">
+                        <span>Search Weather</span> ➔
+                    </button>
+                </div>
+                <div id="autocomplete-dropdown" class="autocomplete-dropdown hero-autocomplete-dropdown"></div>
+            </div>
+
             <div class="welcome-chips-prompt">
                 <span>Quick Search:</span>
-                <button class="chip prompt-chip" data-city="Tokyo">Tokyo</button>
-                <button class="chip prompt-chip" data-city="Chennai">Chennai</button>
-                <button class="chip prompt-chip" data-city="New York">New York</button>
-                <button class="chip prompt-chip" data-city="Paris">Paris</button>
-                <button class="chip prompt-chip" data-city="Sydney">Sydney</button>
+                <button class="chip prompt-chip" data-city="Tokyo">Tokyo, Japan</button>
+                <button class="chip prompt-chip" data-city="Chennai">Chennai, Tamil Nadu, India</button>
+                <button class="chip prompt-chip" data-city="New York">New York, US</button>
+                <button class="chip prompt-chip" data-city="Paris">Paris, France</button>
+                <button class="chip prompt-chip" data-city="Sydney">Sydney, Australia</button>
             </div>
         </div>
     </div>
 
     <!-- Weather Dashboard Container (Hidden until a city is searched) -->
     <div id="weather-dashboard" style="display: none;">
+        <!-- Top Dashboard Persistent 3D Search Bar -->
+        <div class="dashboard-search-bar-row">
+            <div class="search-wrapper dashboard-search-wrapper">
+                <div class="search-bar dashboard-search-bar">
+                    <span style="font-size: 1.1rem; margin-right: 6px;">🔍</span>
+                    <input type="text" id="dashboard-search-input" class="search-input dashboard-search-input" placeholder="Search another city, state, district, or village..." autocomplete="off">
+                    <button id="dashboard-search-btn" class="search-btn dashboard-search-btn">Search ➔</button>
+                </div>
+                <div id="dashboard-autocomplete-dropdown" class="autocomplete-dropdown"></div>
+            </div>
+        </div>
+
         <!-- Top Dashboard Section -->
         <section class="dashboard-grid">
 
