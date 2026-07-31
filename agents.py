@@ -134,7 +134,37 @@ CITY_PRESETS = {
     "leh": {"lat": 34.1526, "lon": 77.5771, "country": "India", "temp": 14.0, "humidity": 35, "cond": "Sunny", "code": 0, "wind": 12.0, "uv": 9.5, "aqi": 15},
     "dehradun": {"lat": 30.3165, "lon": 78.0322, "country": "India", "temp": 28.0, "humidity": 65, "cond": "Partly Cloudy", "code": 2, "wind": 9.0, "uv": 7.5, "aqi": 60},
     "haridwar": {"lat": 29.9457, "lon": 78.1642, "country": "India", "temp": 31.0, "humidity": 62, "cond": "Sunny", "code": 0, "wind": 8.0, "uv": 8.0, "aqi": 85},
-    "chandigarh": {"lat": 30.7333, "lon": 76.7794, "country": "India", "temp": 32.0, "humidity": 58, "cond": "Mainly Clear", "code": 1, "wind": 10.0, "uv": 8.2, "aqi": 90}
+    "chandigarh": {"lat": 30.7333, "lon": 76.7794, "country": "India", "temp": 32.0, "humidity": 58, "cond": "Mainly Clear", "code": 1, "wind": 10.0, "uv": 8.2, "aqi": 90},
+    "lukla": {"lat": 27.6872, "lon": 86.7314, "country": "Nepal (Everest Region)", "temp": 8.0, "humidity": 75, "cond": "Alpine Cold", "code": 3, "wind": 14.0, "uv": 9.0, "aqi": 10},
+    "chamonix": {"lat": 45.9237, "lon": 6.8694, "country": "France (Mont Blanc Alpine)", "temp": 12.0, "humidity": 65, "cond": "Partly Cloudy", "code": 2, "wind": 10.0, "uv": 6.5, "aqi": 15},
+    "mount fuji": {"lat": 35.3606, "lon": 138.7274, "country": "Japan", "temp": 5.0, "humidity": 80, "cond": "Freezing Fog", "code": 45, "wind": 22.0, "uv": 8.0, "aqi": 12},
+    "banff": {"lat": 51.1784, "lon": -115.5708, "country": "Canada (Rockies)", "temp": 14.0, "humidity": 55, "cond": "Mainly Clear", "code": 1, "wind": 9.0, "uv": 5.5, "aqi": 18},
+    "queenstown": {"lat": -45.0312, "lon": 168.6626, "country": "New Zealand (Southern Alps)", "temp": 11.0, "humidity": 70, "cond": "Partly Cloudy", "code": 2, "wind": 16.0, "uv": 4.0, "aqi": 15},
+    "moshi": {"lat": -3.3349, "lon": 37.3404, "country": "Tanzania (Kilimanjaro)", "temp": 24.0, "humidity": 60, "cond": "Partly Cloudy", "code": 2, "wind": 11.0, "uv": 9.0, "aqi": 30},
+    "aspen": {"lat": 39.1911, "lon": -106.8175, "country": "United States (Colorado Rockies)", "temp": 18.0, "humidity": 45, "cond": "Sunny", "code": 0, "wind": 8.0, "uv": 8.5, "aqi": 22},
+    "zermatt": {"lat": 46.0207, "lon": 7.7491, "country": "Switzerland (Matterhorn Alpine)", "temp": 10.0, "humidity": 68, "cond": "Clear Sky", "code": 0, "wind": 9.0, "uv": 7.0, "aqi": 12},
+    "gulmarg": {"lat": 34.0484, "lon": 74.3805, "country": "India (Kashmir Alpine)", "temp": 15.0, "humidity": 65, "cond": "Cool Breeze", "code": 1, "wind": 8.0, "uv": 7.5, "aqi": 15},
+    "darjeeling": {"lat": 27.0410, "lon": 88.2663, "country": "India (Himalayan Hill Station)", "temp": 17.0, "humidity": 82, "cond": "Mist", "code": 45, "wind": 7.0, "uv": 6.5, "aqi": 25},
+    "mahabaleshwar": {"lat": 17.9259, "lon": 73.6577, "country": "India (Western Ghats Peak)", "temp": 21.0, "humidity": 78, "cond": "Mist", "code": 45, "wind": 10.0, "uv": 7.0, "aqi": 30},
+    "vatican city": {"lat": 41.9029, "lon": 12.4534, "country": "Vatican City State", "temp": 26.5, "humidity": 52, "cond": "Sunny", "code": 0, "wind": 9.0, "uv": 7.0, "aqi": 42},
+    "monaco": {"lat": 43.7384, "lon": 7.4246, "country": "Principality of Monaco", "temp": 25.0, "humidity": 62, "cond": "Coastal Sunny", "code": 0, "wind": 12.0, "uv": 7.5, "aqi": 35},
+    "san marino": {"lat": 43.9424, "lon": 12.4578, "country": "Republic of San Marino", "temp": 24.0, "humidity": 55, "cond": "Sunny", "code": 0, "wind": 10.0, "uv": 7.2, "aqi": 30},
+    "vaduz": {"lat": 47.1415, "lon": 9.5215, "country": "Liechtenstein", "temp": 21.0, "humidity": 58, "cond": "Partly Cloudy", "code": 2, "wind": 8.0, "uv": 5.8, "aqi": 25},
+    "andorra la vella": {"lat": 42.5063, "lon": 1.5218, "country": "Andorra", "temp": 19.0, "humidity": 50, "cond": "Mainly Clear", "code": 1, "wind": 9.0, "uv": 6.8, "aqi": 20},
+    "funafuti": {"lat": -8.5201, "lon": 179.1983, "country": "Tuvalu (Pacific Island Microstate)", "temp": 30.0, "humidity": 82, "cond": "Tropical Breeze", "code": 1, "wind": 15.0, "uv": 11.0, "aqi": 15},
+    "malé": {"lat": 4.1755, "lon": 73.5093, "country": "Maldives (Indian Ocean Island)", "temp": 31.0, "humidity": 78, "cond": "Partly Cloudy", "code": 2, "wind": 14.0, "uv": 10.5, "aqi": 22},
+    "victoria": {"lat": -4.6191, "lon": 55.4513, "country": "Seychelles", "temp": 29.5, "humidity": 76, "cond": "Tropical Breeze", "code": 1, "wind": 13.0, "uv": 10.0, "aqi": 18},
+    "valletta": {"lat": 35.8997, "lon": 14.5148, "country": "Malta", "temp": 27.0, "humidity": 65, "cond": "Sunny", "code": 0, "wind": 14.0, "uv": 8.0, "aqi": 35},
+    "manaus": {"lat": -3.1190, "lon": -60.0217, "country": "Brazil (Amazon Rainforest Biosphere)", "temp": 32.0, "humidity": 88, "cond": "Rainforest Humid", "code": 80, "wind": 6.0, "uv": 9.0, "aqi": 25},
+    "arusha": {"lat": -3.3869, "lon": 36.6830, "country": "Tanzania (Serengeti Biosphere Reserve)", "temp": 25.0, "humidity": 55, "cond": "Partly Cloudy", "code": 2, "wind": 12.0, "uv": 8.5, "aqi": 30},
+    "jackson hole": {"lat": 43.4799, "lon": -110.7624, "country": "United States (Yellowstone Biosphere)", "temp": 20.0, "humidity": 42, "cond": "Clear Sky", "code": 0, "wind": 10.0, "uv": 8.0, "aqi": 18},
+    "puerto ayora": {"lat": -0.7439, "lon": -90.3138, "country": "Ecuador (Galapagos Biosphere Reserve)", "temp": 26.0, "humidity": 72, "cond": "Coastal Breeze", "code": 1, "wind": 15.0, "uv": 10.0, "aqi": 15},
+    "canning": {"lat": 22.3167, "lon": 88.6667, "country": "India (Sundarbans Mangrove Biosphere)", "temp": 31.5, "humidity": 84, "cond": "Humid Coastal", "code": 2, "wind": 12.0, "uv": 8.2, "aqi": 75},
+    "yakutsk": {"lat": 62.0355, "lon": 129.6755, "country": "Russia (Siberian Extreme Cold)", "temp": -15.0, "humidity": 75, "cond": "Ice Fog", "code": 45, "wind": 5.0, "uv": 1.0, "aqi": 15},
+    "death valley": {"lat": 36.5323, "lon": -116.9325, "country": "United States (Extreme Thermal)", "temp": 46.0, "humidity": 8, "cond": "Extreme Heat", "code": 0, "wind": 18.0, "uv": 12.0, "aqi": 45},
+    "ushuaia": {"lat": -54.8019, "lon": -68.3030, "country": "Argentina (Tierra del Fuego)", "temp": 4.0, "humidity": 72, "cond": "Cold Breeze", "code": 3, "wind": 25.0, "uv": 2.0, "aqi": 12},
+    "cherrapunji": {"lat": 25.2986, "lon": 91.7302, "country": "India (World Highest Rainfall)", "temp": 21.0, "humidity": 95, "cond": "Heavy Rain", "code": 65, "wind": 10.0, "uv": 5.0, "aqi": 15},
+    "mcmurdo": {"lat": -77.8460, "lon": 166.6680, "country": "Antarctica (Ice Sheet Station)", "temp": -25.0, "humidity": 50, "cond": "Blizzard Wind", "code": 75, "wind": 35.0, "uv": 0.5, "aqi": 5}
 }
 
 
@@ -832,6 +862,31 @@ class ConversationalAgent:
                      f"{info['summary']}<br><br>" \
                      f"Solar radiation context in <strong>{city}</strong> (UV Index: {uv}, Cloud Cover: {curr.get('cloud_cover', 30)}%):<br><br>" \
                      f"<strong>Solar Energy Takeaways</strong>:<ul>{facts}</ul>"
+            return {"query": query, "answer": answer, "agent_name": self.name}
+
+        if any(k in q_clean for k in ["mountain", "hilly", "alpine", "altitude", "slope", "snow", "peak"]):
+            info = weather_knowledge.GENERAL_SCIENCE_KNOWLEDGE["mountain_hilly"]
+            facts = "".join([f"<li>{f}</li>" for f in info["key_facts"]])
+            answer = f"🏔️ <strong>{info['title']}</strong>:<br><br>" \
+                     f"{info['summary']}<br><br>" \
+                     f"Current atmospheric parameters in <strong>{city}</strong> (Temp: {temp}°C, Lat/Lon: {loc.get('latitude', 0)}°, {loc.get('longitude', 0)}°):<br><br>" \
+                     f"<strong>Mountain Science Insights</strong>:<ul>{facts}</ul>"
+            return {"query": query, "answer": answer, "agent_name": self.name}
+
+        if any(k in q_clean for k in ["biosphere", "wildlife", "reserve", "forest", "jungle", "amazon", "serengeti", "sundarbans"]):
+            info = weather_knowledge.GENERAL_SCIENCE_KNOWLEDGE["biosphere_reserves"]
+            facts = "".join([f"<li>{f}</li>" for f in info["key_facts"]])
+            answer = f"🌿 <strong>{info['title']}</strong>:<br><br>" \
+                     f"{info['summary']}<br><br>" \
+                     f"<strong>Ecosystem Insights</strong>:<ul>{facts}</ul>"
+            return {"query": query, "answer": answer, "agent_name": self.name}
+
+        if any(k in q_clean for k in ["island", "microstate", "coastal", "atoll", "maldives", "tuvalu", "monaco", "vatican"]):
+            info = weather_knowledge.GENERAL_SCIENCE_KNOWLEDGE["microstates_islands"]
+            facts = "".join([f"<li>{f}</li>" for f in info["key_facts"]])
+            answer = f"🏝️ <strong>{info['title']}</strong>:<br><br>" \
+                     f"{info['summary']}<br><br>" \
+                     f"<strong>Island & Microstate Insights</strong>:<ul>{facts}</ul>"
             return {"query": query, "answer": answer, "agent_name": self.name}
 
         # 4. Outdoor Exercise / Sports / Running Intent

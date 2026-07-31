@@ -6,6 +6,7 @@ from typing import Dict, Any, List, Tuple
 
 # Try importing numpy and scikit-learn; catch ALL exceptions (including C-extension OSError)
 try:
+    # pyrefly: ignore [missing-import]
     import numpy as np
     from sklearn.ensemble import RandomForestClassifier, IsolationForest
     from sklearn.linear_model import Ridge
@@ -161,6 +162,19 @@ class WeatherMLService:
         }
         self.is_trained = True
         self.last_retrained = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        try:
+            import database
+            database.log_ai_model_metrics(
+                model_name="Scikit-Learn Multi-Output Random Forest Ensemble",
+                accuracy=self.performance_metrics["accuracy"],
+                precision=self.performance_metrics["precision"],
+                recall=self.performance_metrics["recall"],
+                f1=self.performance_metrics["f1_score"],
+                samples=n_samples
+            )
+        except Exception:
+            pass
 
     def _initialize_and_train_fallback(self):
         """Fallback ML training pipeline using robust statistical algorithms."""

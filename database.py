@@ -106,10 +106,26 @@ def init_db():
             )
         """)
 
+        # Table 6: AI Classifier Accuracy & Training Metric Logs
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS ai_accuracy_model_logs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                model_name TEXT NOT NULL,
+                accuracy_score REAL NOT NULL,
+                precision_score REAL NOT NULL,
+                recall_score REAL NOT NULL,
+                f1_score REAL NOT NULL,
+                training_samples INTEGER NOT NULL,
+                status TEXT DEFAULT 'ONLINE',
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
         # Performance Indexes
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_telemetry_city ON historical_weather_telemetry(city, created_at)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_search_history_city ON search_history(city)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_fusion_audit_city ON data_fusion_audit(city)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_ai_model_logs ON ai_accuracy_model_logs(model_name)")
 
         # Seed initial favorite cities if empty
         cursor.execute("SELECT COUNT(*) as count FROM favorite_cities")
@@ -302,3 +318,21 @@ def get_db_analytics() -> Dict[str, Any]:
             "total_telemetry_records": 1,
             "db_status": "Serverless Active"
         }
+
+
+def log_ai_model_metrics(model_name: str, accuracy: float, precision: float, recall: float, f1: float, samples: int) -> bool:
+    """Log trained AI model metrics to SQLite database."""
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO ai_accuracy_model_logs 
+            (model_name, accuracy_score, precision_score, recall_score, f1_score, training_samples)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (model_name, accuracy, precision, recall, f1, samples))
+        conn.commit()
+        conn.close()
+        return True
+    except Exception as e:
+        print(f"[DB MODEL LOG ERROR] {e}")
+        return False

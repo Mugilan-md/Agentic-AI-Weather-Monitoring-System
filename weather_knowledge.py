@@ -139,6 +139,43 @@ GENERAL_SCIENCE_KNOWLEDGE = {
             "Panel efficiency decreases by ~0.35% to 0.45% for every 1°C temperature increase above 25°C.",
             "Cloud cover and haze reduce direct solar irradiance, causing PV power output drops of 50-80%."
         ]
+    },
+    "mountain_hilly": {
+        "title": "🏔️ Alpine & Mountain Microclimatic Physics",
+        "summary": "Mountain and hilly ecosystems experience rapid environmental changes due to altitude lapse rate and orographic forcing.",
+        "key_facts": [
+            "Environmental Lapse Rate: Ambient air temperature decreases by ~6.5°C per 1,000 meters (3.5°F per 1,000 ft) of elevation gain.",
+            "Orographic Precipitation: Moisture-laden winds forced up mountain slopes cool, condense, and drop heavy rain/snow on windward sides while creating rain shadows on leeward slopes.",
+            "Katabatic & Anabatic Winds: Daytime solar heating drives upslope (anabatic) thermal breezes, while nighttime radiation cooling produces downslope (katabatic) gravity winds.",
+            "Hypoxia & Altitude Sickness: Atmospheric pressure decreases exponentially with height, reducing oxygen density and triggering altitude fatigue above 2,500m."
+        ]
+    },
+    "biosphere_reserves": {
+        "title": "🌿 Protected Biospheres & Wildlife Ecosystems",
+        "summary": "Global biosphere reserves (e.g. Amazon Basin, Western Ghats, Serengeti, Sundarbans) maintain crucial ecological microclimates and carbon sinks.",
+        "key_facts": [
+            "Rainforest Moisture Recycling: Evapotranspiration from tropical canopy foliage generates up to 50% of regional rainfall.",
+            "Mangrove Coastal Shielding: Tidal mangrove forests in the Sundarbans dampen storm surge energy and absorb coastal cyclone impact.",
+            "Thermal Buffer Capacity: Dense forest cover stabilizes diurnal temperature swings by up to 8°C compared to surrounding deforested land."
+        ]
+    },
+    "microstates_islands": {
+        "title": "🏝️ Island Microstates & Coastal Vulnerability",
+        "summary": "Small island nations (e.g., Tuvalu, Maldives, Nauru, Seychelles, Malta) face distinct maritime climates and high climate vulnerability.",
+        "key_facts": [
+            "Maritime Thermal Inertia: Ocean waters buffer daily temperature extremes, maintaining narrow diurnal temperature ranges (typically 3-6°C).",
+            "Sea Level & Inundation Hazard: Low-lying coral atolls with average elevations under 2 meters above sea level face elevated saltwater intrusion risks.",
+            "Tropical Cyclone Surge Susceptibility: Isolated island landmasses absorb intense oceanic winds and high wave action during tropical disturbances."
+        ]
+    },
+    "continental_extremes": {
+        "title": "❄️ Continental Extremes & High-Plateau Dynamics",
+        "summary": "Massive interior landmasses (Siberia, Sahara Desert, Tibetan Plateau, Antarctica) drive Earth's most severe climatic extremes.",
+        "key_facts": [
+            "Siberian High & Thermal Inversion: Winter radiative cooling over Eurasia creates dense high-pressure anticyclones with temperatures plunging below -50°C.",
+            "Tibetan Plateau (The Third Pole): Elevating over 4,500m above sea level, the plateau acts as a elevated heat source in summer that powers the Asian Monsoon.",
+            "Sahara Hyper-Aridity: Hadley cell subsidence suppresses cloud formation, yielding solar irradiance over 3,000 kWh/m² per year."
+        ]
     }
 }
 
