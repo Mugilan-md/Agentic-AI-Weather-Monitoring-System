@@ -88,7 +88,53 @@ CITY_PRESETS = {
     "lagos": {"lat": 6.5244, "lon": 3.3792, "country": "Nigeria", "temp": 30.0, "humidity": 82, "cond": "Humid", "code": 2, "wind": 12.0, "uv": 8.0, "aqi": 110},
     "addis ababa": {"lat": 9.0300, "lon": 38.7400, "country": "Ethiopia", "temp": 22.0, "humidity": 50, "cond": "Mainly Clear", "code": 1, "wind": 10.0, "uv": 8.5, "aqi": 30},
     "salem": {"lat": 11.6643, "lon": 78.1460, "country": "India", "temp": 32.0, "humidity": 64, "cond": "Sunny", "code": 0, "wind": 11.0, "uv": 8.5, "aqi": 50},
-    "tirunelveli": {"lat": 8.7139, "lon": 77.7567, "country": "India", "temp": 32.5, "humidity": 70, "cond": "Partly Cloudy", "code": 2, "wind": 14.0, "uv": 8.6, "aqi": 42}
+    "tirunelveli": {"lat": 8.7139, "lon": 77.7567, "country": "India", "temp": 32.5, "humidity": 70, "cond": "Partly Cloudy", "code": 2, "wind": 14.0, "uv": 8.6, "aqi": 42},
+    "thanjavur": {"lat": 10.7870, "lon": 79.1378, "country": "India", "temp": 33.0, "humidity": 68, "cond": "Sunny", "code": 0, "wind": 11.0, "uv": 8.8, "aqi": 48},
+    "kanchipuram": {"lat": 12.8342, "lon": 79.7036, "country": "India", "temp": 32.0, "humidity": 72, "cond": "Partly Cloudy", "code": 2, "wind": 12.0, "uv": 8.2, "aqi": 65},
+    "vellore": {"lat": 12.9165, "lon": 79.1325, "country": "India", "temp": 33.5, "humidity": 60, "cond": "Sunny", "code": 0, "wind": 10.0, "uv": 8.9, "aqi": 75},
+    "erode": {"lat": 11.3410, "lon": 77.7172, "country": "India", "temp": 31.5, "humidity": 65, "cond": "Partly Cloudy", "code": 2, "wind": 11.0, "uv": 8.4, "aqi": 52},
+    "tiruppur": {"lat": 11.1085, "lon": 77.3411, "country": "India", "temp": 31.0, "humidity": 66, "cond": "Partly Cloudy", "code": 2, "wind": 13.0, "uv": 8.3, "aqi": 58},
+    "thoothukudi": {"lat": 8.8053, "lon": 78.1452, "country": "India", "temp": 32.8, "humidity": 75, "cond": "Breezy", "code": 1, "wind": 18.0, "uv": 8.7, "aqi": 45},
+    "dindigul": {"lat": 10.3673, "lon": 77.9803, "country": "India", "temp": 32.0, "humidity": 62, "cond": "Sunny", "code": 0, "wind": 12.0, "uv": 8.6, "aqi": 48},
+    "kanyakumari": {"lat": 8.0883, "lon": 77.5385, "country": "India", "temp": 30.5, "humidity": 78, "cond": "Coastal Breeze", "code": 2, "wind": 20.0, "uv": 8.5, "aqi": 35},
+    "ooty": {"lat": 11.4102, "lon": 76.6950, "country": "India", "temp": 16.5, "humidity": 80, "cond": "Mist", "code": 45, "wind": 8.0, "uv": 6.0, "aqi": 20},
+    "kodaikanal": {"lat": 10.2381, "lon": 77.4892, "country": "India", "temp": 17.0, "humidity": 82, "cond": "Partly Cloudy", "code": 2, "wind": 9.0, "uv": 6.2, "aqi": 18},
+    "tenkasi": {"lat": 8.9593, "lon": 77.3134, "country": "India", "temp": 30.0, "humidity": 72, "cond": "Partly Cloudy", "code": 2, "wind": 15.0, "uv": 8.1, "aqi": 38},
+    "hosur": {"lat": 12.7409, "lon": 77.8253, "country": "India", "temp": 28.0, "humidity": 62, "cond": "Partly Cloudy", "code": 2, "wind": 11.0, "uv": 7.5, "aqi": 50},
+    "kochi": {"lat": 9.9312, "lon": 76.2673, "country": "India", "temp": 31.0, "humidity": 82, "cond": "Humid", "code": 2, "wind": 13.0, "uv": 8.2, "aqi": 40},
+    "thiruvananthapuram": {"lat": 8.5241, "lon": 76.9366, "country": "India", "temp": 31.5, "humidity": 80, "cond": "Partly Cloudy", "code": 2, "wind": 12.0, "uv": 8.4, "aqi": 35},
+    "wayanad": {"lat": 11.6854, "lon": 76.1320, "country": "India", "temp": 22.0, "humidity": 85, "cond": "Light Drizzle", "code": 51, "wind": 8.0, "uv": 6.5, "aqi": 22},
+    "munnar": {"lat": 10.0889, "lon": 77.0595, "country": "India", "temp": 18.0, "humidity": 84, "cond": "Mist", "code": 45, "wind": 7.0, "uv": 6.0, "aqi": 15},
+    "mysuru": {"lat": 12.2958, "lon": 76.6394, "country": "India", "temp": 28.5, "humidity": 65, "cond": "Mainly Clear", "code": 1, "wind": 10.0, "uv": 7.2, "aqi": 45},
+    "mangaluru": {"lat": 12.9141, "lon": 74.8560, "country": "India", "temp": 31.0, "humidity": 80, "cond": "Partly Cloudy", "code": 2, "wind": 14.0, "uv": 8.3, "aqi": 42},
+    "visakhapatnam": {"lat": 17.6868, "lon": 83.2185, "country": "India", "temp": 32.0, "humidity": 78, "cond": "Coastal Breeze", "code": 2, "wind": 16.0, "uv": 8.5, "aqi": 60},
+    "vijayawada": {"lat": 16.5062, "lon": 80.6480, "country": "India", "temp": 33.5, "humidity": 70, "cond": "Sunny", "code": 0, "wind": 11.0, "uv": 8.8, "aqi": 70},
+    "tirupati": {"lat": 13.6288, "lon": 79.4192, "country": "India", "temp": 32.0, "humidity": 68, "cond": "Partly Cloudy", "code": 2, "wind": 10.0, "uv": 8.4, "aqi": 55},
+    "warangal": {"lat": 17.9689, "lon": 79.5941, "country": "India", "temp": 33.0, "humidity": 62, "cond": "Sunny", "code": 0, "wind": 11.0, "uv": 8.7, "aqi": 65},
+    "pune": {"lat": 18.5204, "lon": 73.8567, "country": "India", "temp": 28.0, "humidity": 60, "cond": "Mainly Clear", "code": 1, "wind": 12.0, "uv": 7.0, "aqi": 70},
+    "nagpur": {"lat": 21.1458, "lon": 79.0882, "country": "India", "temp": 34.0, "humidity": 55, "cond": "Sunny", "code": 0, "wind": 10.0, "uv": 8.8, "aqi": 85},
+    "nashik": {"lat": 20.0059, "lon": 73.7898, "country": "India", "temp": 29.0, "humidity": 58, "cond": "Partly Cloudy", "code": 2, "wind": 11.0, "uv": 7.5, "aqi": 60},
+    "ahmedabad": {"lat": 23.0225, "lon": 72.5714, "country": "India", "temp": 35.0, "humidity": 50, "cond": "Sunny", "code": 0, "wind": 12.0, "uv": 9.0, "aqi": 105},
+    "surat": {"lat": 21.1702, "lon": 72.8311, "country": "India", "temp": 33.0, "humidity": 65, "cond": "Sunny", "code": 0, "wind": 13.0, "uv": 8.6, "aqi": 95},
+    "jaipur": {"lat": 26.9124, "lon": 75.7873, "country": "India", "temp": 34.5, "humidity": 45, "cond": "Sunny", "code": 0, "wind": 10.0, "uv": 8.9, "aqi": 115},
+    "udaipur": {"lat": 24.5854, "lon": 73.7125, "country": "India", "temp": 32.0, "humidity": 50, "cond": "Sunny", "code": 0, "wind": 9.0, "uv": 8.2, "aqi": 65},
+    "lucknow": {"lat": 26.8467, "lon": 80.9462, "country": "India", "temp": 33.0, "humidity": 65, "cond": "Hazy", "code": 45, "wind": 9.0, "uv": 8.0, "aqi": 180},
+    "kanpur": {"lat": 26.4499, "lon": 80.3319, "country": "India", "temp": 33.5, "humidity": 62, "cond": "Hazy", "code": 45, "wind": 9.0, "uv": 8.1, "aqi": 195},
+    "varanasi": {"lat": 25.3176, "lon": 82.9739, "country": "India", "temp": 33.0, "humidity": 68, "cond": "Partly Cloudy", "code": 2, "wind": 8.0, "uv": 8.2, "aqi": 160},
+    "agra": {"lat": 27.1767, "lon": 78.0081, "country": "India", "temp": 34.0, "humidity": 55, "cond": "Sunny", "code": 0, "wind": 10.0, "uv": 8.5, "aqi": 170},
+    "patna": {"lat": 25.5941, "lon": 85.1376, "country": "India", "temp": 32.5, "humidity": 70, "cond": "Hazy", "code": 45, "wind": 8.0, "uv": 8.0, "aqi": 175},
+    "ranchi": {"lat": 23.3441, "lon": 85.3096, "country": "India", "temp": 29.0, "humidity": 68, "cond": "Partly Cloudy", "code": 2, "wind": 10.0, "uv": 7.8, "aqi": 80},
+    "bhubaneswar": {"lat": 20.2961, "lon": 85.8245, "country": "India", "temp": 32.5, "humidity": 75, "cond": "Partly Cloudy", "code": 2, "wind": 12.0, "uv": 8.4, "aqi": 90},
+    "guwahati": {"lat": 26.1445, "lon": 91.7362, "country": "India", "temp": 30.0, "humidity": 78, "cond": "Rain Showers", "code": 80, "wind": 7.0, "uv": 7.5, "aqi": 55},
+    "shillong": {"lat": 25.5788, "lon": 91.8933, "country": "India", "temp": 20.0, "humidity": 82, "cond": "Light Rain", "code": 61, "wind": 8.0, "uv": 6.5, "aqi": 25},
+    "gangtok": {"lat": 27.3389, "lon": 88.6065, "country": "India", "temp": 18.0, "humidity": 85, "cond": "Partly Cloudy", "code": 2, "wind": 6.0, "uv": 6.0, "aqi": 20},
+    "shimla": {"lat": 31.1048, "lon": 77.1734, "country": "India", "temp": 19.0, "humidity": 70, "cond": "Clear Sky", "code": 0, "wind": 8.0, "uv": 6.5, "aqi": 30},
+    "manali": {"lat": 32.2432, "lon": 77.1892, "country": "India", "temp": 16.0, "humidity": 72, "cond": "Partly Cloudy", "code": 2, "wind": 7.0, "uv": 6.0, "aqi": 18},
+    "srinagar": {"lat": 34.0837, "lon": 74.7973, "country": "India", "temp": 22.0, "humidity": 60, "cond": "Mainly Clear", "code": 1, "wind": 8.0, "uv": 7.0, "aqi": 40},
+    "leh": {"lat": 34.1526, "lon": 77.5771, "country": "India", "temp": 14.0, "humidity": 35, "cond": "Sunny", "code": 0, "wind": 12.0, "uv": 9.5, "aqi": 15},
+    "dehradun": {"lat": 30.3165, "lon": 78.0322, "country": "India", "temp": 28.0, "humidity": 65, "cond": "Partly Cloudy", "code": 2, "wind": 9.0, "uv": 7.5, "aqi": 60},
+    "haridwar": {"lat": 29.9457, "lon": 78.1642, "country": "India", "temp": 31.0, "humidity": 62, "cond": "Sunny", "code": 0, "wind": 8.0, "uv": 8.0, "aqi": 85},
+    "chandigarh": {"lat": 30.7333, "lon": 76.7794, "country": "India", "temp": 32.0, "humidity": 58, "cond": "Mainly Clear", "code": 1, "wind": 10.0, "uv": 8.2, "aqi": 90}
 }
 
 
@@ -214,6 +260,32 @@ class DataCollectionAgent:
                         "latitude": round(item.get("latitude"), 4),
                         "longitude": round(item.get("longitude"), 4)
                     })
+                if len(cities) >= 2:
+                    return cities
+        except Exception:
+            cities = []
+
+        # Nominatim Universal Fallback for Indian & Global Rural Villages, Taluks, Districts
+        try:
+            nom_params = {"q": city_query, "format": "json", "limit": 6}
+            headers = {"User-Agent": "AgenticAIWeatherSystem/2.0"}
+            nom_resp = requests.get("https://nominatim.openstreetmap.org/search", params=nom_params, headers=headers, timeout=3)
+            if nom_resp.status_code == 200:
+                nom_results = nom_resp.json()
+                for item in nom_results:
+                    display_parts = item.get("display_name", "").split(",")
+                    country_str = display_parts[-1].strip() if display_parts else "Global"
+                    admin_str = display_parts[-2].strip() if len(display_parts) > 1 else ""
+                    name_str = item.get("name") or display_parts[0].strip()
+                    if not any(c["name"].lower() == name_str.lower() for c in cities):
+                        cities.append({
+                            "name": name_str,
+                            "country": country_str,
+                            "country_code": "",
+                            "admin1": admin_str,
+                            "latitude": round(float(item.get("lat")), 4),
+                            "longitude": round(float(item.get("lon")), 4)
+                        })
                 if cities:
                     return cities
         except Exception:
